@@ -102,7 +102,24 @@ const toggleNotificationOnOff = catchAsync(async (req: Request, res: Response) =
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `User is now ${isNotificationOn ? 'online' : 'offline'}`,
+    message: `User notification is now ${isNotificationOn ? 'on' : 'off'}`,
+    data: result,
+  });
+});
+
+const toggleAvailableOnOff = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const { isAvailable } = req.body;
+
+  const result = await UserService.toggleNotificationOnOff(
+    token as string,
+    isAvailable
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `User is now ${isAvailable ? 'online' : 'offline'}`,
     data: result,
   });
 });
@@ -113,4 +130,5 @@ export const UserController = {
   updateProfileImage,
   getAllUser,
   toggleNotificationOnOff,
+  toggleAvailableOnOff
 };

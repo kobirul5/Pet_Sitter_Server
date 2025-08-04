@@ -1,9 +1,7 @@
 import { Server } from "http";
 import config from "./config";
 
-import prisma from "./shared/prisma";
 import app from "./app";
-import { setupWebSocket } from "./shared/websocket";
 
 let server: Server;
 
@@ -17,7 +15,6 @@ async function startServer() {
     );
   });
 
-    setupWebSocket(server);
 }
  
 async function main() {

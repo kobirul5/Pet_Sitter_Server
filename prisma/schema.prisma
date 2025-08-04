@@ -8,35 +8,58 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  phone    String?  @default("")
-  email    String @unique
-  password String
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  phone     String? @default("")
+  email     String  @unique
+  password  String
   firstName String? @default("")
-  lastName String? @default("") 
+  lastName  String? @default("")
 
-  profileImage           String?             @default("")
-  expirationOtp          DateTime?           @default(now())
-  fcmToken               String?             @default("")
-  location               String?             @default("")
-  gender                 String?             @default("")
-  lat                    Float?              @default(0)
-  lng                    Float?              @default(0)
-  otp                    Int?                @default(0)
-  role                   UserRole            @default(User)
-  isNotificationOn       Boolean             @default(false)
-  status                 UserStatus          @default(ACTIVE)
-  createdAt              DateTime            @default(now())
-  updatedAt              DateTime            @updatedAt
-  otpExpiresAt           DateTime?           @default(now())
+  profileImage     String?    @default("")
+  expirationOtp    DateTime?  @default(now())
+  fcmToken         String?    @default("")
+  location         String?    @default("")
+  gender           String?    @default("")
+  lat              Float?     @default(0)
+  lng              Float?     @default(0)
+  otp              Int?       @default(0)
+  role             UserRole   @default(User)
+  isNotificationOn Boolean    @default(false)
+  isAvailable      Boolean    @default(true)
+  status           UserStatus @default(ACTIVE)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  otpExpiresAt     DateTime?  @default(now())
+  service          String?    @default("")
+  address          String?    @default("")
+  serviceDay       String?    @default("0")
 
   // Relations
-  notifications    Notification[]
+  notifications Notification[]
+  Dog           Dog[]
 
   @@map("users")
 }
 
+model Dog {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  name        String?  @default("")
+  gender      String?  @default("")
+  breed       String?  @default("")
+  weight      String?  @default("")
+  vaccination String?  @default("")
+  spayed      String?  @default("")
+  about       String?  @default("")
+  images      String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("dogs")
+}
 
 model Notification {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
@@ -56,13 +79,11 @@ model Notification {
   @@map("notifications")
 }
 
-
 enum UserRole {
   User
   Sitter
   Admin
 }
-
 
 enum UserStatus {
   ACTIVE
@@ -70,8 +91,9 @@ enum UserStatus {
   BLOCKED
 }
 
-
 enum NotificationType {
   GENERAL
+  REMINDER
+  BOOKING
+  PAYMENT
 }
-

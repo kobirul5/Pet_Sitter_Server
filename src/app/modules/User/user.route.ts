@@ -10,9 +10,7 @@ const router = express.Router();
 // Configure multer for user profile updates
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const userImageUpload = upload.fields([
-  { name: "profileImage", maxCount: 1 }
-]);
+const userImageUpload = upload.fields([{ name: "profileImage", maxCount: 1 }]);
 
 router.get("/profile", auth(), UserController.getMyProfile);
 
@@ -35,12 +33,18 @@ router.put(
   UserController.updateProfileImage
 );
 
-
 // toggle notification status
 router.patch(
   "/toggle-notification-status",
   auth(),
   UserController.toggleNotificationOnOff
+);
+
+// toggle notification status
+router.patch(
+  "/toggle-online-status",
+  auth(),
+  UserController.toggleAvailableOnOff
 );
 
 export const userRoutes = router;

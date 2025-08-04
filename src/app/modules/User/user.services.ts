@@ -247,6 +247,41 @@ const toggleNotificationOnOff = async (
   return userWithoutSensitive;
 };
 
+const toggleAvailableOnOff = async (
+  userToken: string,
+  isAvailable: boolean
+) => {
+  const decodedToken = jwtHelpers.verifyToken(
+    userToken,
+    config.jwt.jwt_secret!
+  );
+
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      id: decodedToken.id,
+    },
+  });
+
+  if (!existingUser) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: decodedToken.id },
+    data: {
+      isAvailable,
+    },
+    select: {
+      id: true,
+      isAvailable: true,
+      updatedAt: true,
+    },
+  });
+
+  const userWithoutSensitive = omit(updatedUser, ["password", "fcmToken"]);
+  return userWithoutSensitive;
+};
+
 
 export const UserService = {
   getMyProfile,
@@ -254,4 +289,5 @@ export const UserService = {
   updateUserProfileImage,
   getAllUser,
   toggleNotificationOnOff,
+  toggleAvailableOnOff
 };
