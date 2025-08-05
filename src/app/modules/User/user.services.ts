@@ -282,6 +282,207 @@ const toggleAvailableOnOff = async (
   return userWithoutSensitive;
 };
 
+// Update sitter profile with per-day fee and other sitter-specific info
+const updateSitterProfile = async (
+  userToken: string,
+  updateData: {
+    perDayFee?: number;
+    experience?: string;
+    about?: string;
+    location?: string;
+    lat?: number;
+    lng?: number;
+  }
+) => {
+  const decodedToken = jwtHelpers.verifyToken(
+    userToken,
+    config.jwt.jwt_secret!
+  );
+
+  const existingUser = await prisma.user.findUnique({
+    where: { id: decodedToken.id },
+  });
+
+  if (!existingUser) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  // Check if user is a sitter
+  if (existingUser.role !== "Sitter") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Only sitters can update sitter profile");
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: decodedToken.id },
+    data: updateData,
+    select: {
+      id: true,
+      perDayFee: true,
+      experience: true,
+      about: true,
+      location: true,
+      lat: true,
+      lng: true,
+      updatedAt: true,
+    },
+  });
+
+  return updatedUser;
+};
+
+// Create or update sitter profile details
+const updateSitterProfileDetails = async (
+  userToken: string,
+  profileData: {
+    bio?: string;
+    experience?: string;
+    education?: string;
+    certifications?: string[];
+    languages?: string[];
+    availability?: string;
+  }
+) => {
+  const decodedToken = jwtHelpers.verifyToken(
+    userToken,
+    config.jwt.jwt_secret!
+  );
+
+  const existingUser = await prisma.user.findUnique({
+    where: { id: decodedToken.id },
+  });
+
+  if (!existingUser) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  if (existingUser.role !== "Sitter") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Only sitters can update sitter profile");
+  }
+
+  // Upsert sitter profile
+  const sitterProfile = await prisma.sitterProfile.upsert({
+    where: { userId: decodedToken.id },
+    update: profileData,
+    create: {
+      userId: decodedToken.id,
+      ...profileData,
+    },
+  });
+
+  return sitterProfile;
+};
+
+// Add service for sitter
+const addSitterService = async (
+  userToken: string,
+  serviceData: {
+    name: string;
+    description?: string;
+    price: number;
+  }
+) => {
+  const decodedToken = jwtHelpers.verifyToken(
+    userToken,
+    config.jwt.jwt_secret!
+  );
+
+  const existingUser = await prisma.user.findUnique({
+    where: { id: decodedToken.id },
+  });
+
+  if (!existingUser) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  if (existingUser.role !== "Sitter") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Only sitters can add services");
+  }
+
+  const service = await prisma.service.create({
+    data: {
+      ...serviceData,
+      userId: decodedToken.id,
+    },
+  });
+
+  return service;
+};
+
+// Get sitter services
+const getSitterServices = async (userToken: string) => {
+  const decodedToken = jwtHelpers.verifyToken(
+    userToken,
+    config.jwt.jwt_secret!
+  );
+
+  const services = await prisma.service.findMany({
+    where: { userId: decodedToken.id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return services;
+};
+
+// Update sitter service
+const updateSitterService = async (
+  userToken: string,
+  serviceId: string,
+  serviceData: {
+    name?: string;
+    description?: string;
+    price?: number;
+  }
+) => {
+  const decodedToken = jwtHelpers.verifyToken(
+    userToken,
+    config.jwt.jwt_secret!
+  );
+
+  // Check if service exists and belongs to user
+  const existingService = await prisma.service.findFirst({
+    where: {
+      id: serviceId,
+      userId: decodedToken.id,
+    },
+  });
+
+  if (!existingService) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Service not found");
+  }
+
+  const updatedService = await prisma.service.update({
+    where: { id: serviceId },
+    data: serviceData,
+  });
+
+  return updatedService;
+};
+
+// Delete sitter service
+const deleteSitterService = async (userToken: string, serviceId: string) => {
+  const decodedToken = jwtHelpers.verifyToken(
+    userToken,
+    config.jwt.jwt_secret!
+  );
+
+  // Check if service exists and belongs to user
+  const existingService = await prisma.service.findFirst({
+    where: {
+      id: serviceId,
+      userId: decodedToken.id,
+    },
+  });
+
+  if (!existingService) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Service not found");
+  }
+
+  await prisma.service.delete({
+    where: { id: serviceId },
+  });
+
+  return { message: "Service deleted successfully" };
+};
 
 export const UserService = {
   getMyProfile,
@@ -289,5 +490,11 @@ export const UserService = {
   updateUserProfileImage,
   getAllUser,
   toggleNotificationOnOff,
-  toggleAvailableOnOff
+  toggleAvailableOnOff,
+  updateSitterProfile,
+  updateSitterProfileDetails,
+  addSitterService,
+  getSitterServices,
+  updateSitterService,
+  deleteSitterService,
 };

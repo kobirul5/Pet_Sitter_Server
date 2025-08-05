@@ -28,7 +28,6 @@ router.put(
 router.put(
   "/update-profileImage",
   auth(),
-  checkBlockedStatus,
   fileUploader.uploadSingle,
   UserController.updateProfileImage
 );
@@ -45,6 +44,44 @@ router.patch(
   "/toggle-online-status",
   auth(),
   UserController.toggleAvailableOnOff
+);
+
+// Sitter profile routes
+router.patch(
+  "/sitter/profile",
+  auth(),
+  UserController.updateSitterProfile
+);
+
+router.patch(
+  "/sitter/profile-details",
+  auth(),
+  UserController.updateSitterProfileDetails
+);
+
+// Sitter services routes
+router.post(
+  "/sitter/services",
+  auth(),
+  UserController.addSitterService
+);
+
+router.get(
+  "/sitter/services",
+  auth(),
+  UserController.getSitterServices
+);
+
+router.patch(
+  "/sitter/services/:serviceId",
+  auth(),
+  UserController.updateSitterService
+);
+
+router.delete(
+  "/sitter/services/:serviceId",
+  auth(),
+  UserController.deleteSitterService
 );
 
 export const userRoutes = router;

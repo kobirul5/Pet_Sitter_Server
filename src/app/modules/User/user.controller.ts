@@ -111,7 +111,7 @@ const toggleAvailableOnOff = catchAsync(async (req: Request, res: Response) => {
   const token = req.headers.authorization;
   const { isAvailable } = req.body;
 
-  const result = await UserService.toggleNotificationOnOff(
+  const result = await UserService.toggleAvailableOnOff(
     token as string,
     isAvailable
   );
@@ -124,11 +124,123 @@ const toggleAvailableOnOff = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Update sitter profile
+const updateSitterProfile = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const updateData = req.body;
+
+  const result = await UserService.updateSitterProfile(
+    token as string,
+    updateData
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sitter profile updated successfully",
+    data: result,
+  });
+});
+
+// Update sitter profile details
+const updateSitterProfileDetails = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const profileData = req.body;
+
+  const result = await UserService.updateSitterProfileDetails(
+    token as string,
+    profileData
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sitter profile details updated successfully",
+    data: result,
+  });
+});
+
+// Add sitter service
+const addSitterService = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const serviceData = req.body;
+
+  const result = await UserService.addSitterService(
+    token as string,
+    serviceData
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Service added successfully",
+    data: result,
+  });
+});
+
+// Get sitter services
+const getSitterServices = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+
+  const result = await UserService.getSitterServices(token as string);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sitter services retrieved successfully",
+    data: result,
+  });
+});
+
+// Update sitter service
+const updateSitterService = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const { serviceId } = req.params;
+  const serviceData = req.body;
+
+  const result = await UserService.updateSitterService(
+    token as string,
+    serviceId,
+    serviceData
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Service updated successfully",
+    data: result,
+  });
+});
+
+// Delete sitter service
+const deleteSitterService = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const { serviceId } = req.params;
+
+  const result = await UserService.deleteSitterService(
+    token as string,
+    serviceId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Service deleted successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   getMyProfile,
   updateUser,
   updateProfileImage,
   getAllUser,
   toggleNotificationOnOff,
-  toggleAvailableOnOff
+  toggleAvailableOnOff,
+  updateSitterProfile,
+  updateSitterProfileDetails,
+  addSitterService,
+  getSitterServices,
+  updateSitterService,
+  deleteSitterService,
 };
