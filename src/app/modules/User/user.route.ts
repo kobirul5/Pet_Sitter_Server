@@ -59,7 +59,7 @@ router.patch(
   UserController.updateSitterProfileDetails
 );
 
-// Sitter services routes
+// Sitter services routes : done
 router.post(
   "/sitter/services",
   auth(),

@@ -56,6 +56,8 @@ const getMyProfile = catchAsync(async (req: Request, res: Response) => {
 
 // ****
 // * Update user profile
+
+
 const updateProfileController = catchAsync(async (req: Request, res: Response) => {
 
   const userId = req.user.id;
