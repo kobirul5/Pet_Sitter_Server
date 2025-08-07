@@ -525,6 +525,10 @@ const getUserRatings = async (userToken: string): Promise<any> => {
   return ratings;
 };
 
+
+
+
+
 export const SitterService = {
   getSitterRecommendations,
   getSitterDetails,

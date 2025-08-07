@@ -5,7 +5,8 @@ import config from "../../../config";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
 import { omit } from "lodash";
-import { IUserFilters } from "./user.interface";
+import { IUser, IUserFilters } from "./user.interface";
+import { fileUploader } from "../../../helpars/fileUploader";
 
 // get user profile
 const getMyProfile = async (userToken: string) => {
@@ -30,68 +31,49 @@ const getMyProfile = async (userToken: string) => {
 };
 
 // Update user profile
-const updateUser = async (
-  userToken: string,
-  updateData: User,
-  imageUrl: string,
-) => {
-  const decodedToken = jwtHelpers.verifyToken(
-    userToken,
-    config.jwt.jwt_secret!
-  );
-
-  const existingUser = await prisma.user.findUnique({
-    where: { id: decodedToken.id },
+const updateUserProfile = async (userId: string, updateData: Partial<IUser>, file?: Express.Multer.File) => {
+  // Check if user exists
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
   });
-
-  if (!existingUser) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  if (!user) {
+    throw new ApiError(404, "User not found");
   }
 
-  // Create a filtered update object that excludes empty string and null values, and ensures correct types
-  const filteredUpdateData: Partial<Prisma.UserUpdateInput> = {};
-  for (const [key, value] of Object.entries(updateData)) {
-    if (value !== "" && value !== null && value !== undefined) {
-      filteredUpdateData[key as keyof Prisma.UserUpdateInput] = value;
-    }
-  }
-  // Check if phone exists for another user (only if phone is being changed and not empty)
-  if (
-    filteredUpdateData.email &&
-    filteredUpdateData.email !== existingUser.email
-  ) {
-    const phoneExists = await prisma.user.findFirst({
-      where: {
-        email:
-          typeof filteredUpdateData.email === "string"
-            ? filteredUpdateData.email
-            : String(filteredUpdateData.email),
-        id: { not: decodedToken.id },
-      },
-    });
-    if (phoneExists) {
-      throw new ApiError(httpStatus.BAD_REQUEST, "Phone already exists");
-    }
+
+
+  // If file exists, upload and set profileImage url
+  if (file) {
+    const uploadedImageUrl = await fileUploader.uploadToDigitalOcean(file);
+    updateData.profileImage = uploadedImageUrl.Location;
   }
 
-  // Handle date of birth formatting - keep original format
-  if ((filteredUpdateData as any).dob) {
-    (filteredUpdateData as any).dob = (filteredUpdateData as any).dob;
-  }
-
-  const { ...otherUpdateData } = filteredUpdateData;
-
+  // Update user profile with only provided fields
   const updatedUser = await prisma.user.update({
-    where: { id: decodedToken.id },
+    where: { id: userId },
     data: {
-      ...otherUpdateData,
-      profileImage: imageUrl || existingUser.profileImage,
+      ...updateData,
+      updatedAt: new Date(),
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      profileImage: true,
+      phone: true,
+      role: true,
+      status: true,
+      location: true,
+      gender: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
-  const userWithoutSensitive = omit(updatedUser, ["password", "fcmToken"]);
-  return userWithoutSensitive;
+  return updatedUser;
 };
+
 
 //update user profile image
 const updateUserProfileImage = async (userToken: string, imageUrl: string) => {
@@ -486,7 +468,7 @@ const deleteSitterService = async (userToken: string, serviceId: string) => {
 
 export const UserService = {
   getMyProfile,
-  updateUser,
+  updateUserProfile,
   updateUserProfileImage,
   getAllUser,
   toggleNotificationOnOff,

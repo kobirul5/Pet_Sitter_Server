@@ -20,34 +20,60 @@ const getMyProfile = catchAsync(async (req: Request, res: Response) => {
 });
 
 // update user profile
-const updateUser = catchAsync(async (req: Request, res: Response) => {
-  const token = req.headers.authorization;
-  const { ...userData } = req.body;
-  let imageUrl: string | undefined;
+// const updateUser = catchAsync(async (req: Request, res: Response) => {
+//   console.log("hiiiiiiiiiiiiiiiiiiiiii")
+//   const token = req.headers.authorization;
+//   const userData = JSON.parse(req.body.data);
+  
+//   console.log(userData,"------------------")
 
-  if (req.files) {
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+//   let imageUrl: string | undefined;
+
+//   if (req.files) {
+//     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     
-    // Handle profile image
-    if (files.profileImage?.[0]) {
-      const uploaded = await fileUploader.uploadToDigitalOcean(files.profileImage[0]);
-      imageUrl = uploaded.Location;
-    }
-  }
+//     // Handle profile image
+//     if (files.profileImage?.[0]) {
+//       const uploaded = await fileUploader.uploadToDigitalOcean(files.profileImage[0]);
+//       imageUrl = uploaded.Location;
+//     }
+//   }
 
-  const result = await UserService.updateUser(
-    token as string,
-    userData,
-    imageUrl || "",
-  );
+//   const result = await UserService.updateUser(
+//     token as string,
+//     userData,
+//     imageUrl || "",
+//   );
 
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "User updated successfully",
+//     data: result,
+//   });
+// });
+
+
+// ****
+// * Update user profile
+const updateProfileController = catchAsync(async (req: Request, res: Response) => {
+
+  const userId = req.user.id;
+  const updateData = JSON.parse(req.body.data);
+  const file = req.file;
+
+
+  const user = await UserService.updateUserProfile(userId, updateData, file);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "User updated successfully",
-    data: result,
+    message: "User profile updated successfully",
+    data: user,
   });
 });
+
+
+// ****
 
 //update profile picture
 const updateProfileImage = catchAsync(async (req: Request, res: Response) => {
@@ -232,7 +258,7 @@ const deleteSitterService = catchAsync(async (req: Request, res: Response) => {
 
 export const UserController = {
   getMyProfile,
-  updateUser,
+  updateProfileController,
   updateProfileImage,
   getAllUser,
   toggleNotificationOnOff,

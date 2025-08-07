@@ -20,8 +20,8 @@ router.get("/all", auth(), UserController.getAllUser);
 router.put(
   "/update-profile",
   auth(),
-  userImageUpload,
-  UserController.updateUser
+  fileUploader.uploadSingle,
+  UserController.updateProfileController
 );
 
 // update profile picture

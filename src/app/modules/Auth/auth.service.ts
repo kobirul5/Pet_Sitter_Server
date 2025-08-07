@@ -105,6 +105,7 @@ const changePassword = async (
     config.jwt.jwt_secret!
   );
 
+  console.log(decodedToken, userToken)
   const user = await prisma.user.findUnique({
     where: { id: decodedToken?.id },
   });
@@ -177,7 +178,8 @@ const forgotPassword = async (payload: { email: string }) => {
 </div> `;
 
     // Send the OTP email to the user
-    await emailSender(userData.email, html, "Forgot Password OTP");
+    const response = await emailSender(userData.email, html, "Forgot Password OTP");
+    console.log(response)
   } catch (error) {
     console.error(`Failed to send OTP email:`, error);
   }
@@ -192,7 +194,7 @@ const forgotPassword = async (payload: { email: string }) => {
   });
 
   return {
-    message: "Reset password OTP sent to your phone number successfully",
+    message: "OTP sent successfully",
     otp: otp, // Return OTP for verification
   };
 };
