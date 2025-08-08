@@ -10,6 +10,8 @@ interface ExtendedWebSocket extends WebSocket {
 
 const onlineUsers = new Set<string>();
 const userSockets = new Map<string, ExtendedWebSocket>();
+
+// For live location tracking
 const userLocations = new Map<string, { lat: number; lng: number }>();
 const locationSubscribers = new Map<string, Set<ExtendedWebSocket>>();
 
@@ -26,7 +28,7 @@ export function setupWebSocket(server: Server) {
 
         switch (parsedData.event) {
 
-          // Authenticate with JWT token
+          // ========== AUTHENTICATE ==========
           case "authenticate": {
             const token = parsedData.token;
             if (!token) return ws.close();
@@ -47,19 +49,16 @@ export function setupWebSocket(server: Server) {
               event: "userStatus",
               data: { userId: id, isOnline: true },
             });
-
             break;
           }
 
-          //  Receive location and update memory + DB + notify subscribers
+          // ========== LIVE LOCATION UPDATE ==========
           case "locationUpdate": {
             const { lat, lng } = parsedData;
             if (!ws.userId || lat == null || lng == null) return;
 
-            //  Update memory map
             userLocations.set(ws.userId, { lat, lng });
 
-            // Update in database
             try {
               await prisma.user.update({
                 where: { id: ws.userId },
@@ -69,7 +68,7 @@ export function setupWebSocket(server: Server) {
               console.error("DB update error:", err);
             }
 
-            // Notify subscribers (only)
+            // Notify subscribers who track this user's location
             const subscribers = locationSubscribers.get(ws.userId);
             if (subscribers) {
               subscribers.forEach((subscriberWs) => {
@@ -83,11 +82,10 @@ export function setupWebSocket(server: Server) {
                 }
               });
             }
-
             break;
           }
 
-          //  Subscribe to another user’s location
+          // ========== SUBSCRIBE TO LOCATION ==========
           case "subscribeToLocation": {
             const { targetUserId } = parsedData;
             if (!ws.userId || !targetUserId) return;
@@ -97,15 +95,172 @@ export function setupWebSocket(server: Server) {
             }
             locationSubscribers.get(targetUserId)!.add(ws);
 
-            console.log(`${ws.userId} is now tracking ${targetUserId}`);
+            console.log(`${ws.userId} subscribed to location of ${targetUserId}`);
+            break;
+          }
+
+          // ========== SEND SINGLE MESSAGE ==========
+          case "message": {
+            const { receiverId, message, images } = parsedData;
+            if (!ws.userId || !receiverId || !message) {
+              console.log("Invalid message payload");
+              return;
+            }
+
+            let room = await prisma.room.findFirst({
+              where: {
+                OR: [
+                  { senderId: ws.userId, receiverId },
+                  { senderId: receiverId, receiverId: ws.userId },
+                ],
+              },
+            });
+
+            if (!room) {
+              room = await prisma.room.create({
+                data: { senderId: ws.userId, receiverId },
+              });
+            }
+
+            const chat = await prisma.chat.create({
+              data: {
+                senderId: ws.userId,
+                receiverId,
+                roomId: room.id,
+                message,
+                images: { set: images || [] },
+              },
+            });
+
+            // Send to receiver if online
+            const receiverSocket = userSockets.get(receiverId);
+            if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
+              receiverSocket.send(JSON.stringify({ event: "message", data: chat }));
+            }
+
+            // Send confirmation to sender
+            ws.send(JSON.stringify({ event: "message", data: chat }));
+            break;
+          }
+
+          // ========== FETCH CHAT HISTORY ==========
+          case "fetchChats": {
+            const { receiverId } = parsedData;
+            if (!ws.userId || !receiverId) return;
+
+            const room = await prisma.room.findFirst({
+              where: {
+                OR: [
+                  { senderId: ws.userId, receiverId },
+                  { senderId: receiverId, receiverId: ws.userId },
+                ],
+              },
+            });
+
+            if (!room) {
+              ws.send(JSON.stringify({ event: "noRoomFound" }));
+              return;
+            }
+
+            const chats = await prisma.chat.findMany({
+              where: { roomId: room.id },
+              orderBy: { createdAt: "asc" },
+            });
+
+            await prisma.chat.updateMany({
+              where: { roomId: room.id, receiverId: ws.userId },
+              data: { isRead: true },
+            });
+
+            ws.send(JSON.stringify({ event: "fetchChats", data: chats }));
+            break;
+          }
+
+          // ========== FETCH UNREAD MESSAGES ==========
+          case "unReadMessages": {
+            const { receiverId } = parsedData;
+            if (!ws.userId || !receiverId) return;
+
+            const room = await prisma.room.findFirst({
+              where: {
+                OR: [
+                  { senderId: ws.userId, receiverId },
+                  { senderId: receiverId, receiverId: ws.userId },
+                ],
+              },
+            });
+
+            if (!room) {
+              ws.send(JSON.stringify({ event: "noUnreadMessages", data: [] }));
+              return;
+            }
+
+            const unReadMessages = await prisma.chat.findMany({
+              where: { roomId: room.id, isRead: false, receiverId: ws.userId },
+            });
+
+            ws.send(
+              JSON.stringify({
+                event: "unReadMessages",
+                data: { messages: unReadMessages, count: unReadMessages.length },
+              })
+            );
+            break;
+          }
+
+          // ========== MESSAGE LIST (last msg per room) ==========
+          case "messageList": {
+            if (!ws.userId) return;
+            try {
+              const rooms = await prisma.room.findMany({
+                where: {
+                  OR: [{ senderId: ws.userId }, { receiverId: ws.userId }],
+                },
+                include: {
+                  chats: {
+                    orderBy: { createdAt: "desc" },
+                    take: 1,
+                  },
+                },
+              });
+
+              const userIds = rooms.map((room) =>
+                room.senderId === ws.userId ? room.receiverId : room.senderId
+              );
+
+              const userInfos = await prisma.user.findMany({
+                where: { id: { in: userIds } },
+                select: { profileImage: true, firstName: true, lastName: true, id: true },
+              });
+
+              const userWithLastMessages = rooms.map((room) => {
+                const otherUserId =
+                  room.senderId === ws.userId ? room.receiverId : room.senderId;
+                const userInfo = userInfos.find((u) => u.id === otherUserId);
+                return {
+                  user: userInfo || null,
+                  lastMessage: room.chats && room.chats.length > 0 ? room.chats[0] : null,
+                };
+              });
+
+              ws.send(JSON.stringify({ event: "messageList", data: userWithLastMessages }));
+            } catch (error) {
+              console.error("Error fetching message list:", error);
+              ws.send(
+                JSON.stringify({
+                  event: "error",
+                  message: "Failed to fetch message list",
+                })
+              );
+            }
             break;
           }
 
           default:
-            console.log("Unknown event type:", parsedData.event);
+            console.log("Unknown event:", parsedData.event);
         }
       } catch (error) {
-        console.error("WebSocket Error:", error);
+        console.error("WebSocket message handling error:", error);
       }
     });
 
@@ -114,6 +269,7 @@ export function setupWebSocket(server: Server) {
         onlineUsers.delete(ws.userId);
         userSockets.delete(ws.userId);
 
+        // Notify all users about offline status
         broadcastToAll(wss, {
           event: "userStatus",
           data: { userId: ws.userId, isOnline: false },
@@ -124,7 +280,6 @@ export function setupWebSocket(server: Server) {
           subscribers.delete(ws);
         }
       }
-
       console.log("User disconnected");
     });
   });
