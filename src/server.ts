@@ -2,6 +2,7 @@ import { Server } from "http";
 import config from "./config";
 
 import app from "./app";
+import { setupWebSocket } from "./shared/websocket";
 
 let server: Server;
 
@@ -14,7 +15,7 @@ async function startServer() {
       `Server is listening on port  http://10.0.20.112:${config.port}/api/v1`
     );
   });
-
+  setupWebSocket(server);
 }
  
 async function main() {

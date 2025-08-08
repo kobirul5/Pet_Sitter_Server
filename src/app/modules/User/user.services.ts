@@ -419,7 +419,6 @@ const updateSitterService = async (
     userToken,
     config.jwt.jwt_secret!
   );
-
   // Check if service exists and belongs to user
   const existingService = await prisma.service.findFirst({
     where: {
@@ -431,6 +430,7 @@ const updateSitterService = async (
   if (!existingService) {
     throw new ApiError(httpStatus.NOT_FOUND, "Service not found");
   }
+ 
 
   const updatedService = await prisma.service.update({
     where: { id: serviceId },
