@@ -112,12 +112,13 @@ model Dog {
   userId      String   @db.ObjectId
   name        String?  @default("")
   gender      String?  @default("")
+  age      String?  @default("")
   breed       String?  @default("")
   weight      String?  @default("")
   vaccination String?  @default("")
   spayed      String?  @default("")
   about       String?  @default("")
-  images      String[]
+  images      String[] @default([])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
