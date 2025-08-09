@@ -68,10 +68,10 @@ const getSitterDetails = catchAsync(
 // Rate a sitter
 const rateSitter = catchAsync(
   async (req: Request, res: Response) => {
-    const userToken = req.headers.authorization as string;
+    const userId = req.user.id;
     const ratingData: ICreateRating = req.body;
 
-    const result = await SitterService.rateSitter(userToken, ratingData);
+    const result = await SitterService.rateSitter(userId, ratingData);
 
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
@@ -82,60 +82,60 @@ const rateSitter = catchAsync(
   }
 );
 
-// Update sitter rating
-const updateSitterRating = catchAsync(
-  async (req: Request, res: Response) => {
-    const userToken = req.headers.authorization as string;
-    const { sitterId } = req.params;
-    const ratingData = req.body;
+// // Update sitter rating
+// const updateSitterRating = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const userToken = req.headers.authorization as string;
+//     const { sitterId } = req.params;
+//     const ratingData = req.body;
 
-    const result = await SitterService.updateSitterRating(
-      userToken,
-      sitterId,
-      ratingData
-    );
+//     const result = await SitterService.updateSitterRating(
+//       userToken,
+//       sitterId,
+//       ratingData
+//     );
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Sitter rating updated successfully",
-      data: result,
-    });
-  }
-);
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "Sitter rating updated successfully",
+//       data: result,
+//     });
+//   }
+// );
 
-// Delete sitter rating
-const deleteSitterRating = catchAsync(
-  async (req: Request, res: Response) => {
-    const userToken = req.headers.authorization as string;
-    const { sitterId } = req.params;
+// // Delete sitter rating
+// const deleteSitterRating = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const userToken = req.headers.authorization as string;
+//     const { sitterId } = req.params;
 
-    const result = await SitterService.deleteSitterRating(userToken, sitterId);
+//     const result = await SitterService.deleteSitterRating(userToken, sitterId);
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Sitter rating deleted successfully",
-      data: result,
-    });
-  }
-);
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "Sitter rating deleted successfully",
+//       data: result,
+//     });
+//   }
+// );
 
-// Get user's ratings
-const getUserRatings = catchAsync(
-  async (req: Request, res: Response) => {
-    const userToken = req.headers.authorization as string;
+// // Get user's ratings
+// const getUserRatings = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const userToken = req.headers.authorization as string;
 
-    const result = await SitterService.getUserRatings(userToken);
+//     const result = await SitterService.getUserRatings(userToken);
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "User ratings retrieved successfully",
-      data: result,
-    });
-  }
-);
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "User ratings retrieved successfully",
+//       data: result,
+//     });
+//   }
+// );
 
 
 
@@ -146,9 +146,9 @@ export const SitterController = {
   getSitterRecommendations,
   getSitterDetails,
   rateSitter,
-  updateSitterRating,
-  deleteSitterRating,
-  getUserRatings,
+  // updateSitterRating,
+  // deleteSitterRating,
+  // getUserRatings,
   getAllSitterForServices,
 
 }; 

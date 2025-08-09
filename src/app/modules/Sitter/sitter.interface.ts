@@ -89,7 +89,7 @@ export interface ISitterDetail {
 export interface ICreateRating {
   rating: number;
   review?: string;
-  sitterId: string;
+  ratingsReceivedId: string;
 } 
 
 export interface ICreateRequestData {

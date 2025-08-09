@@ -245,7 +245,7 @@ const getAllServices = async () => {
 const getSitterDetails = async (
   userToken: string,
   sitterId: string
-): Promise<ISitterDetail> => {
+) => {
   const decodedToken = jwtHelpers.verifyToken(
     userToken,
     config.jwt.jwt_secret!
@@ -262,7 +262,7 @@ const getSitterDetails = async (
       sitterProfile: true,
       ratingsReceived: {
         include: {
-          user: {
+          ratingsGiven: {
             select: {
               id: true,
               firstName: true,
@@ -288,6 +288,7 @@ const getSitterDetails = async (
     ? totalRating / sitter.ratingsReceived.length 
     : 0;
 
+    console.log("averageRating", averageRating);
   return {
     id: sitter.id,
     firstName: sitter.firstName,
@@ -310,18 +311,14 @@ const getSitterDetails = async (
 
 // Rate a sitter
 const rateSitter = async (
-  userToken: string,
+  ratingsGivenId: string, // user giving the rating
   ratingData: ICreateRating
 ): Promise<any> => {
-  const decodedToken = jwtHelpers.verifyToken(
-    userToken,
-    config.jwt.jwt_secret!
-  );
 
   // Check if sitter exists
-  const sitter = await prisma.user.findUnique({
+  const sitter = await prisma.user.findFirst({
     where: {
-      id: ratingData.sitterId,
+      id: ratingData.ratingsReceivedId,
       role: "Sitter",
     },
   });
@@ -330,17 +327,17 @@ const rateSitter = async (
     throw new ApiError(httpStatus.NOT_FOUND, "Sitter not found");
   }
 
-  // Check if user is trying to rate themselves
-  if (decodedToken.id === ratingData.sitterId) {
+  // Prevent self-rating
+  if (ratingsGivenId === ratingData.ratingsReceivedId) {
     throw new ApiError(httpStatus.BAD_REQUEST, "You cannot rate yourself");
   }
 
-  // Check if user has already rated this sitter
+  // Check if already rated
   const existingRating = await prisma.rating.findUnique({
     where: {
-      userId_sitterId: {
-        userId: decodedToken.id,
-        sitterId: ratingData.sitterId,
+      ratingsGivenId_ratingsReceivedId: {
+        ratingsGivenId,
+        ratingsReceivedId: ratingData.ratingsReceivedId,
       },
     },
   });
@@ -354,16 +351,16 @@ const rateSitter = async (
     throw new ApiError(httpStatus.BAD_REQUEST, "Rating must be between 1 and 5");
   }
 
-  // Create the rating
+  // Create rating
   const rating = await prisma.rating.create({
     data: {
       rating: ratingData.rating,
       review: ratingData.review,
-      userId: decodedToken.id,
-      sitterId: ratingData.sitterId,
+      ratingsGivenId,
+      ratingsReceivedId: ratingData.ratingsReceivedId,
     },
     include: {
-      user: {
+      ratingsGiven: {
         select: {
           id: true,
           firstName: true,
@@ -374,16 +371,16 @@ const rateSitter = async (
     },
   });
 
-  // Update sitter's total rating and review count
+  // Recalculate sitter's average rating
   const sitterRatings = await prisma.rating.findMany({
-    where: { sitterId: ratingData.sitterId },
+    where: { ratingsReceivedId: ratingData.ratingsReceivedId },
   });
 
   const totalRating = sitterRatings.reduce((sum, r) => sum + r.rating, 0);
   const averageRating = totalRating / sitterRatings.length;
 
   await prisma.user.update({
-    where: { id: ratingData.sitterId },
+    where: { id: ratingData.ratingsReceivedId },
     data: {
       totalRating: Math.round(averageRating * 10) / 10,
       totalReviews: sitterRatings.length,
@@ -393,168 +390,169 @@ const rateSitter = async (
   return rating;
 };
 
+
 // Update sitter rating
-const updateSitterRating = async (
-  userToken: string,
-  sitterId: string,
-  ratingData: { rating: number; review?: string }
-): Promise<any> => {
-  const decodedToken = jwtHelpers.verifyToken(
-    userToken,
-    config.jwt.jwt_secret!
-  );
+// const updateSitterRating = async (
+//   userToken: string,
+//   sitterId: string,
+//   ratingData: { rating: number; review?: string }
+// ): Promise<any> => {
+//   const decodedToken = jwtHelpers.verifyToken(
+//     userToken,
+//     config.jwt.jwt_secret!
+//   );
 
-  // Validate rating value
-  if (ratingData.rating < 1 || ratingData.rating > 5) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Rating must be between 1 and 5");
-  }
+//   // Validate rating value
+//   if (ratingData.rating < 1 || ratingData.rating > 5) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, "Rating must be between 1 and 5");
+//   }
 
-  // Find existing rating
-  const existingRating = await prisma.rating.findUnique({
-    where: {
-      userId_sitterId: {
-        userId: decodedToken.id,
-        sitterId: sitterId,
-      },
-    },
-  });
+//   // Find existing rating
+//   const existingRating = await prisma.rating.findUnique({
+//     where: {
+//       userId_sitterId: {
+//         userId: decodedToken.id,
+//         sitterId: sitterId,
+//       },
+//     },
+//   });
 
-  if (!existingRating) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Rating not found");
-  }
+//   if (!existingRating) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "Rating not found");
+//   }
 
-  // Update the rating
-  const updatedRating = await prisma.rating.update({
-    where: { id: existingRating.id },
-    data: {
-      rating: ratingData.rating,
-      review: ratingData.review,
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          profileImage: true,
-        },
-      },
-    },
-  });
+//   // Update the rating
+//   const updatedRating = await prisma.rating.update({
+//     where: { id: existingRating.id },
+//     data: {
+//       rating: ratingData.rating,
+//       review: ratingData.review,
+//     },
+//     include: {
+//       user: {
+//         select: {
+//           id: true,
+//           firstName: true,
+//           lastName: true,
+//           profileImage: true,
+//         },
+//       },
+//     },
+//   });
 
-  // Update sitter's total rating
-  const sitterRatings = await prisma.rating.findMany({
-    where: { sitterId: sitterId },
-  });
+//   // Update sitter's total rating
+//   const sitterRatings = await prisma.rating.findMany({
+//     where: { sitterId: sitterId },
+//   });
 
-  const totalRating = sitterRatings.reduce((sum, r) => sum + r.rating, 0);
-  const averageRating = totalRating / sitterRatings.length;
+//   const totalRating = sitterRatings.reduce((sum, r) => sum + r.rating, 0);
+//   const averageRating = totalRating / sitterRatings.length;
 
-  await prisma.user.update({
-    where: { id: sitterId },
-    data: {
-      totalRating: Math.round(averageRating * 10) / 10,
-      totalReviews: sitterRatings.length,
-    },
-  });
+//   await prisma.user.update({
+//     where: { id: sitterId },
+//     data: {
+//       totalRating: Math.round(averageRating * 10) / 10,
+//       totalReviews: sitterRatings.length,
+//     },
+//   });
 
-  return updatedRating;
-};
+//   return updatedRating;
+// };
 
-// Delete sitter rating
-const deleteSitterRating = async (
-  userToken: string,
-  sitterId: string
-): Promise<any> => {
-  const decodedToken = jwtHelpers.verifyToken(
-    userToken,
-    config.jwt.jwt_secret!
-  );
+// // Delete sitter rating
+// const deleteSitterRating = async (
+//   userToken: string,
+//   sitterId: string
+// ): Promise<any> => {
+//   const decodedToken = jwtHelpers.verifyToken(
+//     userToken,
+//     config.jwt.jwt_secret!
+//   );
 
-  // Find existing rating
-  const existingRating = await prisma.rating.findUnique({
-    where: {
-      userId_sitterId: {
-        userId: decodedToken.id,
-        sitterId: sitterId,
-      },
-    },
-  });
+//   // Find existing rating
+//   const existingRating = await prisma.rating.findUnique({
+//     where: {
+//       userId_sitterId: {
+//         userId: decodedToken.id,
+//         sitterId: sitterId,
+//       },
+//     },
+//   });
 
-  if (!existingRating) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Rating not found");
-  }
+//   if (!existingRating) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "Rating not found");
+//   }
 
-  // Delete the rating
-  await prisma.rating.delete({
-    where: { id: existingRating.id },
-  });
+//   // Delete the rating
+//   await prisma.rating.delete({
+//     where: { id: existingRating.id },
+//   });
 
-  // Update sitter's total rating
-  const sitterRatings = await prisma.rating.findMany({
-    where: { sitterId: sitterId },
-  });
+//   // Update sitter's total rating
+//   const sitterRatings = await prisma.rating.findMany({
+//     where: { sitterId: sitterId },
+//   });
 
-  if (sitterRatings.length > 0) {
-    const totalRating = sitterRatings.reduce((sum, r) => sum + r.rating, 0);
-    const averageRating = totalRating / sitterRatings.length;
+//   if (sitterRatings.length > 0) {
+//     const totalRating = sitterRatings.reduce((sum, r) => sum + r.rating, 0);
+//     const averageRating = totalRating / sitterRatings.length;
 
-    await prisma.user.update({
-      where: { id: sitterId },
-      data: {
-        totalRating: Math.round(averageRating * 10) / 10,
-        totalReviews: sitterRatings.length,
-      },
-    });
-  } else {
-    // No ratings left
-    await prisma.user.update({
-      where: { id: sitterId },
-      data: {
-        totalRating: 0,
-        totalReviews: 0,
-      },
-    });
-  }
+//     await prisma.user.update({
+//       where: { id: sitterId },
+//       data: {
+//         totalRating: Math.round(averageRating * 10) / 10,
+//         totalReviews: sitterRatings.length,
+//       },
+//     });
+//   } else {
+//     // No ratings left
+//     await prisma.user.update({
+//       where: { id: sitterId },
+//       data: {
+//         totalRating: 0,
+//         totalReviews: 0,
+//       },
+//     });
+//   }
 
-  return { message: "Rating deleted successfully" };
-};
+//   return { message: "Rating deleted successfully" };
+// };
 
-// Get user's ratings
-const getUserRatings = async (userToken: string): Promise<any> => {
-  const decodedToken = jwtHelpers.verifyToken(
-    userToken,
-    config.jwt.jwt_secret!
-  );
+// // Get user's ratings
+// const getUserRatings = async (userToken: string): Promise<any> => {
+//   const decodedToken = jwtHelpers.verifyToken(
+//     userToken,
+//     config.jwt.jwt_secret!
+//   );
 
-  const ratings = await prisma.rating.findMany({
-    where: { userId: decodedToken.id },
-    include: {
-      sitter: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          profileImage: true,
-        },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+//   const ratings = await prisma.rating.findMany({
+//     where: { userId: decodedToken.id },
+//     include: {
+//       sitter: {
+//         select: {
+//           id: true,
+//           firstName: true,
+//           lastName: true,
+//           profileImage: true,
+//         },
+//       },
+//     },
+//     orderBy: { createdAt: "desc" },
+//   });
 
-  return ratings;
-};
+//   return ratings;
+// };
 
 
 
 
 export const SitterService = {
+  getAllServices,
   getSitterRecommendations,
   getSitterDetails,
   rateSitter,
-  updateSitterRating,
-  deleteSitterRating,
-  getUserRatings,
-  getAllServices,
+  // updateSitterRating,
+  // deleteSitterRating,
+  // getUserRatings,
   
 }; 

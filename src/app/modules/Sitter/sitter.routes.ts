@@ -32,26 +32,26 @@ router.post(
   SitterController.rateSitter
 );
 
-// Update sitter rating
-router.patch(
-  "/:sitterId/rate",
-  auth(),
-  SitterController.updateSitterRating
-);
+// // Update sitter rating
+// router.patch(
+//   "/:sitterId/rate",
+//   auth(),
+//   SitterController.updateSitterRating
+// );
 
-// Delete sitter rating
-router.delete(
-  "/:sitterId/rate",
-  auth(),
-  SitterController.deleteSitterRating
-);
+// // Delete sitter rating
+// router.delete(
+//   "/:sitterId/rate",
+//   auth(),
+//   SitterController.deleteSitterRating
+// );
 
-// Get user's ratings
-router.get(
-  "/ratings/my",
-  auth(),
-  SitterController.getUserRatings
-);
+// // Get user's ratings
+// router.get(
+//   "/ratings/my",
+//   auth(),
+//   SitterController.getUserRatings
+// );
 
 
 
