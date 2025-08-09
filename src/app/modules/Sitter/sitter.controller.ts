@@ -4,6 +4,8 @@ import { SitterService } from "./sitter.service";
 import { ISitterFilters, ICreateRating } from "./sitter.interface";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
+import ApiError from "../../../errors/ApiErrors";
+import { ServiceType } from "@prisma/client";
 
 // Get sitter recommendations
 const getSitterRecommendations = catchAsync(
@@ -25,6 +27,76 @@ const getSitterRecommendations = catchAsync(
     });
   }
 );
+
+// Get all services
+const getAllSitterForServices = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const services = await SitterService.getAllServices();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Services retrieved successfully",
+      data: services,
+    });
+  }
+)
+
+
+const createClientRequestController = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const clientId = req.user.id
+
+
+    const {
+      sitterId,
+      startTime,
+      endTime,
+      serviceType,
+      hourlyRate,
+      currency,
+      totalPrice,
+    } = req.body;
+
+    if (
+      !sitterId ||
+      !startTime ||
+      !endTime ||
+      !hourlyRate ||
+      !totalPrice
+    ) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        success: false,
+        message: 'Missing required fields',
+      });
+    }
+
+    const allowedServiceTypes = [
+      ServiceType.BOARDING,
+      ServiceType.DOGCARE,
+      ServiceType.WALKING,
+    ];
+
+    if (!allowedServiceTypes.includes(serviceType)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, `Service type ${ServiceType.BOARDING} or  ${ServiceType.DOGCARE} or  ${ServiceType.WALKING}`);
+    }
+
+
+
+    const newRequest = await SitterService.createClientRequestService({
+      clientId, endTime, hourlyRate, serviceType, sitterId, startTime, totalPrice, currency
+    });
+
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      success: true,
+      message: 'Client request created successfully',
+      data: newRequest,
+    });
+  }
+);
+
 
 // Get sitter details by ID
 const getSitterDetails = catchAsync(
@@ -116,19 +188,8 @@ const getUserRatings = catchAsync(
 );
 
 
-// Get all services
-const getAllServices = catchAsync(
-  async (req: Request, res: Response) => {
 
-    const services = await SitterService.getAllServices();
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Services retrieved successfully",
-      data: services,
-    });
-  }
-) 
+export { createClientRequestController };
 
 
 
@@ -140,5 +201,6 @@ export const SitterController = {
   updateSitterRating,
   deleteSitterRating,
   getUserRatings,
-  getAllServices
+  getAllSitterForServices,
+  createClientRequestController
 }; 

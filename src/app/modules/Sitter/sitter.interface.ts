@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from "@prisma/client";
+import { RequestStatus, ServiceType, UserRole, UserStatus } from "@prisma/client";
 
 export interface ISitterProfile {
   id?: string;
@@ -91,3 +91,15 @@ export interface ICreateRating {
   review?: string;
   sitterId: string;
 } 
+
+export interface ICreateRequestData {
+  clientId: string;
+  sitterId: string;
+  startTime: string | Date;
+  endTime: string | Date;
+  serviceType: ServiceType
+  hourlyRate: number;
+  totalPrice: number;
+  currency?: string;
+  status?: RequestStatus; // Optional, defaults to 'PENDING'
+}

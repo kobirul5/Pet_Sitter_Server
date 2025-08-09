@@ -50,7 +50,12 @@ router.get(
 router.get(
   "/sitter/all-services",
   auth(),
-  SitterController.getAllServices
+  SitterController.getAllSitterForServices
+);
+router.post(
+  "/send-request",
+  auth(),
+  SitterController.createClientRequestController
 );
 
 export const SitterRoutes = router; 
