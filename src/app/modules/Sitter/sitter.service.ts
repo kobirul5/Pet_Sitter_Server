@@ -30,17 +30,17 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 
 // Get sitter recommendations based on location and filters
 const getSitterRecommendations = async (
-  userToken: string,
+  userID: string,
   filters: ISitterFilters
 ): Promise<{ meta: any; data: ISitterRecommendation[] }> => {
-  const decodedToken = jwtHelpers.verifyToken(
-    userToken,
-    config.jwt.jwt_secret!
-  );
+  // const decodedToken = jwtHelpers.verifyToken(
+  //   userToken,
+  //   config.jwt.jwt_secret!
+  // );
 
   // Get user's location
   const user = await prisma.user.findUnique({
-    where: { id: decodedToken.id },
+    where: { id: userID },
     select: { lat: true, lng: true, location: true }
   });
 
@@ -526,6 +526,24 @@ const getUserRatings = async (userToken: string): Promise<any> => {
 };
 
 
+const getAllServices = async () => {
+  const services = await prisma.user.findMany({
+    select:{
+      id: true,
+      firstName: true,
+      lastName: true,
+      profileImage: true,
+      serviceType: true,
+      serviceAvailableDates: true
+    },
+    where: {
+      role: "Sitter"
+      // status: "ACTIVE",
+    }
+  });
+  return services;
+};
+
 
 
 
@@ -536,4 +554,5 @@ export const SitterService = {
   updateSitterRating,
   deleteSitterRating,
   getUserRatings,
+  getAllServices
 }; 

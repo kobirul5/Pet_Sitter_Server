@@ -120,11 +120,18 @@ const getAllUser = async (filters: IUserFilters) => {
   const sortBy = filters.sortBy || "createdAt";
   const sortOrder = filters.sortOrder || "desc";
 
+  // const whereConditions: Prisma.UserWhereInput = {
+  //   NOT: {
+  //     role: "Admin",
+  //   },
+  // };
+
   const whereConditions: Prisma.UserWhereInput = {
     NOT: {
       role: "Admin",
     },
   };
+
 
   if (searchTerm) {
     whereConditions.OR = [
@@ -430,7 +437,7 @@ const updateSitterService = async (
   if (!existingService) {
     throw new ApiError(httpStatus.NOT_FOUND, "Service not found");
   }
- 
+
 
   const updatedService = await prisma.service.update({
     where: { id: serviceId },

@@ -10,9 +10,9 @@ const getSitterRecommendations = catchAsync(
   async (req: Request, res: Response) => {
     const userToken = req.headers.authorization as string;
     const filters: ISitterFilters = req.query;
-
+    const userID = req.user.id;
     const result = await SitterService.getSitterRecommendations(
-      userToken,
+      userID,
       filters
     );
 
@@ -115,6 +115,24 @@ const getUserRatings = catchAsync(
   }
 );
 
+
+// Get all services
+const getAllServices = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const services = await SitterService.getAllServices();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Services retrieved successfully",
+      data: services,
+    });
+  }
+) 
+
+
+
+
 export const SitterController = {
   getSitterRecommendations,
   getSitterDetails,
@@ -122,4 +140,5 @@ export const SitterController = {
   updateSitterRating,
   deleteSitterRating,
   getUserRatings,
+  getAllServices
 }; 

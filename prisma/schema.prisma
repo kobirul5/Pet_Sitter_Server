@@ -15,59 +15,63 @@ model User {
   firstName String? @default("")
   lastName  String? @default("")
 
-  profileImage     String?    @default("")
-  expirationOtp    DateTime?  @default(now())
-  fcmToken         String?    @default("")
-  location         String?    @default("")
-  gender           String?    @default("")
-  lat              Float?     @default(0)
-  lng              Float?     @default(0)
-  otp              Int?       @default(0)
-  role             UserRole   @default(User)
-  isNotificationOn Boolean    @default(false)
-  isAvailable      Boolean    @default(true)
-  status           UserStatus @default(ACTIVE)
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
-  otpExpiresAt     DateTime?  @default(now())
-  service          String?    @default("")
-  address          String?    @default("")
-  serviceDay       String?    @default("0")
+  profileImage     String?     @default("")
+  expirationOtp    DateTime?   @default(now())
+  fcmToken         String?     @default("")
+  location         String?     @default("")
+  gender           String?     @default("")
+  lat              Float?      @default(0)
+  lng              Float?      @default(0)
+  otp              Int?        @default(0)
+  role             UserRole    @default(User)
+  isNotificationOn Boolean     @default(false)
+  isAvailable      Boolean     @default(true)
+  status           UserStatus  @default(ACTIVE)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  otpExpiresAt     DateTime?   @default(now())
+  service          String?     @default("")
+  address          String?     @default("")
+  serviceDayTotal  Int?        @default(0)
+  serviceAvailableDates     DateTime[]  @default([])
+  serviceType      ServiceType @default(NOSERVICE)
+
+  Service String? @default("")
 
   // Sitter specific fields
-  perDayFee        Float?     @default(0)
-  totalRating      Float?     @default(0)
-  totalReviews     Int?       @default(0)
-  experience       String?    @default("")
-  about           String?    @default("")
-  services        Service[]
-  sitterProfile   SitterProfile?
+  perDayFee     Float?         @default(0)
+  totalRating   Float?         @default(0)
+  totalReviews  Int?           @default(0)
+  experience    String?        @default("")
+  about         String?        @default("")
+  services      Service[]
+  sitterProfile SitterProfile?
 
   SenderRooms   Room[] @relation("SenderRooms")
   ReceiverRooms Room[] @relation("ReceiverRooms")
-   SentChats     Chat[]       @relation("SentChats")
-  ReceivedChats Chat[]       @relation("ReceivedChats")
+  SentChats     Chat[] @relation("SentChats")
+  ReceivedChats Chat[] @relation("ReceivedChats")
 
   // Relations
-  notifications Notification[]
-  Dog           Dog[]
-  ratingsGiven  Rating[]       @relation("UserRatings")
-  ratingsReceived Rating[]     @relation("SitterRatings")
+  notifications   Notification[]
+  Dog             Dog[]
+  ratingsGiven    Rating[]       @relation("UserRatings")
+  ratingsReceived Rating[]       @relation("SitterRatings")
 
   @@map("users")
 }
 
 model SitterProfile {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @unique @db.ObjectId
-  bio         String?  @default("")
-  experience  String?  @default("")
-  education   String?  @default("")
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @unique @db.ObjectId
+  bio            String?  @default("")
+  experience     String?  @default("")
+  education      String?  @default("")
   certifications String[] @default([])
-  languages   String[] @default([])
-  availability String? @default("")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  languages      String[] @default([])
+  availability   String?  @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -90,14 +94,18 @@ model Service {
   @@map("services")
 }
 
+model RequestService {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
 model Rating {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  rating      Float
-  review      String?  @default("")
-  userId      String   @db.ObjectId  // User who gave the rating
-  sitterId    String   @db.ObjectId  // Sitter who received the rating
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating    Float
+  review    String?  @default("")
+  userId    String   @db.ObjectId // User who gave the rating
+  sitterId  String   @db.ObjectId // Sitter who received the rating
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
   user   User @relation("UserRatings", fields: [userId], references: [id], onDelete: Cascade)
@@ -112,7 +120,7 @@ model Dog {
   userId      String   @db.ObjectId
   name        String?  @default("")
   gender      String?  @default("")
-  age      String?  @default("")
+  age         String?  @default("")
   breed       String?  @default("")
   weight      String?  @default("")
   vaccination String?  @default("")
@@ -179,7 +187,7 @@ model Room {
 enum UserRole {
   User
   Sitter
-   
+  Admin
 }
 
 enum UserStatus {
@@ -193,4 +201,11 @@ enum NotificationType {
   REMINDER
   BOOKING
   PAYMENT
+}
+
+enum ServiceType {
+  NOSERVICE
+  DOGCARE
+  BOARDING
+  WALKING
 }

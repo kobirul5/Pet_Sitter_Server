@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiErrors';
 import { fileUploader } from '../../../helpars/fileUploader';
-import { Id } from 'aws-sdk/clients/applicationautoscaling';
+
 
 interface Dog {
   name?: string;

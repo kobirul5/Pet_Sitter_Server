@@ -46,4 +46,11 @@ router.get(
   SitterController.getUserRatings
 );
 
+
+router.get(
+  "/sitter/all-services",
+  auth(),
+  SitterController.getAllServices
+);
+
 export const SitterRoutes = router; 
