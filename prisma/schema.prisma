@@ -126,13 +126,14 @@ model ClientRequest {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // The person requesting the service
-  client   User   @relation("ClientRequestsAsClient", fields: [clientId], references: [id])
+  client   User   @relation("ClientRequestsAsClient", fields: [clientId], references: [id], onDelete: Cascade)
   clientId String @db.ObjectId
-  dog      Dog    @relation("RequestedDog", fields: [clientId], references: [id])
+
+  dog      Dog    @relation("RequestedDog", fields: [dogId], references: [id], onDelete: Cascade)
   dogId    String @db.ObjectId
 
   // The sitter who is receiving the request
-  sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id])
+  sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
   sitterId String @db.ObjectId
 
   startTime   DateTime
@@ -240,4 +241,5 @@ enum RequestStatus {
   PENDING
   ACCEPTED
   DENIED
+  COMPLETED
 }

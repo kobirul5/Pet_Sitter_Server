@@ -95,6 +95,7 @@ export interface ICreateRating {
 export interface ICreateRequestData {
   clientId: string;
   sitterId: string;
+  dogId: string;
   startTime: string | Date;
   endTime: string | Date;
   serviceType: ServiceType

@@ -16,11 +16,7 @@ router.get(
   auth(),
   SitterController.getAllSitterForServices
 );
-router.post(
-  "/send-request",
-  auth(),
-  SitterController.createClientRequestController
-);
+
 
 // Get sitter details by ID
 router.get(

@@ -43,59 +43,6 @@ const getAllSitterForServices = catchAsync(
 )
 
 
-const createClientRequestController = catchAsync(
-  async (req: Request, res: Response) => {
-
-    const clientId = req.user.id
-
-
-    const {
-      sitterId,
-      startTime,
-      endTime,
-      serviceType,
-      hourlyRate,
-      currency,
-      totalPrice,
-    } = req.body;
-
-    if (
-      !sitterId ||
-      !startTime ||
-      !endTime ||
-      !hourlyRate ||
-      !totalPrice
-    ) {
-      return res.status(httpStatus.BAD_REQUEST).json({
-        success: false,
-        message: 'Missing required fields',
-      });
-    }
-
-    const allowedServiceTypes = [
-      ServiceType.BOARDING,
-      ServiceType.DOGCARE,
-      ServiceType.WALKING,
-    ];
-
-    if (!allowedServiceTypes.includes(serviceType)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, `Service type ${ServiceType.BOARDING} or  ${ServiceType.DOGCARE} or  ${ServiceType.WALKING}`);
-    }
-
-
-
-    const newRequest = await SitterService.createClientRequestService({
-      clientId, endTime, hourlyRate, serviceType, sitterId, startTime, totalPrice, currency
-    });
-
-    sendResponse(res, {
-      statusCode: httpStatus.CREATED,
-      success: true,
-      message: 'Client request created successfully',
-      data: newRequest,
-    });
-  }
-);
 
 
 // Get sitter details by ID
@@ -114,6 +61,9 @@ const getSitterDetails = catchAsync(
     });
   }
 );
+
+
+
 
 // Rate a sitter
 const rateSitter = catchAsync(
@@ -189,8 +139,6 @@ const getUserRatings = catchAsync(
 
 
 
-export { createClientRequestController };
-
 
 
 
@@ -202,5 +150,5 @@ export const SitterController = {
   deleteSitterRating,
   getUserRatings,
   getAllSitterForServices,
-  createClientRequestController
+
 }; 

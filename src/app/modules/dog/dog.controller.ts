@@ -38,8 +38,21 @@ const getDogList = catchAsync(async (req, res) => {
 });
 
 
+const dogDeleteController = catchAsync(async (req, res) => {
+  const dogId = req.params.dogId;
+  console.log(dogId);
+  const result = await dogService.deleteDog(dogId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Dog deleted successfully',
+    data: null,
+  });
+});
+
 export const dogController = {
   createDogProfile,
-  getDogList
+  getDogList,
+  dogDeleteController
 
 };

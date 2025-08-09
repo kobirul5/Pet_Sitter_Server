@@ -74,7 +74,31 @@ const getDogList = async (userId: string) => {
 };
 
 
+const deleteDog = async (dogId: string) => {
+
+  if(!dogId){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Dog id is required')
+  }
+
+  const dog = await prisma.dog.findUnique({
+    where: { id: dogId },
+  });
+  if (!dog) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Dog not found');
+  }
+
+  
+
+
+  const result = await prisma.dog.delete({
+    where: { id: dogId },
+  });
+  return result;
+};
+
+
 export const dogService = {
 createIntoDb,
-getDogList
+getDogList,
+deleteDog
 };
