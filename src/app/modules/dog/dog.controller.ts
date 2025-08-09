@@ -26,8 +26,20 @@ const createDogProfile = catchAsync(async (req, res) => {
   });
 });
 
+const getDogList = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const result = await dogService.getDogList(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Dog list retrieved successfully',
+    data: result,
+  });
+});
+
 
 export const dogController = {
   createDogProfile,
+  getDogList
 
 };

@@ -66,7 +66,15 @@ const createIntoDb = async ({data, files, userId}:IDog) => {
 };
 
 
+const getDogList = async (userId: string) => {
+  const result = await prisma.dog.findMany({
+    where: { userId: userId },
+  });
+  return result;
+};
+
 
 export const dogService = {
 createIntoDb,
+getDogList
 };

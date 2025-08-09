@@ -11,6 +11,17 @@ router.get(
   SitterController.getSitterRecommendations
 );
 
+router.get(
+  "/sitter/all-services",
+  auth(),
+  SitterController.getAllSitterForServices
+);
+router.post(
+  "/send-request",
+  auth(),
+  SitterController.createClientRequestController
+);
+
 // Get sitter details by ID
 router.get(
   "/:sitterId",
@@ -47,15 +58,6 @@ router.get(
 );
 
 
-router.get(
-  "/sitter/all-services",
-  auth(),
-  SitterController.getAllSitterForServices
-);
-router.post(
-  "/send-request",
-  auth(),
-  SitterController.createClientRequestController
-);
+
 
 export const SitterRoutes = router; 

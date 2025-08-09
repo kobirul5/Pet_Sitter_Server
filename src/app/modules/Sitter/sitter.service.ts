@@ -222,6 +222,56 @@ const getSitterRecommendations = async (
   };
 };
 
+
+const getAllServices = async () => {
+  const services = await prisma.user.findMany({
+    select:{
+      id: true,
+      firstName: true,
+      lastName: true,
+      profileImage: true,
+      serviceType: true,
+      serviceAvailableDates: true
+    },
+    where: {
+      role: "Sitter"
+      // status: "ACTIVE",
+    }
+  });
+  return services;
+};
+
+const createClientRequestService = async (data: ICreateRequestData) => {
+  // Validate sitter exists and is active
+  const sitter = await prisma.user.findFirst({
+    where: {
+      id: data.sitterId,
+      role: 'Sitter',
+      status: 'ACTIVE',
+    },
+  });
+
+  if (!sitter) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Sitter not found or inactive');
+  }
+
+  // Create the client request
+  const request = await prisma.clientRequest.create({
+    data: {
+      clientId: data.clientId,
+      sitterId: data.sitterId,
+      startTime: new Date(data.startTime),
+      endTime: new Date(data.endTime),
+      serviceType: data.serviceType,
+      hourlyRate: data.hourlyRate,
+      totalPrice: data.totalPrice,
+    },
+  });
+
+  return request;
+};
+
+
 // Get sitter details by ID
 const getSitterDetails = async (
   userToken: string,
@@ -527,53 +577,7 @@ const getUserRatings = async (userToken: string): Promise<any> => {
 };
 
 
-const getAllServices = async () => {
-  const services = await prisma.user.findMany({
-    select:{
-      id: true,
-      firstName: true,
-      lastName: true,
-      profileImage: true,
-      serviceType: true,
-      serviceAvailableDates: true
-    },
-    where: {
-      role: "Sitter"
-      // status: "ACTIVE",
-    }
-  });
-  return services;
-};
 
-const createClientRequestService = async (data: ICreateRequestData) => {
-  // Validate sitter exists and is active
-  const sitter = await prisma.user.findFirst({
-    where: {
-      id: data.sitterId,
-      role: 'Sitter',
-      status: 'ACTIVE',
-    },
-  });
-
-  if (!sitter) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Sitter not found or inactive');
-  }
-
-  // Create the client request
-  const request = await prisma.clientRequest.create({
-    data: {
-      clientId: data.clientId,
-      sitterId: data.sitterId,
-      startTime: new Date(data.startTime),
-      endTime: new Date(data.endTime),
-      serviceType: data.serviceType,
-      hourlyRate: data.hourlyRate,
-      totalPrice: data.totalPrice,
-    },
-  });
-
-  return request;
-};
 
 export const SitterService = {
   getSitterRecommendations,

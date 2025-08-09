@@ -15,6 +15,8 @@ fileUploader.uploadMultipleImage,
 dogController.createDogProfile,
 );
 
+router.get('/my-pets', auth(), dogController.getDogList);
+
 // router.get('/', auth(), dogController.getDogList);
 
 // router.get('/:id', auth(), dogController.getDogById);

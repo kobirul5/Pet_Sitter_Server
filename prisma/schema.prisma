@@ -15,26 +15,26 @@ model User {
   firstName String? @default("")
   lastName  String? @default("")
 
-  profileImage     String?     @default("")
-  expirationOtp    DateTime?   @default(now())
-  fcmToken         String?     @default("")
-  location         String?     @default("")
-  gender           String?     @default("")
-  lat              Float?      @default(0)
-  lng              Float?      @default(0)
-  otp              Int?        @default(0)
-  role             UserRole    @default(User)
-  isNotificationOn Boolean     @default(false)
-  isAvailable      Boolean     @default(true)
-  status           UserStatus  @default(ACTIVE)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-  otpExpiresAt     DateTime?   @default(now())
-  service          String?     @default("")
-  address          String?     @default("")
-  serviceDayTotal  Int?        @default(0)
-  serviceAvailableDates     DateTime[]  @default([])
-  serviceType      ServiceType @default(NOSERVICE)
+  profileImage          String?     @default("")
+  expirationOtp         DateTime?   @default(now())
+  fcmToken              String?     @default("")
+  location              String?     @default("")
+  gender                String?     @default("")
+  lat                   Float?      @default(0)
+  lng                   Float?      @default(0)
+  otp                   Int?        @default(0)
+  role                  UserRole    @default(User)
+  isNotificationOn      Boolean     @default(false)
+  isAvailable           Boolean     @default(true)
+  status                UserStatus  @default(ACTIVE)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  otpExpiresAt          DateTime?   @default(now())
+  service               String?     @default("")
+  address               String?     @default("")
+  serviceDayTotal       Int?        @default(0)
+  serviceAvailableDates DateTime[]  @default([])
+  serviceType           ServiceType @default(NOSERVICE)
 
   Service String? @default("")
 
@@ -58,11 +58,11 @@ model User {
   ratingsGiven    Rating[]       @relation("UserRatings")
   ratingsReceived Rating[]       @relation("SitterRatings")
 
-    // Requests the user has made as a client
-  clientRequests  ClientRequest[] @relation("ClientRequestsAsClient")
+  // Requests the user has made as a client
+  clientRequests ClientRequest[] @relation("ClientRequestsAsClient")
 
   // Requests the user has received as a sitter
-  sitterRequests  ClientRequest[] @relation("ClientRequestsAsSitter")
+  sitterRequests ClientRequest[] @relation("ClientRequestsAsSitter")
 
   @@map("users")
 }
@@ -100,47 +100,6 @@ model Service {
   @@map("services")
 }
 
-
-
-model ClientRequest {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
-
-  // The person requesting the service
-  client       User          @relation("ClientRequestsAsClient", fields: [clientId], references: [id])
-  clientId     String        @db.ObjectId
-
-  // The sitter who is receiving the request
-  sitter       User          @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id])
-  sitterId     String        @db.ObjectId
-
-  startTime    DateTime
-  endTime      DateTime
-  serviceType  ServiceType
-  hourlyRate   Float
-  totalPrice  Float
-  status       RequestStatus @default(PENDING)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-}
-
-
-model Rating {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  rating    Float
-  review    String?  @default("")
-  userId    String   @db.ObjectId // User who gave the rating
-  sitterId  String   @db.ObjectId // Sitter who received the rating
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  user   User @relation("UserRatings", fields: [userId], references: [id], onDelete: Cascade)
-  sitter User @relation("SitterRatings", fields: [sitterId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, sitterId])
-  @@map("ratings")
-}
-
 model Dog {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   userId      String   @db.ObjectId
@@ -157,9 +116,50 @@ model Dog {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ClientRequest ClientRequest[] @relation("RequestedDog")
 
   @@map("dogs")
+}
+
+model ClientRequest {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  // The person requesting the service
+  client   User   @relation("ClientRequestsAsClient", fields: [clientId], references: [id])
+  clientId String @db.ObjectId
+  dog      Dog    @relation("RequestedDog", fields: [clientId], references: [id])
+  dogId    String @db.ObjectId
+
+  // The sitter who is receiving the request
+  sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id])
+  sitterId String @db.ObjectId
+
+  startTime   DateTime
+  endTime     DateTime
+  serviceType ServiceType
+  hourlyRate  Float
+  totalPrice  Float
+  status      RequestStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Rating {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating    Float
+  review    String?  @default("")
+  userId    String   @db.ObjectId // User who gave the rating
+  sitterId  String   @db.ObjectId // Sitter who received the rating
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user   User @relation("UserRatings", fields: [userId], references: [id], onDelete: Cascade)
+  sitter User @relation("SitterRatings", fields: [sitterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sitterId])
+  @@map("ratings")
 }
 
 model Notification {
