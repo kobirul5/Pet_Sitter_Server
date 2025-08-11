@@ -114,8 +114,8 @@ const getServiceForSitterRequests = async (sitterId: string) => {
 // update service status
 const updateServicestatus = async (requestId: string, status: string, sitterId: string) => {
 
-if(status !== RequestStatus.ACCEPTED && status !== RequestStatus.DENIED){
-  throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Status must be ACCEPTED or DENIED');
+if(status !== RequestStatus.ACCEPTED && status !== RequestStatus.DENIED && status !== RequestStatus.COMPLETED){
+  throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Status must be ACCEPTED , COMPLETED or DENIED');
 }
 
  if( !sitterId ){

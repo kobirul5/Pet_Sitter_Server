@@ -4,6 +4,7 @@ import { userRoutes } from "../modules/User/user.route";
 import { SitterRoutes } from "../modules/Sitter/sitter.routes";
 import { dogRoutes } from "../modules/dog/dog.routes";
 import { serviceReuestRoutes } from "../modules/serviceReuest/serviceReuest.routes";
+import { ChatRoutes } from "../modules/chatImage/chat.route";
 
 const router = express.Router();
 
@@ -28,6 +29,10 @@ const moduleRoutes = [
     path: "/service-requests",
     route: serviceReuestRoutes,
   },
+  {
+    path: "/chats",
+    route: ChatRoutes
+  }
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
