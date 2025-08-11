@@ -18,6 +18,7 @@ dogController.createDogProfile,
 router.get('/my-pets', auth(), dogController.getDogList);
 router.delete("/:dogId", auth(), dogController.dogDeleteController);
 
+
 // router.get('/', auth(), dogController.getDogList);
 
 // router.get('/:id', auth(), dogController.getDogById);

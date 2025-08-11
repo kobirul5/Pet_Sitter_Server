@@ -50,6 +50,7 @@ const dogDeleteController = catchAsync(async (req, res) => {
   });
 });
 
+
 export const dogController = {
   createDogProfile,
   getDogList,

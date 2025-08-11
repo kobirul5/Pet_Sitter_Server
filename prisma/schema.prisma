@@ -63,6 +63,8 @@ model User {
 
   // Requests the user has received as a sitter
   sitterRequests ClientRequest[] @relation("ClientRequestsAsSitter")
+  RatingsPetReceived      PetRating[] @relation("RatingsPetReceived")
+  RatingsPetGiven      PetRating[] @relation("RatingsPetGiven")
 
   @@map("users")
 }
@@ -129,8 +131,8 @@ model ClientRequest {
   client   User   @relation("ClientRequestsAsClient", fields: [clientId], references: [id], onDelete: Cascade)
   clientId String @db.ObjectId
 
-  dog      Dog    @relation("RequestedDog", fields: [dogId], references: [id], onDelete: Cascade)
-  dogId    String @db.ObjectId
+  dog   Dog    @relation("RequestedDog", fields: [dogId], references: [id], onDelete: Cascade)
+  dogId String @db.ObjectId
 
   // The sitter who is receiving the request
   sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
@@ -147,22 +149,38 @@ model ClientRequest {
 }
 
 model Rating {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  rating             Float
-  review             String?  @default("")
-  ratingsGivenId     String   @db.ObjectId // User who gave the rating
-  ratingsReceivedId  String   @db.ObjectId // Sitter who received the rating
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating            Float
+  review            String?  @default("")
+  ratingsGivenId    String   @db.ObjectId // User who gave the rating
+  ratingsReceivedId String   @db.ObjectId // Sitter who received the rating
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   // Relations
-  ratingsGiven       User @relation("RatingsGiven", fields: [ratingsGivenId], references: [id], onDelete: Cascade)
-  ratingsReceived    User @relation("RatingsReceived", fields: [ratingsReceivedId], references: [id], onDelete: Cascade)
+  ratingsGiven    User @relation("RatingsGiven", fields: [ratingsGivenId], references: [id], onDelete: Cascade)
+  ratingsReceived User @relation("RatingsReceived", fields: [ratingsReceivedId], references: [id], onDelete: Cascade)
 
   @@unique([ratingsGivenId, ratingsReceivedId])
   @@map("ratings")
 }
 
+model PetRating {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating            Float
+  review            String?  @default("")
+  ratingsGivenId    String   @db.ObjectId // User who gave the rating
+  ratingsReceivedId String   @db.ObjectId // Sitter who received the rating
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  ratingsPetGiven    User @relation("RatingsPetGiven", fields: [ratingsGivenId], references: [id], onDelete: Cascade)
+  ratingsPetReceived User @relation("RatingsPetReceived", fields: [ratingsReceivedId], references: [id], onDelete: Cascade)
+
+  @@unique([ratingsGivenId, ratingsReceivedId])
+  @@map("petRatings")
+}
 
 model Notification {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId

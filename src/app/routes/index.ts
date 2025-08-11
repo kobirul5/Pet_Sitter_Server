@@ -5,6 +5,8 @@ import { SitterRoutes } from "../modules/Sitter/sitter.routes";
 import { dogRoutes } from "../modules/dog/dog.routes";
 import { serviceReuestRoutes } from "../modules/serviceReuest/serviceReuest.routes";
 import { ChatRoutes } from "../modules/chatImage/chat.route";
+import path from "path";
+import { reviewRoutes } from "../modules/review/review.routes";
 
 const router = express.Router();
 
@@ -32,6 +34,10 @@ const moduleRoutes = [
   {
     path: "/chats",
     route: ChatRoutes
+  },
+  {
+    path: "/reviews",
+    route: reviewRoutes
   }
 ];
 
