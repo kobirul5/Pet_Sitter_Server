@@ -82,6 +82,22 @@ const rateSitter = catchAsync(
   }
 );
 
+
+// const getSitterBoarding = catchAsync(async (req: Request, res: Response) => {
+//     console.log("req.user.id", req.user.id);
+//     const sitterId = req.user.id;
+//     console.log(sitterId);
+//     const result = await SitterService.getSitterBoarding(sitterId);
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "Sitter Boarding retrieved successfully",
+//       data: result,
+//     });
+//   }
+// );
+
+
 // // Update sitter rating
 // const updateSitterRating = catchAsync(
 //   async (req: Request, res: Response) => {
@@ -146,6 +162,7 @@ export const SitterController = {
   getSitterRecommendations,
   getSitterDetails,
   rateSitter,
+  // getSitterBoarding,
   // updateSitterRating,
   // deleteSitterRating,
   // getUserRatings,

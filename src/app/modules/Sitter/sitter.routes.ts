@@ -17,6 +17,11 @@ router.get(
   SitterController.getAllSitterForServices
 );
 
+// router.get(
+//   "/onboarding",
+//   auth(),
+//   SitterController.getSitterBoarding
+// )
 
 // Get sitter details by ID
 router.get(
@@ -31,6 +36,8 @@ router.post(
   auth(),
   SitterController.rateSitter
 );
+
+
 
 // // Update sitter rating
 // router.patch(

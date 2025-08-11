@@ -6,6 +6,7 @@ import ApiError from "../../../errors/ApiErrors";
 import { ServiceType } from "@prisma/client";
 import { serviceReuestService } from "./serviceReuest.service";
 
+// Create client request
 const createClientRequestController = catchAsync(
   async (req: Request, res: Response) => {
 
@@ -62,6 +63,7 @@ const createClientRequestController = catchAsync(
   }
 );
 
+// Get all service requests
 const getServiceRequestsController = catchAsync(
   async (req: Request, res: Response) => {
     const requests = await serviceReuestService.getServiceRequests();
@@ -73,8 +75,42 @@ const getServiceRequestsController = catchAsync(
     });
   }
 );
+// Get service requests for sitter
+const getServiceRequestsForSitterController = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const sitterId = req.user.id
+    console.log(sitterId)
+    const requests = await serviceReuestService.getServiceForSitterRequests(sitterId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Service requests retrieved successfully',
+      data: requests,
+    });
+  }
+);
+
+
+//updateServicestatusController
+const updateServicestatusController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { requestId, status } = req.body
+    const sitterId = req.user.id
+    const result = await serviceReuestService.updateServicestatus(requestId, status, sitterId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Service status updated successfully',
+      data: result,
+    });
+  }
+)
+
 
 export const serviceReuestController = {
   createClientRequestController,
-  getServiceRequestsController
+  getServiceRequestsController,
+  getServiceRequestsForSitterController,
+  updateServicestatusController
 };

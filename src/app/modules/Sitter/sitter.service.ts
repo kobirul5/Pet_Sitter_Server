@@ -391,6 +391,21 @@ const rateSitter = async (
 };
 
 
+
+// const getSitterBoarding = async (sitterId: string) => {
+//   const sitter = await prisma.clientRequest.findMany({
+//     where: {
+//       sitterId: sitterId,
+//     },
+//     include: {
+//       client: true,
+//     },
+//   });
+
+//   return sitter;
+// }
+
+
 // Update sitter rating
 // const updateSitterRating = async (
 //   userToken: string,
@@ -551,6 +566,7 @@ export const SitterService = {
   getSitterRecommendations,
   getSitterDetails,
   rateSitter,
+  // getSitterBoarding,
   // updateSitterRating,
   // deleteSitterRating,
   // getUserRatings,

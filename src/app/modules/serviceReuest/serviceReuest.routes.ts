@@ -17,5 +17,17 @@ router.get(
   auth(),
   serviceReuestController.getServiceRequestsController
 );
+router.get(
+  "/sitter",
+  auth(),
+  serviceReuestController.getServiceRequestsForSitterController
+);
+
+router.put(
+  "/update-status",
+  auth(),
+  serviceReuestController.updateServicestatusController
+);
+
 
 export const serviceReuestRoutes = router;
