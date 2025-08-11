@@ -75,7 +75,7 @@ const getServiceRequestsController = catchAsync(
     });
   }
 );
-// Get service requests for sitter
+// Get service requests by siiterId for sitter
 const getServiceRequestsForSitterController = catchAsync(
   async (req: Request, res: Response) => {
 
@@ -107,10 +107,25 @@ const updateServicestatusController = catchAsync(
   }
 )
 
+// get clinet and dog details
+const getClinetAndDogProfileByIdController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { requestId } = req.body
+    const result = await serviceReuestService.getClinetAndDogProfileById(requestId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Service status updated successfully',
+      data: result,
+    });
+  }
+)
+
 
 export const serviceReuestController = {
   createClientRequestController,
   getServiceRequestsController,
   getServiceRequestsForSitterController,
-  updateServicestatusController
+  updateServicestatusController,
+  getClinetAndDogProfileByIdController
 };

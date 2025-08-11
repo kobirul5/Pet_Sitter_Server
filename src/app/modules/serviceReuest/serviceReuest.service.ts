@@ -64,6 +64,8 @@ const getServiceRequests = async () => {
 //   return requests;
 // };
 
+// get service requests by siiterId for sitter
+
 const getServiceForSitterRequests = async (sitterId: string) => {
   const nowTime = new Date().toDateString();
 
@@ -135,10 +137,50 @@ if(status !== RequestStatus.ACCEPTED && status !== RequestStatus.DENIED){
   return result;
 };
 
+// get clinet and dog details by request id
+
+const getClinetAndDogProfileById = async (requestId: string) => {
+
+
+  const result = await prisma.clientRequest.findUnique({
+    where: {
+      id: requestId,
+    },
+    include: {
+      client: {
+       select:{
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          email: true,
+          createdAt: true,
+          phone: true,
+          address: true,
+        }
+      },
+      dog: {
+        select:{
+          name: true,
+          breed: true,
+          images: true,
+          gender: true,
+          age: true,
+          vaccination: true,
+          spayed: true,
+          about: true,
+          createdAt: true
+        }
+      },
+    },
+  });
+  return result;
+};
+
 
 export const serviceReuestService = {
   createClientRequestService,
   getServiceRequests,
   getServiceForSitterRequests,
-  updateServicestatus
+  updateServicestatus,
+  getClinetAndDogProfileById
 };

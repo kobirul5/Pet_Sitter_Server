@@ -17,6 +17,7 @@ router.get(
   auth(),
   serviceReuestController.getServiceRequestsController
 );
+// Get service requests by siiterId for sitter
 router.get(
   "/sitter",
   auth(),
@@ -29,5 +30,11 @@ router.put(
   serviceReuestController.updateServicestatusController
 );
 
+// get clinet and dog profile by id
+ router.get(
+  "/clinet-and-dog/:requestid",
+  auth(),
+  serviceReuestController.getClinetAndDogProfileByIdController
+);
 
 export const serviceReuestRoutes = router;
