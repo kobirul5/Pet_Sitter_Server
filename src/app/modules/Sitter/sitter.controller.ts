@@ -83,6 +83,21 @@ const rateSitter = catchAsync(
 );
 
 
+//  get sitter services
+const getSitterServicesForBoarding = catchAsync(
+  async (req: Request, res: Response) => {
+    const sitterId = req.user.id;
+    const result = await SitterService.getSitterBoarding();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Sitter services retrieved successfully",
+      data: result,
+    });
+  }
+);
+
+
 // const getSitterBoarding = catchAsync(async (req: Request, res: Response) => {
 //     console.log("req.user.id", req.user.id);
 //     const sitterId = req.user.id;
@@ -167,5 +182,6 @@ export const SitterController = {
   // deleteSitterRating,
   // getUserRatings,
   getAllSitterForServices,
+  getSitterServicesForBoarding
 
 }; 

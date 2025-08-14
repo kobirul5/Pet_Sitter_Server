@@ -1,6 +1,6 @@
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiErrors";
-import { Prisma } from "@prisma/client";
+import { Prisma, ServiceType, UserRole } from "@prisma/client";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
 import { omit } from "lodash";
@@ -237,6 +237,28 @@ const getAllServices = async () => {
   });
   return services;
 };
+
+
+const getSitterBoarding = async () => {
+  const services = await prisma.user.findMany({
+    select:{
+      id: true,
+      firstName: true,
+      lastName: true,
+      profileImage: true,
+      serviceType: true,
+      serviceAvailableDates: true,
+      about: true,
+      email: true,
+    },
+    where: {
+      role: UserRole.Sitter,
+      serviceType: ServiceType.BOARDING
+      // status: "ACTIVE",
+    }
+  });
+  return services;
+}
 
 
 
@@ -566,6 +588,7 @@ export const SitterService = {
   getSitterRecommendations,
   getSitterDetails,
   rateSitter,
+  getSitterBoarding
   // getSitterBoarding,
   // updateSitterRating,
   // deleteSitterRating,

@@ -11,6 +11,13 @@ router.get(
   SitterController.getSitterRecommendations
 );
 
+// Get sitter services for boarding
+router.get(
+  "/sitter/boarding-services",
+  auth(),
+  SitterController.getSitterServicesForBoarding
+);
+
 router.get(
   "/sitter/all-services",
   auth(),

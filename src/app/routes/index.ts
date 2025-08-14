@@ -7,6 +7,7 @@ import { serviceReuestRoutes } from "../modules/serviceReuest/serviceReuest.rout
 import { ChatRoutes } from "../modules/chatImage/chat.route";
 import path from "path";
 import { reviewRoutes } from "../modules/review/review.routes";
+import { NotificationRoutes } from "../modules/notification/notification.routes";
 
 const router = express.Router();
 
@@ -38,7 +39,11 @@ const moduleRoutes = [
   {
     path: "/reviews",
     route: reviewRoutes
-  }
+  },
+  {
+    path: "/notifications",
+    route: NotificationRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

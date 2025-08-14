@@ -2,35 +2,10 @@
 import httpStatus from 'http-status';
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiErrors';
+import { IReview } from './review.interface';
 
 
-interface IPetReview {
-  clientId: string;
-  dogId: string;
-  review: string;
-  rating: number;
-}
 
-
-interface IPetReview {
-  // sitterId: string;
-  dogId: string;
-  review: string;
-  rating: number;
-}
-
-interface IClientReview {
-  // sitterId: string;  // fixed typo here
-  clientId: string;
-  review: string;
-  rating: number;
-}
-
-interface IReview {
-  petData: IPetReview;
-  clientData: IClientReview;
-  sitterId: string
-}
 
 const createIntoDb = async ({ clientData, petData, sitterId }: IReview) => {
   if (!clientData) {
