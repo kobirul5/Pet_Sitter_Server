@@ -260,6 +260,49 @@ const getSitterBoarding = async () => {
   return services;
 }
 
+const getSitterServicesForWalking = async () => {
+  const services = await prisma.user.findMany({
+    select:{
+      id: true,
+      firstName: true,
+      lastName: true,
+      profileImage: true,
+      serviceType: true,
+      serviceAvailableDates: true,
+      about: true,
+      email: true,
+    },
+    where: {
+      role: UserRole.Sitter,
+      serviceType: ServiceType.WALKING
+      // status: "ACTIVE",
+    }
+  });
+  return services;
+}
+ 
+//  GET ALL SITTERS  SERvice for DOGCARE
+
+const getSitterServicesForDogCare = async () => {
+  const services = await prisma.user.findMany({
+    select:{
+      id: true,
+      firstName: true,
+      lastName: true,
+      profileImage: true,
+      serviceType: true,
+      serviceAvailableDates: true,
+      about: true,
+      email: true,
+    },
+    where: {
+      role: UserRole.Sitter,
+      serviceType: ServiceType.DOGCARE
+      // status: "ACTIVE",
+    }
+  });
+  return services;
+}
 
 
 
@@ -588,7 +631,9 @@ export const SitterService = {
   getSitterRecommendations,
   getSitterDetails,
   rateSitter,
-  getSitterBoarding
+  getSitterBoarding,
+  getSitterServicesForWalking,
+  getSitterServicesForDogCare
   // getSitterBoarding,
   // updateSitterRating,
   // deleteSitterRating,

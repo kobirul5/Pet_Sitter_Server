@@ -86,17 +86,42 @@ const rateSitter = catchAsync(
 //  get sitter services
 const getSitterServicesForBoarding = catchAsync(
   async (req: Request, res: Response) => {
-    const sitterId = req.user.id;
     const result = await SitterService.getSitterBoarding();
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "Sitter services retrieved successfully",
+      message: "Boarding services retrieved successfully",
       data: result,
     });
   }
 );
 
+
+const getSitterServicesForWalkingController = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const result = await SitterService.getSitterServicesForWalking();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Walking services retrieved successfully",
+      data: result,
+    });
+  }
+)
+
+const getSitterServicesForDogCareController = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const result = await SitterService.getSitterServicesForDogCare();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Dog Care services retrieved successfully",
+      data: result,
+    });
+  }
+)
 
 // const getSitterBoarding = catchAsync(async (req: Request, res: Response) => {
 //     console.log("req.user.id", req.user.id);
@@ -182,6 +207,8 @@ export const SitterController = {
   // deleteSitterRating,
   // getUserRatings,
   getAllSitterForServices,
-  getSitterServicesForBoarding
+  getSitterServicesForBoarding,
+  getSitterServicesForWalkingController,
+  getSitterServicesForDogCareController
 
 }; 

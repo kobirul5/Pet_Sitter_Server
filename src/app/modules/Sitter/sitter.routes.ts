@@ -18,10 +18,24 @@ router.get(
   SitterController.getSitterServicesForBoarding
 );
 
+// get sitter services for walk
+router.get(
+  "/sitter/walk-services",
+  auth(),
+  SitterController.getSitterServicesForWalkingController
+);
+
 router.get(
   "/sitter/all-services",
   auth(),
   SitterController.getAllSitterForServices
+);
+
+ // get sitter services for dog care
+router.get(
+  "/sitter/dog-care-services",
+  auth(),
+  SitterController.getSitterServicesForDogCareController
 );
 
 // router.get(
