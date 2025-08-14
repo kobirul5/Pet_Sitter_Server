@@ -15,7 +15,7 @@ const sendNotificationToUser = catchAsync(
       body,
       type,
       data = "",
-      targetId = "",
+      receiverId = "",
       slug = "",
     } = req.body;
 
@@ -33,7 +33,7 @@ const sendNotificationToUser = catchAsync(
       body,
       type,
       data: data.toString(),
-      targetId,
+      receiverId,
       slug,
     };
 
@@ -54,12 +54,12 @@ const sendNotificationToUser = catchAsync(
 
 const saveNotification = catchAsync(async (req: Request, res: Response) => {
   const {
-    deviceToken,
+    fcmToken,
     title,
     body,
     type,
     data = "",
-    targetId = "",
+    receiverId = "",
     slug = "",
   } = req.body;
 
@@ -68,11 +68,11 @@ const saveNotification = catchAsync(async (req: Request, res: Response) => {
     body,
     type,
     data: data.toString(),
-    targetId,
+    receiverId,
     slug,
   };
 
-  await notificationService.saveNotification(notificationPayload, req.user?.id);
+  const notification = await notificationService.saveNotification(notificationPayload, req.user?.id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -82,23 +82,26 @@ const saveNotification = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllNotificationsController = catchAsync(
-  async (req: Request, res: Response) => {
-    const notifications = await notificationService.getAllNotifications();
+// const getAllNotificationsController = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const notifications = await notificationService.getAllNotifications();
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "All notifications fetched successfully",
-      data: notifications,
-    });
-  }
-);
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "All notifications fetched successfully",
+//       data: notifications,
+//     });
+//   }
+// );
 
 const getNotificationByUserIdController = catchAsync(
   async (req: Request, res: Response) => {
-    const notifications = await notificationService.getNotificationByUserId(
-      req.user?.id
+
+    const receiverId = req.user?.id
+
+    const notifications = await notificationService.getNotificationByreceiverId(
+    receiverId
     );
 
     sendResponse(res, {
@@ -110,26 +113,27 @@ const getNotificationByUserIdController = catchAsync(
   }
 );
 
-const readNotificationByUserIdController = catchAsync(
-  async (req: Request, res: Response) => {
-    const notifications = await notificationService.readNotificationByUserId(
-      req.user?.id
-    );
+// const readNotificationByUserIdController = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const notifications = await notificationService.readNotificationByUserId(
+//       req.user?.id
+//     );
 
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Notifications marked as read successfully",
-      data: notifications,
-    });
-  }
-);
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "Notifications marked as read successfully",
+//       data: notifications,
+//     });
+//   }
+// );
 
 const deleteNotificationByIdController = catchAsync(
   async (req: Request, res: Response) => {
     const { id: notificationId } = req.params;
 
-    const result = await notificationService.deleteNotificationById(
+    
+    await notificationService.deleteNotificationById(
       req.user?.id,
       notificationId
     );
@@ -138,73 +142,73 @@ const deleteNotificationByIdController = catchAsync(
       statusCode: httpStatus.OK,
       success: true,
       message: "Notification deleted successfully",
-      data: result,
-    });
-  }
-);
-
-const deleteAllNotificationsController = catchAsync(
-  async (req: Request, res: Response) => {
-    const result = await notificationService.deleteAllNotifications(
-      req.user?.id
-    );
-
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "All notifications deleted successfully",
-      data: result,
-    });
-  }
-);
-
-const sendNotificationToSelectedUsersController = catchAsync(
-  async (req: Request, res: Response) => {
-    const { userIds, title, body, type, data, targetId, slug } = req.body;
-
-    if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
-      return sendResponse(res, {
-        statusCode: httpStatus.BAD_REQUEST,
-        success: false,
-        message: "Please select at least one user!",
-        data: null,
-      });
-    }
-
-    if (!title || !body) {
-      return sendResponse(res, {
-        statusCode: httpStatus.BAD_REQUEST,
-        success: false,
-        message: "Title and body are required!",
-        data: null,
-      });
-    }
-
-    await notificationService.sendNotificationToSelectedUsers(userIds, {
-      title,
-      body,
-      type,
-      data,
-      targetId,
-      slug,
-    });
-
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Notifications sent successfully",
       data: null,
     });
   }
 );
 
+// const deleteAllNotificationsController = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const result = await notificationService.deleteAllNotifications(
+//       req.user?.id
+//     );
+
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "All notifications deleted successfully",
+//       data: result,
+//     });
+//   }
+// );
+
+// const sendNotificationToSelectedUsersController = catchAsync(
+//   async (req: Request, res: Response) => {
+//     const { userIds, title, body, type, data, receiverId, slug } = req.body;
+
+//     if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+//       return sendResponse(res, {
+//         statusCode: httpStatus.BAD_REQUEST,
+//         success: false,
+//         message: "Please select at least one user!",
+//         data: null,
+//       });
+//     }
+
+//     if (!title || !body) {
+//       return sendResponse(res, {
+//         statusCode: httpStatus.BAD_REQUEST,
+//         success: false,
+//         message: "Title and body are required!",
+//         data: null,
+//       });
+//     }
+
+//     await notificationService.sendNotificationToSelectedUsers(userIds, {
+//       title,
+//       body,
+//       type,
+//       data,
+//       receiverId,
+//       slug,
+//     });
+
+//     sendResponse(res, {
+//       statusCode: httpStatus.OK,
+//       success: true,
+//       message: "Notifications sent successfully",
+//       data: null,
+//     });
+//   }
+// );
+
 export const NotificationController = {
   sendNotificationToUser,
-  getAllNotificationsController,
-  getNotificationByUserIdController,
-  readNotificationByUserIdController,
-  deleteNotificationByIdController,
-  deleteAllNotificationsController,
-  sendNotificationToSelectedUsersController,
   saveNotification,
+  // getAllNotificationsController,
+  getNotificationByUserIdController,
+  // readNotificationByUserIdController,
+  deleteNotificationByIdController,
+  // deleteAllNotificationsController,
+  // sendNotificationToSelectedUsersController,
 };

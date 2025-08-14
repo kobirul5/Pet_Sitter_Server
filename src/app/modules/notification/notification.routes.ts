@@ -7,13 +7,13 @@ import { NotificationController } from "./notification.controller";
 
 const router = express.Router();
 
-router.post(
-  "/send-to-selected",
+// router.post(
+//   "/send-to-selected",
 
-  auth(ENUM_USER_ROLE.ADMIN),
-  checkBlockedStatus,
-  NotificationController.sendNotificationToSelectedUsersController
-);
+//   auth(ENUM_USER_ROLE.ADMIN),
+//   checkBlockedStatus,
+//   NotificationController.sendNotificationToSelectedUsersController
+// );
 
 router.post(
   "/send",
@@ -22,13 +22,20 @@ router.post(
   NotificationController.sendNotificationToUser
 );
 
-// Get all notifications
-router.get(
-  "/",
-  auth(ENUM_USER_ROLE.ADMIN),
+router.post(
+  "/save",
+  auth(),
   checkBlockedStatus,
-  NotificationController.getAllNotificationsController
-);
+  NotificationController.saveNotification
+)
+
+// Get all notifications
+// router.get(
+//   "/",
+//   auth(ENUM_USER_ROLE.ADMIN),
+//   checkBlockedStatus,
+//   NotificationController.getAllNotificationsController
+// );
 
 // Get notifications by user ID
 router.get(
@@ -38,13 +45,13 @@ router.get(
   NotificationController.getNotificationByUserIdController
 );
 
-// Mark notifications as read by user ID
-router.put(
-  "/read",
-  auth(),
-  checkBlockedStatus,
-  NotificationController.readNotificationByUserIdController
-);
+// // Mark notifications as read by user ID
+// router.put(
+//   "/read",
+//   auth(),
+//   checkBlockedStatus,
+//   NotificationController.readNotificationByUserIdController
+// );
 
 // Delete notification by id
 router.delete(
@@ -54,12 +61,12 @@ router.delete(
   NotificationController.deleteNotificationByIdController
 );
 
-// Delete all notifications for the authenticated user
-router.delete(
-  "/delete-all",
-  auth(),
-  checkBlockedStatus,
-  NotificationController.deleteAllNotificationsController
-);
+// // Delete all notifications for the authenticated user
+// router.delete(
+//   "/delete-all",
+//   auth(),
+//   checkBlockedStatus,
+//   NotificationController.deleteAllNotificationsController
+// );
 
 export const NotificationRoutes = router;
