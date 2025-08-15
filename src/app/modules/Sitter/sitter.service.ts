@@ -231,7 +231,10 @@ const getAllServices = async () => {
       serviceAvailableDates: true
     },
     where: {
-      role: "Sitter"
+      role: "Sitter",
+      serviceAvailableDates: {
+        
+      }
       // status: "ACTIVE",
     }
   });

@@ -3,6 +3,8 @@ import ApiError from "../../../errors/ApiErrors";
 import prisma from "../../../shared/prisma";
 import { ICreateRequestData } from "../Sitter/sitter.interface";
 import { RequestStatus } from "@prisma/client";
+import { IClinetRating, IDogRating } from "./serviceRequest.interface";
+import { result } from "lodash";
 
 const createClientRequestService = async (data: ICreateRequestData) => {
   // Validate sitter exists and is active
@@ -208,11 +210,89 @@ const acceptClinerRequest = async (requestId: string, sitterId: string) => {
   return result;
 };
 
+const createReviewCinetAndDog = async ({ requestId, client, dog}: {requestId: string, client:IClinetRating, dog:IDogRating}) => {
+ 
+  if (!requestId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
+  }
+  if(!client){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! client not found');
+  }
+  if(!dog){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! dog not found');
+  }
+
+  const serviceReuestData = await prisma.clientRequest.findUnique({
+    where: {
+      id: requestId,
+    },
+    include: {
+      client: {
+        select: {
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          email: true,
+          createdAt: true,
+          phone: true,
+          address: true,
+        }
+      },
+      dog: {
+        select: {
+          name: true,
+          breed: true,
+          images: true,
+          gender: true,
+          age: true,
+          vaccination: true,
+          spayed: true,
+          about: true,
+          createdAt: true
+        }
+      }
+    },
+  })
+
+  if (!serviceReuestData) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! sitter not found');
+  }
+
+
+  const clientReviwe = await prisma.rating.create({
+    data: {
+      review: client.review,
+      rating: client.rating,
+      ratingsGivenId: serviceReuestData.clientId,
+      ratingsReceivedId: serviceReuestData.sitterId,
+    },
+  })
+
+
+  const dogReview = await prisma.petRating.create({
+    data: {
+      review: dog.review,
+      rating: dog.rating,
+      ratingsGivenId: serviceReuestData.clientId,
+      ratingsReceivedId: serviceReuestData.dogId,
+    },
+  })
+  return {
+    clientReviwe,
+    dogReview
+  }
+
+
+};
+
+
 export const serviceReuestService = {
   createClientRequestService,
   getServiceRequests,
   getServiceForSitterRequests,
   updateServicestatus,
   getClinetAndDogProfileById,
-  acceptClinerRequest
+  acceptClinerRequest,
+  createReviewCinetAndDog,
+
 };

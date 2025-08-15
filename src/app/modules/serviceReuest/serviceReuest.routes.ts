@@ -37,6 +37,14 @@ router.put(
   serviceReuestController.getClinetAndDogProfileByIdController
 );
 
+// create review client and dog
+router.post(
+  "/review-client-and-dog",
+  auth(),
+  serviceReuestController.createReviewCinetAndDogController
+);
+
+
 // accept clinet request
 router.patch(
   "/accept-request/:id",

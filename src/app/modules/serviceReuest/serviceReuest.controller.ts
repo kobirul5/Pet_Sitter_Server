@@ -137,7 +137,20 @@ const acceptClinerRequestController = catchAsync(
   }
 )
 
-//
+// createReviewCinetAndDogController
+const createReviewCinetAndDogController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { requestId, client, dog } = req.body
+    console.log(req.body)
+    const result = await serviceReuestService.createReviewCinetAndDog({requestId, client, dog });
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Review created successfully',
+      data: result,
+    });
+  }
+)
 
 
 export const serviceReuestController = {
@@ -146,5 +159,6 @@ export const serviceReuestController = {
   getServiceRequestsForSitterController,
   updateServicestatusController,
   getClinetAndDogProfileByIdController,
-  acceptClinerRequestController
+  acceptClinerRequestController,
+  createReviewCinetAndDogController
 };
