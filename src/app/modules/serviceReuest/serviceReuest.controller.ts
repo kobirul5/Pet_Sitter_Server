@@ -121,11 +121,30 @@ const getClinetAndDogProfileByIdController = catchAsync(
   }
 )
 
+const acceptClinerRequestController = catchAsync(
+  async (req: Request, res: Response) => {
+    const  requestId  = req.params.id
+
+    const sitterId = req.user.id
+
+    const result = await serviceReuestService.acceptClinerRequest(requestId, sitterId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Service status updated successfully',
+      data: result,
+    });
+  }
+)
+
+//
+
 
 export const serviceReuestController = {
   createClientRequestController,
   getServiceRequestsController,
   getServiceRequestsForSitterController,
   updateServicestatusController,
-  getClinetAndDogProfileByIdController
+  getClinetAndDogProfileByIdController,
+  acceptClinerRequestController
 };

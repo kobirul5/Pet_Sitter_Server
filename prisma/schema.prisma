@@ -140,14 +140,17 @@ model ClientRequest {
   sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
   sitterId String @db.ObjectId
 
-  startTime   DateTime
-  endTime     DateTime
-  serviceType ServiceType
-  hourlyRate  Float
-  totalPrice  Float
-  status      RequestStatus @default(PENDING)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  startTime     DateTime
+  endTime       DateTime
+  serviceType   ServiceType
+  hourlyRate    Float
+  totalPrice    Float
+  status        RequestStatus  @default(PENDING)
+  paymentStatus PaymenttStatus @default(PENDING)
+  Payment       Payment[]
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Rating {
@@ -234,6 +237,24 @@ model Room {
   updatedAt DateTime @updatedAt
 }
 
+model Payment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  // Link to the request being paid for
+  request   ClientRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  requestId String        @db.ObjectId
+
+  amount        Float
+  currency      String         @default("USD") // You can change default to your currency
+  method        PaymentMethod @default(CARD)
+  paymentStatus PaymenttStatus @default(PENDING)
+
+  transactionId String?   @unique
+  paidAt        DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
 enum UserRole {
   User
   Sitter
@@ -265,4 +286,17 @@ enum RequestStatus {
   ACCEPTED
   DENIED
   COMPLETED
+}
+
+enum PaymenttStatus {
+  PENDING
+  ACCEPTED
+  DENIED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
 }

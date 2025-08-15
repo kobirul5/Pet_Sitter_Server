@@ -114,13 +114,13 @@ const getServiceForSitterRequests = async (sitterId: string) => {
 // update service status
 const updateServicestatus = async (requestId: string, status: string, sitterId: string) => {
 
-if(status !== RequestStatus.ACCEPTED && status !== RequestStatus.DENIED && status !== RequestStatus.COMPLETED){
-  throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Status must be ACCEPTED , COMPLETED or DENIED');
-}
+  if (status !== RequestStatus.ACCEPTED && status !== RequestStatus.DENIED && status !== RequestStatus.COMPLETED) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Status must be ACCEPTED , COMPLETED or DENIED');
+  }
 
- if( !sitterId ){
-  throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
-}
+  if (!sitterId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
+  }
 
 
 
@@ -148,7 +148,7 @@ const getClinetAndDogProfileById = async (requestId: string) => {
     },
     include: {
       client: {
-       select:{
+        select: {
           firstName: true,
           lastName: true,
           profileImage: true,
@@ -159,7 +159,7 @@ const getClinetAndDogProfileById = async (requestId: string) => {
         }
       },
       dog: {
-        select:{
+        select: {
           name: true,
           breed: true,
           images: true,
@@ -176,11 +176,43 @@ const getClinetAndDogProfileById = async (requestId: string) => {
   return result;
 };
 
+const acceptClinerRequest = async (requestId: string, sitterId: string) => {
+
+
+  if (!sitterId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
+  }
+
+  const sitter = await prisma.user.findUnique({
+    where: {
+      id: sitterId,
+      role: "Sitter",
+      status: "ACTIVE",
+    },
+  });
+
+  if (!sitter) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! sitter not found');
+  }
+
+
+  const result = await prisma.clientRequest.update({
+    where: {
+      id: requestId,
+      sitterId: sitterId
+    },
+    data: {
+      status: RequestStatus.ACCEPTED,
+    },
+  });
+  return result;
+};
 
 export const serviceReuestService = {
   createClientRequestService,
   getServiceRequests,
   getServiceForSitterRequests,
   updateServicestatus,
-  getClinetAndDogProfileById
+  getClinetAndDogProfileById,
+  acceptClinerRequest
 };

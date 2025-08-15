@@ -37,4 +37,13 @@ router.put(
   serviceReuestController.getClinetAndDogProfileByIdController
 );
 
+// accept clinet request
+router.patch(
+  "/accept-request/:id",
+  auth(),
+  serviceReuestController.acceptClinerRequestController
+);
+
+
+
 export const serviceReuestRoutes = router;

@@ -8,6 +8,8 @@ import { ChatRoutes } from "../modules/chatImage/chat.route";
 import path from "path";
 import { reviewRoutes } from "../modules/review/review.routes";
 import { NotificationRoutes } from "../modules/notification/notification.routes";
+import { paymentRoutes } from "../modules/payment/payment.routes";
+// import { paymentRoutes } from "../modules/payment/payment.routes";
 
 const router = express.Router();
 
@@ -44,6 +46,10 @@ const moduleRoutes = [
     path: "/notifications",
     route: NotificationRoutes,
   },
+  {
+    path: "/payments",
+    route: paymentRoutes
+  }
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
