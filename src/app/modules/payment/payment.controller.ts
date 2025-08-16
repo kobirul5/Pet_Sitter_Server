@@ -4,7 +4,15 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 
 const createPayment = catchAsync(async (req, res) => {
-  const result = await paymentService.createPaymentIntent(req.body);
+  const {
+    // amount,
+    methodCardId,
+    currency = 'USD',
+    userId,
+  requestId} = req.body
+  // const userId = req.user.id;
+  console.log(userId)
+  const result = await paymentService.createPaymentIntent({ methodCardId,currency, requestId, userId});
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,

@@ -49,6 +49,7 @@ export function setupWebSocket(server: Server) {
               event: "userStatus",
               data: { userId: id, isOnline: true },
             });
+            
             break;
           }
 

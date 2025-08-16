@@ -8,6 +8,7 @@ import ApiError from "../../../errors/ApiErrors";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthServices.createUserIntoDb(req.body);
+  res.cookie("token", result.token, { httpOnly: true });
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

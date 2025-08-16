@@ -247,6 +247,7 @@ model Payment {
   amount        Float
   currency      String         @default("USD") // You can change default to your currency
   method        PaymentMethod @default(CARD)
+  methodCardId String
   paymentStatus PaymenttStatus @default(PENDING)
 
   transactionId String?   @unique
@@ -294,6 +295,7 @@ enum PaymenttStatus {
   DENIED
   FAILED
   REFUNDED
+  COMPLETED
 }
 
 enum PaymentMethod {

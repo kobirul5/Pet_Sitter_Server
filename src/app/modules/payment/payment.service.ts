@@ -1,4 +1,3 @@
-
 import { PaymenttStatus } from "@prisma/client";
 import ApiError from "../../../errors/ApiErrors";
 import { getTransactionId } from "../../../helpars/getTransactionId";
@@ -8,15 +7,21 @@ import httpStatus from "http-status";
 
 const createPaymentIntent = async ({
   requestId,
+  methodCardId,
   userId,
+  currency,
+  // amount
 }: {
   requestId: string;
   userId: string;
+  currency?: string;
+  methodCardId: string
+  // amount: number
 }) => {
   const transactionId = getTransactionId();
 
   const request = await prisma.clientRequest.findUnique({
-    where: { 
+    where: {
       id: requestId,
       status: PaymenttStatus.ACCEPTED,
     },
@@ -32,30 +37,40 @@ const createPaymentIntent = async ({
   };
 
   try {
-    const result = await prisma.$transaction(async (tx) => {
+
+  const result = await prisma.$transaction(async (tx) => {
       // Create a Payment record in DB
       const payment = await tx.payment.create({
         data: {
-          requestId: request.clientId,
+          requestId,
           amount: request.totalPrice,
-          currency: 'USD',
+          methodCardId,
+          currency: currency || "USD",
           paymentStatus: PaymenttStatus.PENDING,
           transactionId,
-          method: "CARD"
+          method: "CARD",
         },
       });
 
-      // Create Stripe PaymentIntent
+      // Create Stripe PaymentIntent 
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(request.totalPrice * 100), // convert to cents
-        currency: 'usd',
+        currency: currency || "USD",
         receipt_email: request.client.email,
+        payment_method: payment.methodCardId,
+        off_session: true,
+        confirm: true,
+        automatic_payment_methods: {
+          enabled: true,
+        },
         metadata: {
           requestId: request.id,
           transactionId,
           userId,
         },
       });
+
+      console.log("PaymentIntent created:", paymentIntent);
 
       return {
         clientSecret: paymentIntent.client_secret,
@@ -65,7 +80,8 @@ const createPaymentIntent = async ({
     });
 
     return result;
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error creating payment intent:", error);
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create payment intent");
   }
 };
@@ -75,9 +91,9 @@ const createPaymentIntent = async ({
 // get my payments
 const getMyPayments = async (userId: string) => {
   const result = await prisma.payment.findMany({
-    where: { 
-      
-     },
+    where: {
+
+    },
   });
   return result;
 }

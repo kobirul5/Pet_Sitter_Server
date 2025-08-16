@@ -43,7 +43,18 @@ const createUserIntoDb = async (payload: User) => {
     },
   });
 
-  return newUser;
+
+   const token = jwtHelpers.generateToken(
+    {
+      id: newUser.id,
+      email: newUser.email,
+      role: newUser.role,
+    },
+    config.jwt.jwt_secret as Secret,
+    config.jwt.expires_in as string
+  );
+
+  return {newUser, token};
 };
 
 // user login service

@@ -12,7 +12,7 @@ async function startServer() {
       `Server is listening on port  http://localhost:${config.port}/api/v1`
     );
     console.log(
-      `Server is listening on port  http://10.0.20.112:${config.port}/api/v1`
+      `Server is listening on port  http://10.0.20.132:${config.port}/api/v1`
     );
   });
   setupWebSocket(server);
