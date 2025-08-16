@@ -5,90 +5,70 @@ import prisma from "../../../shared/prisma";
 import stripe from "../../../shared/stripe";
 import httpStatus from "http-status";
 
-const createPaymentIntent = async ({
-  requestId,
-  methodCardId,
-  userId,
-  currency,
-  // amount
-}: {
+
+interface IPaymentIntent {
+  paymentMethod: string;
   requestId: string;
-  userId: string;
   currency?: string;
-  methodCardId: string
-  // amount: number
-}) => {
+  userId: string;
+}
+
+
+const createPaymentIntent = async ({ paymentMethod, requestId, currency = 'usd', userId,}: IPaymentIntent) => {
+
   const transactionId = getTransactionId();
 
-  const request = await prisma.clientRequest.findUnique({
-    where: {
-      id: requestId,
-      status: PaymenttStatus.ACCEPTED,
-    },
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const clientRequest = await prisma.clientRequest.findUnique({
+    where: { id: requestId },
     include: {
       client: true,
       sitter: true,
-      Payment: true,
     },
   });
 
-  if (!request) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Client Service request not found')
-  };
+
 
   try {
 
-  const result = await prisma.$transaction(async (tx) => {
-      // Create a Payment record in DB
-      const payment = await tx.payment.create({
-        data: {
-          requestId,
-          amount: request.totalPrice,
-          methodCardId,
-          currency: currency || "USD",
-          paymentStatus: PaymenttStatus.PENDING,
-          transactionId,
-          method: "CARD",
-        },
-      });
 
-      // Create Stripe PaymentIntent 
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(request.totalPrice * 100), // convert to cents
-        currency: currency || "USD",
-        receipt_email: request.client.email,
-        payment_method: payment.methodCardId,
-        off_session: true,
-        confirm: true,
-        automatic_payment_methods: {
-          enabled: true,
-        },
-        metadata: {
-          requestId: request.id,
-          transactionId,
-          userId,
-        },
-      });
-
-      console.log("PaymentIntent created:", paymentIntent);
-
-      return {
-        clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id,
-        payment,
-      };
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(clientRequest?.totalPrice! * 100), // convert to cents
+      currency,
+      payment_method: paymentMethod, // Stripe PaymentMethod ID
+      confirm: true,
+      automatic_payment_methods: { enabled: true, allow_redirects: 'never' },
+      metadata: {
+        requestId,
+        orderId: transactionId,
+        senderId: userId,
+        courierId: clientRequest?.sitterId!,
+      },
     });
 
-    return result;
+    console.log("paymentIntent", paymentIntent, "-------------------");
+
+    return { paymentIntent };
   } catch (error: any) {
-    console.error("Error creating payment intent:", error);
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create payment intent");
+    console.error('Card payment error:', error);
+    throw new ApiError(httpStatus.BAD_REQUEST, error.message || 'Payment failed');
   }
-};
+}
 
 
 
-// get my payments
+
+
+
+
 const getMyPayments = async (userId: string) => {
   const result = await prisma.payment.findMany({
     where: {

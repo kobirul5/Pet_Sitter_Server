@@ -4,15 +4,16 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 
 const createPayment = catchAsync(async (req, res) => {
-  const {
-    // amount,
-    methodCardId,
-    currency = 'USD',
+  const { paymentMethod, requestId, currency = 'usd', clientId, sitterId, totalPrice } = req.body;
+  const userId = req.user.id;
+
+  const result = await paymentService.createPaymentIntent({
+    paymentMethod,
+    requestId,
+    currency,
     userId,
-  requestId} = req.body
-  // const userId = req.user.id;
-  console.log(userId)
-  const result = await paymentService.createPaymentIntent({ methodCardId,currency, requestId, userId});
+  });
+
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -20,8 +21,6 @@ const createPayment = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
-
 
 
 export const paymentController = {
