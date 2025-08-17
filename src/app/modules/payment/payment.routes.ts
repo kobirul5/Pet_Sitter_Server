@@ -15,6 +15,13 @@ paymentController.createPayment,
 );
 
 router.post(
+  "/create-card",
+  auth(),
+  // validateRequest(paymentValidation.createCardSchema),
+  paymentController.createCard
+)
+
+router.post(
   "/stripe/webhook",
   express.raw({ type: "application/json" }),
   handleStripeWebhook
