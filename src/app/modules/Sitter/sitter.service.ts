@@ -4,10 +4,10 @@ import { Prisma, ServiceType, UserRole } from "@prisma/client";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
 import { omit } from "lodash";
-import { 
-  ISitterFilters, 
-  ISitterRecommendation, 
-  ISitterDetail, 
+import {
+  ISitterFilters,
+  ISitterRecommendation,
+  ISitterDetail,
   ICreateRating,
 } from "./sitter.interface";
 import config from "../../../config";
@@ -17,11 +17,11 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
   const R = 6371; // Radius of the Earth in kilometers
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c; // Distance in kilometers
   return distance;
 };
@@ -224,7 +224,7 @@ const getSitterRecommendations = async (
 
 const getAllServices = async () => {
   const services = await prisma.user.findMany({
-    select:{
+    select: {
       id: true,
       firstName: true,
       lastName: true,
@@ -251,7 +251,7 @@ const getAllServices = async () => {
 
 const getSitterBoarding = async () => {
   const services = await prisma.user.findMany({
-    select:{
+    select: {
       id: true,
       firstName: true,
       lastName: true,
@@ -277,7 +277,7 @@ const getSitterBoarding = async () => {
 
 const getSitterServicesForWalking = async () => {
   const services = await prisma.user.findMany({
-    select:{
+    select: {
       id: true,
       firstName: true,
       lastName: true,
@@ -300,12 +300,12 @@ const getSitterServicesForWalking = async () => {
   });
   return services;
 }
- 
+
 //  GET ALL SITTERS  SERvice for DOGCARE
 
 const getSitterServicesForDogCare = async () => {
   const services = await prisma.user.findMany({
-    select:{
+    select: {
       id: true,
       firstName: true,
       lastName: true,
@@ -375,8 +375,8 @@ const getSitterDetails = async (
 
   // Calculate average rating
   const totalRating = sitter.ratingsReceived.reduce((sum, rating) => sum + rating.rating, 0);
-  const averageRating = sitter.ratingsReceived.length > 0 
-    ? totalRating / sitter.ratingsReceived.length 
+  const averageRating = sitter.ratingsReceived.length > 0
+    ? totalRating / sitter.ratingsReceived.length
     : 0;
 
 
@@ -388,6 +388,8 @@ const getSitterDetails = async (
     location: sitter.location,
     lat: sitter.lat,
     lng: sitter.lng,
+    serviceAvailableDates: sitter.serviceAvailableDates,
+    email: sitter.email,
     perDayFee: sitter.perDayFee,
     totalRating: sitter.totalRating,
     totalReviews: sitter.totalReviews,
@@ -395,7 +397,6 @@ const getSitterDetails = async (
     about: sitter.about,
     services: sitter.services,
     serviceType: sitter.serviceType,
-    sitterProfile: sitter.sitterProfile,
     ratings: sitter.ratingsReceived,
     averageRating: Math.round(averageRating * 10) / 10, // Round to 1 decimal place
   };
@@ -665,5 +666,5 @@ export const SitterService = {
   // updateSitterRating,
   // deleteSitterRating,
   // getUserRatings,
-  
+
 }; 
