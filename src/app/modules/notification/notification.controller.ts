@@ -82,18 +82,18 @@ const saveNotification = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// const getAllNotificationsController = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const notifications = await notificationService.getAllNotifications();
+const getAllNotificationsController = catchAsync(
+  async (req: Request, res: Response) => {
+    const notifications = await notificationService.getAllNotifications();
 
-//     sendResponse(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: "All notifications fetched successfully",
-//       data: notifications,
-//     });
-//   }
-// );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "All notifications fetched successfully",
+      data: notifications,
+    });
+  }
+);
 
 const getNotificationByUserIdController = catchAsync(
   async (req: Request, res: Response) => {
@@ -205,7 +205,7 @@ const deleteNotificationByIdController = catchAsync(
 export const NotificationController = {
   sendNotificationToUser,
   saveNotification,
-  // getAllNotificationsController,
+  getAllNotificationsController,
   getNotificationByUserIdController,
   // readNotificationByUserIdController,
   deleteNotificationByIdController,

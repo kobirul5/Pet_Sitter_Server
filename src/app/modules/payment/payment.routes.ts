@@ -29,5 +29,7 @@ router.post(
 
 router.get("/get-all-payments", auth(), paymentController.getAllPayment);
 
+router.get("/get-my-payments", auth(), paymentController.getMyPayments);
+
 
 export const paymentRoutes = router;

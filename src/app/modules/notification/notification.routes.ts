@@ -4,6 +4,7 @@ import auth from "../../middlewares/auth";
 import { ENUM_USER_ROLE } from "../../../enums/user";
 import { checkBlockedStatus } from "../../middlewares/checkBlock";
 import { NotificationController } from "./notification.controller";
+import { UserRole } from "@prisma/client";
 
 const router = express.Router();
 
@@ -30,12 +31,13 @@ router.post(
 )
 
 // Get all notifications
-// router.get(
-//   "/",
-//   auth(ENUM_USER_ROLE.ADMIN),
-//   checkBlockedStatus,
-//   NotificationController.getAllNotificationsController
-// );
+router.get(
+  "/all-noitifications",
+  auth(),
+  auth(UserRole.Admin),
+  checkBlockedStatus,
+  NotificationController.getAllNotificationsController
+);
 
 // Get notifications by user ID
 router.get(

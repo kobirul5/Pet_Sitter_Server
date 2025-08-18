@@ -147,46 +147,46 @@ const saveNotification = async (
 };
 
 
-// const getAllNotifications = async () => {
-//   try {
-//     console.log("Attempting to fetch all notifications...");
+const getAllNotifications = async () => {
+  try {
+    console.log("Attempting to fetch all notifications...");
 
-//     const notifications = await prisma.notification.findMany({
-//       orderBy: { createdAt: "desc" },
-//     });
+    const notifications = await prisma.notification.findMany({
+      orderBy: { createdAt: "desc" },
+    });
 
-//     // Fetch user details separately to handle null cases
-//     const notificationsWithUser = await Promise.all(
-//       notifications.map(async (notification) => {
-//         if (!notification.senderId) return { ...notification, user: null };
+    // Fetch user details separately to handle null cases
+    const notificationsWithUser = await Promise.all(
+      notifications.map(async (notification) => {
+        if (!notification.senderId) return { ...notification, user: null };
 
-//         const user = await prisma.user.findUnique({
-//           where: { id: notification.senderId },
-//           select: {
-//             id: true,
-//             firstName: true,
-//             lastName: true,
-//             email: true,
-//           },
-//         });
-//         return { ...notification, user };
-//       })
-//     );
+        const user = await prisma.user.findUnique({
+          where: { id: notification.senderId },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        });
+        return { ...notification, user };
+      })
+    );
 
-//     console.log(
-//       `Successfully fetched ${notificationsWithUser.length} notifications`
-//     );
-//     return notificationsWithUser;
-//   } catch (error) {
-//     console.error("Error in getAllNotifications:", error);
-//     if (error instanceof ApiError) throw error;
-//     throw new ApiError(
-//       httpStatus.INTERNAL_SERVER_ERROR,
-//       "Failed to fetch notifications",
-//       error instanceof Error ? error.stack : undefined
-//     );
-//   }
-// };
+    console.log(
+      `Successfully fetched ${notificationsWithUser.length} notifications`
+    );
+    return notificationsWithUser;
+  } catch (error) {
+    console.error("Error in getAllNotifications:", error);
+    if (error instanceof ApiError) throw error;
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to fetch notifications",
+      error instanceof Error ? error.stack : undefined
+    );
+  }
+};
 
 const getNotificationByreceiverId = async (receiverId: string) => {
   try {
@@ -339,7 +339,7 @@ const deleteNotificationById = async (
 
 export const notificationService = {
   sendNotification,
-  // getAllNotifications,
+  getAllNotifications,
   getNotificationByreceiverId,
   // readNotificationByUserId,
   deleteNotificationById,

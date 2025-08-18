@@ -209,9 +209,9 @@ const getAllPayments = async (userId: string) => {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  // if(user.role !== UserRole.Admin){
-  //   throw new ApiError(httpStatus.BAD_REQUEST, "Only admin can get all payments");
-  // }
+  if(user.role !== UserRole.Admin){
+    throw new ApiError(httpStatus.BAD_REQUEST, "Only admin can get all payments");
+  }
 
 
   const result = await prisma.payment.findMany();
@@ -220,9 +220,20 @@ const getAllPayments = async (userId: string) => {
 
 
 const getMyPayments = async (userId: string) => {
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  })
+
+  if(!user){
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
   const result = await prisma.payment.findMany({
     where: {
-
+      senderId: userId
     },
   });
   return result;
@@ -231,5 +242,6 @@ const getMyPayments = async (userId: string) => {
 export const paymentService = {
   createPaymentIntent,
   createCard,
-  getAllPayments
+  getAllPayments,
+  getMyPayments
 };
