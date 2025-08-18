@@ -230,13 +230,18 @@ const getAllServices = async () => {
       lastName: true,
       profileImage: true,
       serviceType: true,
-      serviceAvailableDates: true
+      serviceAvailableDates: true,
+      sitterProfile: true,
+      serviceId: true,
+      services: true,
+      about: true,
+      email: true,
+      totalRating: true,
+      ratingsReceived: true,
     },
     where: {
       role: "Sitter",
-      serviceAvailableDates: {
-        
-      }
+      // serviceAvailableDates:  []
       // status: "ACTIVE",
     }
   });
