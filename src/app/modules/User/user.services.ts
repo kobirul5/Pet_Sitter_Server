@@ -1,10 +1,10 @@
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiErrors";
-import { User, Prisma } from "@prisma/client";
+import { User, Prisma, ServiceType } from "@prisma/client";
 import config from "../../../config";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
-import { omit } from "lodash";
+import { omit, update } from "lodash";
 import { IUser, IUserFilters } from "./user.interface";
 import { fileUploader } from "../../../helpars/fileUploader";
 
@@ -48,6 +48,7 @@ const updateUserProfile = async (userId: string, updateData: Partial<IUser>, fil
     updateData.profileImage = uploadedImageUrl.Location;
   }
 
+
   // Update user profile with only provided fields
   const updatedUser = await prisma.user.update({
     where: { id: userId },
@@ -68,8 +69,12 @@ const updateUserProfile = async (userId: string, updateData: Partial<IUser>, fil
       gender: true,
       createdAt: true,
       updatedAt: true,
+      serviceType: true,
+      serviceId: true,
+      services: true
     },
   });
+
 
   return updatedUser;
 };
@@ -389,8 +394,10 @@ const addSitterService = async (
 
   const service = await prisma.service.create({
     data: {
-      ...serviceData,
-      userId: decodedToken.id,
+      name: serviceData.name,
+      description: serviceData.description,
+      price: serviceData.price,
+      ServiceProviderID: decodedToken.id,
     },
   });
 
@@ -405,7 +412,7 @@ const getSitterServices = async (userToken: string) => {
   );
 
   const services = await prisma.service.findMany({
-    where: { userId: decodedToken.id },
+    where: { ServiceProviderID: decodedToken.id },
     orderBy: { createdAt: "desc" },
   });
 
@@ -430,7 +437,7 @@ const updateSitterService = async (
   const existingService = await prisma.service.findFirst({
     where: {
       id: serviceId,
-      userId: decodedToken.id,
+      ServiceProviderID: decodedToken.id,
     },
   });
 
@@ -458,7 +465,7 @@ const deleteSitterService = async (userToken: string, serviceId: string) => {
   const existingService = await prisma.service.findFirst({
     where: {
       id: serviceId,
-      userId: decodedToken.id,
+      ServiceProviderID: decodedToken.id,
     },
   });
 

@@ -104,13 +104,16 @@ model Service {
   name        String
   description String?  @default("")
   price       Float
-  userId      String   @db.ObjectId
+  // userId      String   @db.ObjectId
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  serciveType ServiceType @default(BOARDING)
 
   // Relations
   // Provider relation
-  user User @relation("ServiceProviderID",fields: [userId], references: [id], onDelete: Cascade)
+  ServiceProviderID String @db.ObjectId
+  ServiceProvider User @relation("ServiceProviderID",fields: [ServiceProviderID], references: [id], onDelete: Cascade)
+
 
   // Reverse relation
   selectedBy User[] @relation("UserSelectedService")
