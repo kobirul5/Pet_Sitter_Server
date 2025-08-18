@@ -61,6 +61,7 @@ model User {
 
   // Requests the user has made as a client
   clientRequests ClientRequest[] @relation("ClientRequestsAsClient")
+  senderPayment  Payment[] @relation("SenderPayment")
 
   // Requests the user has received as a sitter
   sitterRequests        ClientRequest[] @relation("ClientRequestsAsSitter")
@@ -254,8 +255,10 @@ model Payment {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // Link to the request being paid for
-  request   ClientRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
   requestId String        @db.ObjectId
+  request   ClientRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  senderId String @db.ObjectId
+  sender User @relation("SenderPayment", fields: [senderId], references: [id], onDelete: Cascade)
 
   amount        Float
   currency      String         @default("USD") // You can change default to your currency

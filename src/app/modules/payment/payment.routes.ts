@@ -27,5 +27,7 @@ router.post(
   handleStripeWebhook
 );
 
+router.get("/get-all-payments", auth(), paymentController.getAllPayment);
+
 
 export const paymentRoutes = router;

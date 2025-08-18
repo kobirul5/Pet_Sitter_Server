@@ -39,8 +39,21 @@ const createCard = catchAsync(
 );
 
 
+const getAllPayment = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const result = await paymentService.getAllPayments(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Payment retrieved successfully',
+    data: result,
+  });
+});
+
+
 export const paymentController = {
   createPayment,
-  createCard
+  createCard,
+  getAllPayment
 
 };

@@ -394,6 +394,7 @@ const getSitterDetails = async (
     experience: sitter.experience,
     about: sitter.about,
     services: sitter.services,
+    serviceType: sitter.serviceType,
     sitterProfile: sitter.sitterProfile,
     ratings: sitter.ratingsReceived,
     averageRating: Math.round(averageRating * 10) / 10, // Round to 1 decimal place

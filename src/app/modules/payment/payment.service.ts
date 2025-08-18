@@ -1,4 +1,4 @@
-import { PaymenttStatus } from "@prisma/client";
+import { PaymenttStatus, RequestStatus, UserRole } from "@prisma/client";
 import ApiError from "../../../errors/ApiErrors";
 import { getTransactionId } from "../../../helpars/getTransactionId";
 import prisma from "../../../shared/prisma";
@@ -14,10 +14,13 @@ interface IPaymentIntent {
 }
 
 
-const createPaymentIntent = async ({ paymentMethod, requestId, currency = 'usd', userId,}: IPaymentIntent) => {
-
+const createPaymentIntent = async ({
+  paymentMethod,
+  requestId,
+  currency = 'usd',
+  userId,
+}: IPaymentIntent) => {
   const transactionId = getTransactionId();
-
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -36,32 +39,84 @@ const createPaymentIntent = async ({ paymentMethod, requestId, currency = 'usd',
   });
 
 
+  if (!clientRequest) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Service request not found");
+  }
+
+  if (clientRequest.status !== RequestStatus.ACCEPTED) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Service request is not Accepted");
+  }
+
+  if(clientRequest.paymentStatus === PaymenttStatus.COMPLETED){
+    throw new ApiError(httpStatus.BAD_REQUEST, "Payment already completed");
+  }
 
   try {
-
-
+    // Stripe payment create
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(clientRequest?.totalPrice! * 100), // convert to cents
+      amount: Math.round(clientRequest.totalPrice! * 100), // convert to cents
       currency,
-      payment_method: paymentMethod, // Stripe PaymentMethod ID
+      payment_method: paymentMethod,
       confirm: true,
       automatic_payment_methods: { enabled: true, allow_redirects: 'never' },
       metadata: {
         requestId,
-        orderId: transactionId,
+        transactionId,
         senderId: userId,
-        courierId: clientRequest?.sitterId!,
+        amount: clientRequest.totalPrice!.toString(),
       },
     });
 
-    console.log("paymentIntent", paymentIntent, "-------------------");
+    if (paymentIntent.status !== 'succeeded') {
 
-    return { paymentIntent };
+      await prisma.payment.create({
+        data: {
+          transactionId,
+          requestId,
+          amount: clientRequest.totalPrice!,
+          paymentStatus: PaymenttStatus.FAILED,
+          senderId: userId,
+          method: "CARD",
+          methodCardId: paymentIntent.payment_method as string,
+        },
+      });
+
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Payment failed');
+    }
+
+
+
+    // Prisma transaction
+    const payment = await prisma.$transaction(async (tx) => {
+      const paymentRecord = await tx.payment.create({
+        data: {
+          transactionId,
+          requestId,
+          amount: clientRequest.totalPrice!,
+          paymentStatus: PaymenttStatus.COMPLETED,
+          senderId: userId,
+          method: "CARD",
+          methodCardId: paymentIntent.payment_method as string,
+        },
+      });
+
+      await tx.clientRequest.update({
+        where: { id: requestId },
+        data: {
+          paymentStatus: PaymenttStatus.COMPLETED,
+        },
+      });
+
+
+      return paymentRecord;
+    });
+
+    return payment;
   } catch (error: any) {
     console.error('Card payment error:', error);
     throw new ApiError(httpStatus.BAD_REQUEST, error.message || 'Payment failed');
   }
-}
+};
 
 
 interface ICreateCardRequest {
@@ -142,6 +197,26 @@ const createCard = async (
 };
 
 
+const getAllPayments = async (userId: string) => {
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  })
+
+  if(!user){
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  // if(user.role !== UserRole.Admin){
+  //   throw new ApiError(httpStatus.BAD_REQUEST, "Only admin can get all payments");
+  // }
+
+
+  const result = await prisma.payment.findMany();
+  return result;
+}
 
 
 const getMyPayments = async (userId: string) => {
@@ -156,4 +231,5 @@ const getMyPayments = async (userId: string) => {
 export const paymentService = {
   createPaymentIntent,
   createCard,
+  getAllPayments
 };
