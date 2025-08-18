@@ -62,7 +62,7 @@ export interface ISitterRecommendation {
   totalReviews?: number | null;
   experience?: string | null;
   about?: string | null;
-  services: IService[];
+  services: IService | [];
   distance?: number | null;
   sitterProfile?: ISitterProfile | null;
 }

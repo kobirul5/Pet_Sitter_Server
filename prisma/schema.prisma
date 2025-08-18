@@ -45,7 +45,7 @@ model User {
   totalReviews  Int?           @default(0)
   experience    String?        @default("")
   about         String?        @default("")
-  services      Service[]
+
   sitterProfile SitterProfile?
 
   SenderRooms   Room[] @relation("SenderRooms")
@@ -68,7 +68,14 @@ model User {
   RatingsPetGiven       PetRating[]     @relation("RatingsPetGiven")
   sentNotifications     Notification[]  @relation("SentNotifications")
   receivedNotifications Notification[]  @relation("ReceivedNotifications")
-  savedCards             SavedCard[]
+  savedCards            SavedCard[]
+
+  // Services
+  serviceId       String?  @db.ObjectId
+  services Service? @relation("UserSelectedService", fields: [serviceId], references: [id],  onDelete: NoAction, onUpdate: NoAction)
+
+  // Services he provides
+  servicesProvided Service[] @relation("ServiceProviderID")
 
   @@map("users")
 }
@@ -101,7 +108,11 @@ model Service {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Provider relation
+  user User @relation("ServiceProviderID",fields: [userId], references: [id], onDelete: Cascade)
+
+  // Reverse relation
+  selectedBy User[] @relation("UserSelectedService")
 
   @@map("services")
 }

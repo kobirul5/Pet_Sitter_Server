@@ -30,7 +30,8 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 const getSitterRecommendations = async (
   userID: string,
   filters: ISitterFilters
-): Promise<{ meta: any; data: ISitterRecommendation[] }> => {
+): Promise<{ meta: any; data: any }> => {
+  // ISitterRecommendation[]
   // const decodedToken = jwtHelpers.verifyToken(
   //   userToken,
   //   config.jwt.jwt_secret!
@@ -141,6 +142,7 @@ const getSitterRecommendations = async (
       totalReviews: true,
       experience: true,
       about: true,
+      serviceId: true,
       services: {
         select: {
           id: true,
@@ -251,8 +253,13 @@ const getSitterBoarding = async () => {
       profileImage: true,
       serviceType: true,
       serviceAvailableDates: true,
+      sitterProfile: true,
+      serviceId: true,
+      services: true,
       about: true,
       email: true,
+      totalRating: true,
+      ratingsReceived: true,
     },
     where: {
       role: UserRole.Sitter,
@@ -272,8 +279,13 @@ const getSitterServicesForWalking = async () => {
       profileImage: true,
       serviceType: true,
       serviceAvailableDates: true,
+      sitterProfile: true,
+      serviceId: true,
+      services: true,
       about: true,
       email: true,
+      totalRating: true,
+      ratingsReceived: true,
     },
     where: {
       role: UserRole.Sitter,
@@ -295,8 +307,14 @@ const getSitterServicesForDogCare = async () => {
       profileImage: true,
       serviceType: true,
       serviceAvailableDates: true,
+      totalReviews: true,
+      sitterProfile: true,
+      serviceId: true,
+      services: true,
       about: true,
       email: true,
+      totalRating: true,
+      ratingsReceived: true,
     },
     where: {
       role: UserRole.Sitter,
@@ -356,7 +374,7 @@ const getSitterDetails = async (
     ? totalRating / sitter.ratingsReceived.length 
     : 0;
 
-    console.log("averageRating", averageRating);
+
   return {
     id: sitter.id,
     firstName: sitter.firstName,
