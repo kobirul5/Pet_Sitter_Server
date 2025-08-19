@@ -373,23 +373,20 @@ const addSitterService = async (
     name: string;
     description?: string;
     price: number;
+    serviceType: "NOSERVICE" | "DOGCARE" | "BOARDING" | "WALKING"; // corrected spelling
   }
 ) => {
-  const decodedToken = jwtHelpers.verifyToken(
-    userToken,
-    config.jwt.jwt_secret!
-  );
+  const decodedToken = jwtHelpers.verifyToken(userToken, config.jwt.jwt_secret!);
 
-  const existingUser = await prisma.user.findUnique({
-    where: { id: decodedToken.id },
-  });
+  const existingUser = await prisma.user.findUnique({ where: { id: decodedToken.id } });
+  if (!existingUser) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
 
-  if (!existingUser) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
-  }
-
-  if (existingUser.role !== "Sitter") {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Only sitters can add services");
+  const allowedTypes = ["DOGCARE", "BOARDING", "WALKING"];
+  if (!allowedTypes.includes(serviceData.serviceType)) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      `Invalid service type. Allowed types: ${allowedTypes.join(", ")}`
+    );
   }
 
   const service = await prisma.service.create({
@@ -397,12 +394,14 @@ const addSitterService = async (
       name: serviceData.name,
       description: serviceData.description,
       price: serviceData.price,
+      serciveType: serviceData.serviceType, // ensure DB column matches spelling
       ServiceProviderID: decodedToken.id,
     },
   });
 
   return service;
 };
+
 
 // Get sitter services
 const getSitterServices = async (userToken: string) => {
@@ -480,6 +479,47 @@ const deleteSitterService = async (userToken: string, serviceId: string) => {
   return { message: "Service deleted successfully" };
 };
 
+
+const changeSitterStatus = async ({ userId, serviceStatus }: { userId: string; serviceStatus: ServiceType }) => {
+
+  const existingUser = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!existingUser) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  if (existingUser.role !== "Sitter") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Only sitters can change status");
+  }
+
+  const serviceStatusType = Object.values(ServiceType);
+  if (!serviceStatusType.includes(serviceStatus)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, `Invalid service status ${ServiceType.BOARDING} or ${ServiceType.WALKING} or ${ServiceType.WALKING} required `);
+  }
+
+  const services = await prisma.service.findFirst({
+    where: { serciveType: serviceStatus },
+  });
+
+  if(!services){
+    throw new ApiError(httpStatus.BAD_REQUEST, "Service not found");
+  }
+
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      serviceId: services.id
+    },
+    include: {
+      services: true
+    }
+  });
+
+  return result;
+}
+
 export const UserService = {
   getMyProfile,
   updateUserProfile,
@@ -493,4 +533,5 @@ export const UserService = {
   getSitterServices,
   updateSitterService,
   deleteSitterService,
+  changeSitterStatus
 };

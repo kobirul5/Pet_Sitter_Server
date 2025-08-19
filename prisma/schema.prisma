@@ -107,7 +107,7 @@ model Service {
   // userId      String   @db.ObjectId
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  serciveType ServiceType @default(BOARDING)
+  serciveType ServiceType 
 
   // Relations
   // Provider relation

@@ -84,4 +84,10 @@ router.delete(
   UserController.deleteSitterService
 );
 
+router.patch(
+  "/change-sitter-service",
+  auth(),
+  UserController.changeSitterController
+)
+
 export const userRoutes = router;

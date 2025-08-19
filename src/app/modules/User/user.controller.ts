@@ -24,14 +24,14 @@ const getMyProfile = catchAsync(async (req: Request, res: Response) => {
 //   console.log("hiiiiiiiiiiiiiiiiiiiiii")
 //   const token = req.headers.authorization;
 //   const userData = JSON.parse(req.body.data);
-  
+
 //   console.log(userData,"------------------")
 
 //   let imageUrl: string | undefined;
 
 //   if (req.files) {
 //     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-    
+
 //     // Handle profile image
 //     if (files.profileImage?.[0]) {
 //       const uploaded = await fileUploader.uploadToDigitalOcean(files.profileImage[0]);
@@ -258,6 +258,19 @@ const deleteSitterService = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const changeSitterController = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user.id
+  const { serviceStatus } = req.body
+  const result = await UserService.changeSitterStatus({ userId, serviceStatus });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Sitter status changed successfully",
+    data: result,
+  });
+})
+
 export const UserController = {
   getMyProfile,
   updateProfileController,
@@ -271,4 +284,5 @@ export const UserController = {
   getSitterServices,
   updateSitterService,
   deleteSitterService,
+  changeSitterController,
 };
