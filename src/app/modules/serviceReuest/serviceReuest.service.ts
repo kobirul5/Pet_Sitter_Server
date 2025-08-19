@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiErrors";
 import prisma from "../../../shared/prisma";
 import { ICreateRequestData } from "../Sitter/sitter.interface";
-import { RequestStatus } from "@prisma/client";
+import { PaymenttStatus, RequestStatus } from "@prisma/client";
 import { IClinetRating, IDogRating } from "./serviceRequest.interface";
 import { result } from "lodash";
 
@@ -285,6 +285,21 @@ const createReviewCinetAndDog = async ({ requestId, client, dog}: {requestId: st
 
 };
 
+const getAllAcceptedRequestsForStudent = async (clientId: string) => {
+
+  if(!clientId){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
+  }
+
+  const result = await prisma.clientRequest.findMany({
+    where: {
+      clientId: clientId,
+      status: RequestStatus.ACCEPTED,
+      paymentStatus: PaymenttStatus.PENDING
+    },
+  });
+  return result;
+}
 
 export const serviceReuestService = {
   createClientRequestService,
@@ -294,5 +309,6 @@ export const serviceReuestService = {
   getClinetAndDogProfileById,
   acceptClinerRequest,
   createReviewCinetAndDog,
+  getAllAcceptedRequestsForStudent
 
 };

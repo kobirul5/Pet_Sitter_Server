@@ -30,6 +30,13 @@ router.put(
   serviceReuestController.updateServicestatusController
 );
 
+// get all accepted request for student
+router.get(
+  "/accepted-requests-for-student",
+  auth(),
+  serviceReuestController.getAllAcceptedRequestsForStudent
+)
+
 // get clinet and dog profile by id
  router.get(
   "/clinet-and-dog/:requestid",

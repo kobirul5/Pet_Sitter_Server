@@ -153,6 +153,19 @@ const createReviewCinetAndDogController = catchAsync(
 )
 
 
+const getAllAcceptedRequestsForStudent = catchAsync(
+  async (req: Request, res: Response) => {
+    const clientId = req.user.id
+    const result = await serviceReuestService.getAllAcceptedRequestsForStudent(clientId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Review created successfully',
+      data: result,
+    });
+  }
+)
+
 export const serviceReuestController = {
   createClientRequestController,
   getServiceRequestsController,
@@ -160,5 +173,6 @@ export const serviceReuestController = {
   updateServicestatusController,
   getClinetAndDogProfileByIdController,
   acceptClinerRequestController,
-  createReviewCinetAndDogController
+  createReviewCinetAndDogController,
+  getAllAcceptedRequestsForStudent
 };
