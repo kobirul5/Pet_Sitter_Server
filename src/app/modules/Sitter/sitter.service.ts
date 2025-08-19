@@ -240,9 +240,8 @@ const getAllServices = async () => {
       ratingsReceived: true,
     },
     where: {
-      role: "Sitter",
-      // serviceAvailableDates:  []
-      // status: "ACTIVE",
+      role: UserRole.Sitter,
+      serviceId: { not: null },
     }
   });
   return services;
