@@ -393,7 +393,7 @@ const addSitterService = async (
     data: {
       name: serviceData.name,
       description: serviceData.description,
-      price: serviceData.price,
+      hourlyRate: serviceData.price,
       serciveType: serviceData.serviceType, // ensure DB column matches spelling
       ServiceProviderID: decodedToken.id,
     },

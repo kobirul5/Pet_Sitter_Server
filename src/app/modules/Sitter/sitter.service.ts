@@ -148,7 +148,7 @@ const getSitterRecommendations = async (
           id: true,
           name: true,
           description: true,
-          price: true,
+          hourlyRate: true,
         },
       },
       sitterProfile: {
