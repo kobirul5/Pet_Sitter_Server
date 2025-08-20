@@ -108,6 +108,31 @@ const createPaymentIntent = async ({
       });
 
 
+        let room = await prisma.room.findFirst({
+              where: {
+                OR: [
+                  { senderId: clientRequest.clientId, receiverId: clientRequest.sitterId },
+                  { senderId: clientRequest.sitterId, receiverId: clientRequest.clientId },
+                ],
+              },
+            });
+
+            if (!room) {
+              room = await prisma.room.create({
+                data: { senderId: clientRequest.clientId, receiverId: clientRequest.sitterId},
+              });
+            }
+
+            const chat = await prisma.chat.create({
+              data: {
+                senderId: clientRequest.clientId,
+                receiverId: clientRequest.sitterId,
+                roomId: room.id,
+                message : `I have successfully completed the payment for the ${clientRequest.serviceType} service. Thank you! If you  want to discuss any details, feel free to reach out.`,
+              },
+            });
+
+
       return paymentRecord;
     });
 
