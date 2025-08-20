@@ -32,9 +32,9 @@ router.put(
 
 // get all accepted request for student
 router.get(
-  "/accepted-requests-for-student",
+  "/accepted-requests-for-client",
   auth(),
-  serviceReuestController.getAllAcceptedRequestsForStudent
+  serviceReuestController.getAllAcceptedRequests
 )
 
 // get clinet and dog profile by id

@@ -75,13 +75,15 @@ const getServiceForSitterRequests = async (sitterId: string) => {
   const allRequests = await prisma.clientRequest.findMany({
     where: {
       sitterId,
+      paymentStatus: PaymenttStatus.COMPLETED,
       status: {
         notIn: ["PENDING", "DENIED"],
       },
     },
     include: {
-      sitter: true,
+      // sitter: true,
       client: true,
+      dog: true,
       // dog: true, // uncomment if needed
     },
   });
@@ -95,8 +97,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
       req.endTime.toDateString() >= nowTime
   );
 
-  // console.log("ongoing", ongoing, allRequests);
-  console.log(nowTime)
+  
 
   const upcoming = allRequests.filter(
     (req) =>
@@ -285,16 +286,18 @@ const createReviewCinetAndDog = async ({ requestId, client, dog}: {requestId: st
 
 };
 
-const getAllAcceptedRequestsForStudent = async (clientId: string) => {
 
-  if(!clientId){
+const getAllAcceptedRequests = async (sitterId: string) => {
+
+  if(!sitterId){
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
   }
 
+
   const result = await prisma.clientRequest.findMany({
     where: {
-      clientId: clientId,
-      status: RequestStatus.ACCEPTED,
+      sitterId: sitterId,
+      status: RequestStatus.PENDING,
       paymentStatus: PaymenttStatus.PENDING
     },
   });
@@ -309,6 +312,6 @@ export const serviceReuestService = {
   getClinetAndDogProfileById,
   acceptClinerRequest,
   createReviewCinetAndDog,
-  getAllAcceptedRequestsForStudent
+  getAllAcceptedRequests
 
 };

@@ -80,7 +80,6 @@ const getServiceRequestsForSitterController = catchAsync(
   async (req: Request, res: Response) => {
 
     const sitterId = req.user.id
-    console.log(sitterId)
     const requests = await serviceReuestService.getServiceForSitterRequests(sitterId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -141,7 +140,7 @@ const acceptClinerRequestController = catchAsync(
 const createReviewCinetAndDogController = catchAsync(
   async (req: Request, res: Response) => {
     const { requestId, client, dog } = req.body
-    console.log(req.body)
+
     const result = await serviceReuestService.createReviewCinetAndDog({requestId, client, dog });
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -153,14 +152,14 @@ const createReviewCinetAndDogController = catchAsync(
 )
 
 
-const getAllAcceptedRequestsForStudent = catchAsync(
+const getAllAcceptedRequests = catchAsync(
   async (req: Request, res: Response) => {
-    const clientId = req.user.id
-    const result = await serviceReuestService.getAllAcceptedRequestsForStudent(clientId);
+    const sitterId = req.user.id
+    const result = await serviceReuestService.getAllAcceptedRequests(sitterId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Review created successfully',
+      message: 'Service requests retrieved successfully',
       data: result,
     });
   }
@@ -174,5 +173,5 @@ export const serviceReuestController = {
   getClinetAndDogProfileByIdController,
   acceptClinerRequestController,
   createReviewCinetAndDogController,
-  getAllAcceptedRequestsForStudent
+  getAllAcceptedRequests
 };
