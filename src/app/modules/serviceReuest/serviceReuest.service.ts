@@ -69,7 +69,7 @@ const getServiceRequests = async () => {
 // get service requests by siiterId for sitter
 
 const getServiceForSitterRequests = async (sitterId: string) => {
-  const nowTime = new Date().toDateString();
+  const nowTime = new Date()
 
   // Fetch all requests for sitter with related data
   const allRequests = await prisma.clientRequest.findMany({
@@ -77,7 +77,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
       sitterId,
       paymentStatus: PaymenttStatus.COMPLETED,
       status: {
-        notIn: ["PENDING", "DENIED"],
+        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
       },
     },
     include: {
@@ -88,30 +88,39 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     },
   });
 
-  // Then filter in JS for ongoing, upcoming, past
+  const ongoingRequests = await prisma.clientRequest.findMany({
+    where: {
+      sitterId,
+      paymentStatus: PaymenttStatus.COMPLETED,
+      status: "ONGOING",
+    },
+    include: {
 
-  const ongoing = allRequests.filter(
-    (req) =>
-      req.status === "ACCEPTED" &&
-      req.startTime.toDateString() <= nowTime &&
-      req.endTime.toDateString() >= nowTime
-  );
+      client: true,
+      dog: true,
 
-  
+    },
+  });
+  const upComeingRequests = await prisma.clientRequest.findMany({
+    where: {
+      sitterId,
+      paymentStatus: PaymenttStatus.COMPLETED,
+      status:  {
+        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
+      },
+      endTime: {
+        gt: nowTime,
+      },
+    },
+    include: {
+      client: true,
+      dog: true,
+    },
+  });
 
-  const upcoming = allRequests.filter(
-    (req) =>
-      req.status === "ACCEPTED" &&
-      req.startTime.toDateString() > nowTime
-  );
 
-  const past = allRequests.filter(
-    (req) =>
-      req.status === "COMPLETED" &&
-      req.endTime.toDateString() < nowTime
-  );
 
-  return allRequests;
+  return {allRequests,ongoingRequests, upComeingRequests};
 };
 
 // update service status

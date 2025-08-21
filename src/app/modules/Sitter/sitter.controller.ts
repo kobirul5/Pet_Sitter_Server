@@ -32,7 +32,9 @@ const getSitterRecommendations = catchAsync(
 const getAllSitterForServices = catchAsync(
   async (req: Request, res: Response) => {
 
-    const services = await SitterService.getAllServices();
+    const clientId = req.user.id
+
+    const services = await SitterService.getAllServices(clientId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

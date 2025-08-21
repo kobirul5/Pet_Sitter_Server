@@ -321,6 +321,7 @@ enum ServiceType {
 enum RequestStatus {
   PENDING
   ACCEPTED
+  ONGOING
   DENIED
   COMPLETED
 }
