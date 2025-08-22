@@ -223,58 +223,30 @@ const getSitterRecommendations = async (
 
 
 const getAllServices = async (clientId: string) => {
- const nowTime = new Date()
-
-  // Fetch all requests for sitter with related data
-  const allRequests = await prisma.clientRequest.findMany({
+ 
+const services = await prisma.user.findMany({
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      profileImage: true,
+      serviceType: true,
+      serviceAvailableDates: true,
+      sitterProfile: true,
+      serviceId: true,
+      services: true,
+      about: true,
+      email: true,
+      totalRating: true,
+      ratingsReceived: true,
+    },
     where: {
-      clientId,
-      paymentStatus: PaymenttStatus.COMPLETED,
-      status: {
-        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
-      },
-    },
-    include: {
-      // sitter: true,
-      client: true,
-      dog: true,
-      // dog: true, // uncomment if needed
-    },
+      role: UserRole.Sitter,
+      serviceId: { not: null },
+    }
   });
-
-  const ongoingRequests = await prisma.clientRequest.findMany({
-    where: {
-      clientId,
-      paymentStatus: PaymenttStatus.COMPLETED,
-      status: "ONGOING",
-    },
-    include: {
-
-      client: true,
-      dog: true,
-
-    },
-  });
-  const upComeingRequests = await prisma.clientRequest.findMany({
-    where: {
-      clientId,
-      paymentStatus: PaymenttStatus.COMPLETED,
-      status:  {
-        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
-      },
-      endTime: {
-        gt: nowTime,
-      },
-    },
-    include: {
-      client: true,
-      dog: true,
-    },
-  });
-
-
-
-  return {allRequests,ongoingRequests, upComeingRequests};
+  return services;
+;
 };
 
 

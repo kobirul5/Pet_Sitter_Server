@@ -59,7 +59,6 @@ router.post(
 );
 
 
-
 // // Update sitter rating
 // router.patch(
 //   "/:sitterId/rate",

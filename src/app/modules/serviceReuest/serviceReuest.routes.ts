@@ -30,12 +30,14 @@ router.put(
   serviceReuestController.updateServicestatusController
 );
 
-// get all accepted request for student
+// get all accepted request 
 router.get(
   "/accepted-requests-for-client",
   auth(),
   serviceReuestController.getAllAcceptedRequests
 )
+
+// const updateOngoingStatus
 
 // get clinet and dog profile by id
  router.get(
