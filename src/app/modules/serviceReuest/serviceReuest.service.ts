@@ -149,6 +149,76 @@ const updateServicestatus = async (requestId: string, status: string, sitterId: 
   return result;
 };
 
+// getAllUpcomingAndOngoingCleintServices
+
+const getAllUpcomingAndOngoingCleintServices = async (clientId: string) => {
+
+  const nowTime = new Date()
+
+  // // Fetch all requests for sitter with related data
+  // const allRequests = await prisma.clientRequest.findMany({
+  //   where: {
+  //     clientId,
+  //     paymentStatus: PaymenttStatus.COMPLETED,
+  //     status: {
+  //       notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
+  //     },
+  //   },
+  //   include: {
+  //     // sitter: true,
+  //     client: true,
+  //     dog: true,
+  //     // dog: true, // uncomment if needed
+  //   },
+  // });
+
+  const ongoingRequests = await prisma.clientRequest.findMany({
+    where: {
+      clientId,
+      paymentStatus: PaymenttStatus.COMPLETED,
+      status: "ONGOING",
+    },
+    include: {
+
+      client: true,
+      dog: true,
+
+    },
+  });
+  const upComeingRequests = await prisma.clientRequest.findMany({
+    where: {
+      clientId,
+      paymentStatus: PaymenttStatus.COMPLETED,
+      status:  {
+        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
+      },
+      endTime: {
+        gt: nowTime,
+      },
+    },
+    include: {
+      client: true,
+      dog: true,
+    },
+  });
+
+  const completedRequests = await prisma.clientRequest.findMany({
+    where: {
+      clientId,
+      paymentStatus: PaymenttStatus.COMPLETED,
+      status: "COMPLETED",
+    },
+    include: {
+      client: true,
+      dog: true,
+    },
+  });
+
+
+
+  return {ongoingRequests, upComeingRequests, completedRequests};
+}
+
 // get clinet and dog details by request id
 
 const getClinetAndDogProfileById = async (requestId: string) => {
@@ -321,6 +391,7 @@ export const serviceReuestService = {
   getClinetAndDogProfileById,
   acceptClinerRequest,
   createReviewCinetAndDog,
-  getAllAcceptedRequests
+  getAllAcceptedRequests,
+  getAllUpcomingAndOngoingCleintServices
 
 };

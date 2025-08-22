@@ -165,6 +165,20 @@ const getAllAcceptedRequests = catchAsync(
   }
 )
 
+// getAllUpcomingAndOngoingCleintRequests 
+const getAllUpcomingAndOngoingCleintRequests = catchAsync(
+  async (req: Request, res: Response) => {
+    const sitterId = req.user.id
+    const result = await serviceReuestService.getAllUpcomingAndOngoingCleintServices(sitterId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Service requests retrieved successfully',
+      data: result,
+    });
+  }
+)
+
 export const serviceReuestController = {
   createClientRequestController,
   getServiceRequestsController,
@@ -173,5 +187,6 @@ export const serviceReuestController = {
   getClinetAndDogProfileByIdController,
   acceptClinerRequestController,
   createReviewCinetAndDogController,
-  getAllAcceptedRequests
+  getAllAcceptedRequests,
+  getAllUpcomingAndOngoingCleintRequests
 };

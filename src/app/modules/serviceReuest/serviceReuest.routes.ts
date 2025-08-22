@@ -37,6 +37,13 @@ router.get(
   serviceReuestController.getAllAcceptedRequests
 )
 
+// get all upcoming and ongoing request 
+router.get(
+  "/upcoming-and-ongoing-requests-for-client",
+  auth(),
+  serviceReuestController.getAllUpcomingAndOngoingCleintRequests
+)
+
 // const updateOngoingStatus
 
 // get clinet and dog profile by id
