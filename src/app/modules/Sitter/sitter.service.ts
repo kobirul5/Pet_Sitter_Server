@@ -269,7 +269,8 @@ const getSitterBoarding = async () => {
     },
     where: {
       role: UserRole.Sitter,
-      serviceType: ServiceType.BOARDING
+      serviceType: ServiceType.BOARDING,
+      serviceId: {not: null }
       // status: "ACTIVE",
     }
   });
@@ -295,7 +296,8 @@ const getSitterServicesForWalking = async () => {
     },
     where: {
       role: UserRole.Sitter,
-      serviceType: ServiceType.WALKING
+      serviceType: ServiceType.WALKING,
+      serviceId: {not: null },
       // status: "ACTIVE",
     }
   });
@@ -324,7 +326,8 @@ const getSitterServicesForDogCare = async () => {
     },
     where: {
       role: UserRole.Sitter,
-      serviceType: ServiceType.DOGCARE
+      serviceType: ServiceType.DOGCARE,
+            serviceId: {not: null },
       // status: "ACTIVE",
     }
   });
