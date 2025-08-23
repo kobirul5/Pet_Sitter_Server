@@ -379,6 +379,9 @@ const getAllAcceptedRequests = async (sitterId: string) => {
       status: RequestStatus.PENDING,
       paymentStatus: PaymenttStatus.PENDING
     },
+    include: {
+      client: true,
+    },
   });
   return result;
 }
