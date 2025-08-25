@@ -126,8 +126,8 @@ const getServiceForSitterRequests = async (sitterId: string) => {
 // update service status
 const updateServicestatus = async (requestId: string, status: string, sitterId: string) => {
 
-  if (status !== RequestStatus.ACCEPTED && status !== RequestStatus.DENIED && status !== RequestStatus.COMPLETED) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Status must be ACCEPTED , COMPLETED or DENIED');
+  if (status !== RequestStatus.ACCEPTED && status !== RequestStatus.DENIED && status !== RequestStatus.COMPLETED && status !== RequestStatus.ONGOING) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Status must be ACCEPTED , COMPLETED, ONGOING or DENIED');
   }
 
   if (!sitterId) {
@@ -135,7 +135,25 @@ const updateServicestatus = async (requestId: string, status: string, sitterId: 
   }
 
 
+  const serviceRequest = await prisma.clientRequest.findUnique({
+    where: {
+      id: requestId,
+      sitterId: sitterId
+    },
+  });
 
+  if (!serviceRequest) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Service request not found');
+  }
+
+  if(status === RequestStatus.ONGOING && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Service request is not completed Not payment yet');
+  }
+
+
+  if(status === RequestStatus.COMPLETED && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Service request is not completed Not payment yet ');
+  }
 
   const result = await prisma.clientRequest.update({
     where: {
