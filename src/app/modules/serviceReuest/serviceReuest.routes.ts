@@ -69,5 +69,12 @@ router.patch(
 );
 
 
+// accpepted services for payment
+router.get(
+  "/accept-service-payment",
+  auth(),
+  serviceReuestController.getAcceptServiceForPaymentController
+);
+
 
 export const serviceReuestRoutes = router;

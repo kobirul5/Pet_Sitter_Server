@@ -179,6 +179,22 @@ const getAllUpcomingAndOngoingCleintRequests = catchAsync(
   }
 )
 
+
+// Get all service requests payment
+const getAcceptServiceForPaymentController = catchAsync(
+  async (req: Request, res: Response) => {
+
+    const clientId = req.user.id
+    const result = await serviceReuestService.getAcceptServiceForPayment(clientId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Service requests retrieved successfully',
+      data: result,
+    });
+  }
+)
+
 export const serviceReuestController = {
   createClientRequestController,
   getServiceRequestsController,
@@ -188,5 +204,6 @@ export const serviceReuestController = {
   acceptClinerRequestController,
   createReviewCinetAndDogController,
   getAllAcceptedRequests,
-  getAllUpcomingAndOngoingCleintRequests
+  getAllUpcomingAndOngoingCleintRequests,
+  getAcceptServiceForPaymentController
 };
