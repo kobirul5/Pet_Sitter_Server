@@ -20,6 +20,16 @@ const createClientRequestService = async (data: ICreateRequestData) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Sitter not found or inactive');
   }
 
+  const dog = await prisma.dog.findFirst({
+    where: {
+      id: data.dogId,
+    },
+  });
+
+  if (!dog) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Wrong Dog Id, Dog not found');
+  }
+
   // Create the client request
   const request = await prisma.clientRequest.create({
     data: {
@@ -240,6 +250,10 @@ const getAllUpcomingAndOngoingCleintServices = async (clientId: string) => {
 // get clinet and dog details by request id
 
 const getClinetAndDogProfileById = async (requestId: string) => {
+
+  if(!requestId){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot get! unauthorized request');
+  }
 
 
   const result = await prisma.clientRequest.findUnique({

@@ -109,12 +109,12 @@ const updateServicestatusController = catchAsync(
 // get clinet and dog details
 const getClinetAndDogProfileByIdController = catchAsync(
   async (req: Request, res: Response) => {
-    const { requestId } = req.body
+    const  requestId  = req.params.requestid
     const result = await serviceReuestService.getClinetAndDogProfileById(requestId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service status updated successfully',
+      message: 'get clinet and dog details successfully',
       data: result,
     });
   }
