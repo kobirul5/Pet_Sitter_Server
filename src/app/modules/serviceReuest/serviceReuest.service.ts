@@ -41,6 +41,7 @@ const createClientRequestService = async (data: ICreateRequestData) => {
       serviceType: data.serviceType,
       hourlyRate: data.hourlyRate,
       totalPrice: data.totalPrice,
+      dogs: data.dogs,
     },
   });
 

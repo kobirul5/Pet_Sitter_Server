@@ -1,4 +1,4 @@
-import { RequestStatus, ServiceType, UserRole, UserStatus } from "@prisma/client";
+import { Dog, RequestStatus, ServiceType, UserRole, UserStatus } from "@prisma/client";
 
 export interface ISitterProfile {
   id?: string;
@@ -102,5 +102,6 @@ export interface ICreateRequestData {
   hourlyRate: number;
   totalPrice: number;
   currency?: string;
-  status?: RequestStatus; // Optional, defaults to 'PENDING'
+  status?: RequestStatus;
+  dogs: Dog[] // Optional, defaults to 'PENDING'
 }

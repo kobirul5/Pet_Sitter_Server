@@ -33,8 +33,9 @@ const getAllSitterForServices = catchAsync(
   async (req: Request, res: Response) => {
 
     const clientId = req.user.id
+     const searchText = req.query.search as string | undefined;
 
-    const services = await SitterService.getAllServices(clientId);
+    const services = await SitterService.getAllServices(clientId, searchText);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

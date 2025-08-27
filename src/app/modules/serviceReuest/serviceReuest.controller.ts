@@ -21,7 +21,8 @@ const createClientRequestController = catchAsync(
       hourlyRate,
       currency,
       totalPrice,
-      dogId
+      dogId,
+      dogs
     } = req.body;
 
     if (
@@ -30,7 +31,8 @@ const createClientRequestController = catchAsync(
       !endTime ||
       !hourlyRate ||
       !totalPrice ||
-      !dogId
+      !dogId ||
+      !dogs
     ) {
       return res.status(httpStatus.BAD_REQUEST).json({
         success: false,
@@ -51,7 +53,7 @@ const createClientRequestController = catchAsync(
 
 
     const newRequest = await serviceReuestService.createClientRequestService({
-      clientId, endTime, hourlyRate, serviceType, sitterId, startTime, totalPrice, currency, dogId
+      clientId, endTime, hourlyRate, serviceType, sitterId, startTime, totalPrice, currency, dogId, dogs
     });
 
     sendResponse(res, {

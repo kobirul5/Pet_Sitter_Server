@@ -222,9 +222,10 @@ const getSitterRecommendations = async (
 };
 
 
-const getAllServices = async (clientId: string) => {
- 
-const services = await prisma.user.findMany({
+const getAllServices = async (clientId: string, searchText?: string) => {
+
+
+  const services = await prisma.user.findMany({
     select: {
       id: true,
       firstName: true,
@@ -243,11 +244,20 @@ const services = await prisma.user.findMany({
     where: {
       role: UserRole.Sitter,
       serviceId: { not: null },
-    }
+      ...(searchText && {
+        OR: [
+          { firstName: { contains: searchText, mode: "insensitive" } },
+          { lastName: { contains: searchText, mode: "insensitive" } },
+          { about: { contains: searchText, mode: "insensitive" } },
+          { email: { contains: searchText, mode: "insensitive" } },
+        ],
+      }),
+    },
   });
+
   return services;
-;
 };
+
 
 
 const getSitterBoarding = async () => {
@@ -270,7 +280,7 @@ const getSitterBoarding = async () => {
     where: {
       role: UserRole.Sitter,
       serviceType: ServiceType.BOARDING,
-      serviceId: {not: null }
+      serviceId: { not: null }
       // status: "ACTIVE",
     }
   });
@@ -297,7 +307,7 @@ const getSitterServicesForWalking = async () => {
     where: {
       role: UserRole.Sitter,
       serviceType: ServiceType.WALKING,
-      serviceId: {not: null },
+      serviceId: { not: null },
       // status: "ACTIVE",
     }
   });
@@ -327,7 +337,7 @@ const getSitterServicesForDogCare = async () => {
     where: {
       role: UserRole.Sitter,
       serviceType: ServiceType.DOGCARE,
-            serviceId: {not: null },
+      serviceId: { not: null },
       // status: "ACTIVE",
     }
   });

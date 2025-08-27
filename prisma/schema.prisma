@@ -153,6 +153,7 @@ model ClientRequest {
   dog   Dog    @relation("RequestedDog", fields: [dogId], references: [id], onDelete: Cascade)
   dogId String @db.ObjectId
 
+  dogs  Json[]  @default([])
   // The sitter who is receiving the request
   sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
   sitterId String @db.ObjectId
