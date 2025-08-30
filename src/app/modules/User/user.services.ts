@@ -394,7 +394,7 @@ const addSitterService = async (
       name: serviceData.name,
       description: serviceData.description,
       hourlyRate: serviceData.price,
-      serciveType: serviceData.serviceType, // ensure DB column matches spelling
+      serviceType: serviceData.serviceType, // ensure DB column matches spelling
       ServiceProviderID: decodedToken.id,
     },
   });
@@ -500,7 +500,7 @@ const changeSitterStatus = async ({ userId, serviceStatus }: { userId: string; s
   }
 
   const services = await prisma.service.findFirst({
-    where: { serciveType: serviceStatus },
+    where: { serviceType: serviceStatus },
   });
 
   if(!services){
@@ -510,7 +510,8 @@ const changeSitterStatus = async ({ userId, serviceStatus }: { userId: string; s
   const result = await prisma.user.update({
     where: { id: userId },
     data: {
-      serviceId: services.id
+      serviceId: services.id,
+      serviceType: serviceStatus
     },
     include: {
       services: true
