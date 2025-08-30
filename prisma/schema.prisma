@@ -109,8 +109,8 @@ model Service {
 
   // Relations
   // Provider relation
-  ServiceProviderID String @db.ObjectId
-  ServiceProvider User @relation("ServiceProviderID",fields: [ServiceProviderID], references: [id], onDelete: Cascade)
+  ServiceProviderId String @db.ObjectId
+  ServiceProvider User @relation("ServiceProviderID",fields: [ServiceProviderId], references: [id], onDelete: Cascade)
 
 
   // Reverse relation

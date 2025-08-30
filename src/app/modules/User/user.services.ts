@@ -395,7 +395,7 @@ const addSitterService = async (
       description: serviceData.description,
       hourlyRate: serviceData.price,
       serviceType: serviceData.serviceType, // ensure DB column matches spelling
-      ServiceProviderID: decodedToken.id,
+      ServiceProviderId: decodedToken.id,
     },
   });
 
@@ -411,7 +411,7 @@ const getSitterServices = async (userToken: string) => {
   );
 
   const services = await prisma.service.findMany({
-    where: { ServiceProviderID: decodedToken.id },
+    where: { ServiceProviderId: decodedToken.id },
     orderBy: { createdAt: "desc" },
   });
 
@@ -436,7 +436,7 @@ const updateSitterService = async (
   const existingService = await prisma.service.findFirst({
     where: {
       id: serviceId,
-      ServiceProviderID: decodedToken.id,
+      ServiceProviderId: decodedToken.id,
     },
   });
 
@@ -464,7 +464,7 @@ const deleteSitterService = async (userToken: string, serviceId: string) => {
   const existingService = await prisma.service.findFirst({
     where: {
       id: serviceId,
-      ServiceProviderID: decodedToken.id,
+      ServiceProviderId: decodedToken.id,
     },
   });
 
@@ -496,7 +496,7 @@ const changeSitterStatus = async ({ userId, serviceStatus }: { userId: string; s
 
   const serviceStatusType = Object.values(ServiceType);
   if (!serviceStatusType.includes(serviceStatus)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, `Invalid service status ${ServiceType.BOARDING} or ${ServiceType.WALKING} or ${ServiceType.WALKING} required `);
+    throw new ApiError(httpStatus.BAD_REQUEST, `Invalid service status ${ServiceType.BOARDING} or ${ServiceType.WALKING} or ${ServiceType.DOGCARE} required `);
   }
 
   const services = await prisma.service.findFirst({

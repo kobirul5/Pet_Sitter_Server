@@ -50,4 +50,11 @@ export default {
     authToken: process.env.TWILIO_AUTH_TOKEN,
     twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER,
   },
+  digitalOcean: {
+    endpoint: process.env.DO_SPACE_ENDPOINT,
+    originEndpoint: process.env.DO_SPACE_ORIGIN_ENDPOINT,
+    accessKey: process.env.DO_SPACE_ACCESS_KEY,
+    secretKey: process.env.DO_SPACE_SECRET_KEY,
+    bucket: process.env.DO_SPACE_BUCKET,
+  },
 };

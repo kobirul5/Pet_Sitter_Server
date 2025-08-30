@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiErrors';
 import { fileUploader } from '../../../helpars/fileUploader';
+import { deleteImageFromSpaces } from '../../../helpars/fileDelete';
 
 
 interface Dog {
@@ -74,11 +75,13 @@ const getDogList = async (userId: string) => {
 };
 
 
-const deleteDog = async (dogId: string) => {
+const deleteDog = async (dogId: string, userId: string) => {
 
   if(!dogId){
     throw new ApiError(httpStatus.BAD_REQUEST, 'Dog id is required')
   }
+
+
 
   const dog = await prisma.dog.findUnique({
     where: { id: dogId },
@@ -87,13 +90,25 @@ const deleteDog = async (dogId: string) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Dog not found');
   }
 
+  if (dog.userId !== userId) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized to delete this dog');
+  }
   
+  const urls: string[] = dog.images || [];
+
+  let deleted
+
+ for (const url of urls) {
+   deleted = await deleteImageFromSpaces(url);
+  }
 
 
   const result = await prisma.dog.delete({
     where: { id: dogId },
   });
-  return result;
+
+
+  return null;
 };
 
 

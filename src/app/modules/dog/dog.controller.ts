@@ -40,8 +40,10 @@ const getDogList = catchAsync(async (req, res) => {
 
 const dogDeleteController = catchAsync(async (req, res) => {
   const dogId = req.params.dogId;
-  console.log(dogId);
-  const result = await dogService.deleteDog(dogId);
+
+  const userId = req.user.id;
+
+  const result = await dogService.deleteDog(dogId, userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
