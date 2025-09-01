@@ -217,20 +217,43 @@ const getNotificationByreceiverId = async (receiverId: string) => {
   }
 };
 
-// const readNotificationByUserId = async (userId: string) => {
-//   try {
-//     const notifications = await prisma.notification.updateMany({
-//       where: { userId, read: false },
-//       data: { read: true },
-//     });
-//     return notifications;
-//   } catch (error) {
-//     throw new ApiError(
-//       httpStatus.INTERNAL_SERVER_ERROR,
-//       "Failed to mark notifications as read"
-//     );
-//   }
-// };
+const readNotificationByUserId = async (userId: string) => {
+  try {
+
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    })
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    }
+
+    const exitNotification = await prisma.notification.findMany({
+      where: { receiverId: userId, read: false },
+    });
+
+
+    if (!exitNotification) {
+      throw new ApiError(httpStatus.NOT_FOUND, "No unread notifications found");
+    }
+
+
+    const readNotifications = await prisma.notification.updateMany({
+      where: { receiverId: userId, read: false },
+      data: { read: true },
+    })
+
+
+    return readNotifications;
+
+
+  } catch (error) {
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to mark notifications as read"
+    );
+  }
+};
 
 const deleteNotificationById = async (
   userId: string,
@@ -341,7 +364,7 @@ export const notificationService = {
   sendNotification,
   getAllNotifications,
   getNotificationByreceiverId,
-  // readNotificationByUserId,
+  readNotificationByUserId,
   deleteNotificationById,
   // deleteAllNotifications,
   // sendNotificationToSelectedUsers,

@@ -33,7 +33,7 @@ router.post(
 // Get all notifications
 router.get(
   "/all-noitifications",
-  auth(),
+  // auth(),
   auth(UserRole.Admin),
   checkBlockedStatus,
   NotificationController.getAllNotificationsController
@@ -47,13 +47,13 @@ router.get(
   NotificationController.getNotificationByUserIdController
 );
 
-// // Mark notifications as read by user ID
-// router.put(
-//   "/read",
-//   auth(),
-//   checkBlockedStatus,
-//   NotificationController.readNotificationByUserIdController
-// );
+// Mark notifications as read by user ID
+router.put(
+  "/read",
+  auth(),
+  checkBlockedStatus,
+  NotificationController.readNotificationByUserIdController
+);
 
 // Delete notification by id
 router.delete(

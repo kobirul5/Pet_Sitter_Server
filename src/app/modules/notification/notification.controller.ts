@@ -78,7 +78,7 @@ const saveNotification = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Notification saved successfully",
-    data: null,
+    data: notification,
   });
 });
 
@@ -104,6 +104,8 @@ const getNotificationByUserIdController = catchAsync(
     receiverId
     );
 
+    console.log("Fetched notifications:", notifications);
+
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -113,20 +115,20 @@ const getNotificationByUserIdController = catchAsync(
   }
 );
 
-// const readNotificationByUserIdController = catchAsync(
-//   async (req: Request, res: Response) => {
-//     const notifications = await notificationService.readNotificationByUserId(
-//       req.user?.id
-//     );
+const readNotificationByUserIdController = catchAsync(
+  async (req: Request, res: Response) => {
+    const notifications = await notificationService.readNotificationByUserId(
+      req.user?.id
+    );
 
-//     sendResponse(res, {
-//       statusCode: httpStatus.OK,
-//       success: true,
-//       message: "Notifications marked as read successfully",
-//       data: notifications,
-//     });
-//   }
-// );
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Notifications marked as read successfully",
+      data: notifications,
+    });
+  }
+);
 
 const deleteNotificationByIdController = catchAsync(
   async (req: Request, res: Response) => {
@@ -207,7 +209,7 @@ export const NotificationController = {
   saveNotification,
   getAllNotificationsController,
   getNotificationByUserIdController,
-  // readNotificationByUserIdController,
+  readNotificationByUserIdController,
   deleteNotificationByIdController,
   // deleteAllNotificationsController,
   // sendNotificationToSelectedUsersController,

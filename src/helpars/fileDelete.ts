@@ -4,7 +4,7 @@ import config from "../config/index";
 // DigitalOcean Spaces Config
 const s3 = new S3Client({
   region: "us-east-1",
-  endpoint: config.digitalOcean.endpoint!, // ! দিয়ে বলছি এটা kesin string
+  endpoint: config.digitalOcean.endpoint!,
   credentials: {
     accessKeyId: config.digitalOcean.accessKey as string,
     secretAccessKey: config.digitalOcean.secretKey as string,
