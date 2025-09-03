@@ -417,6 +417,7 @@ const acceptClinerRequest = async (requestId: string, sitterId: string) => {
   return result;
 };
 
+
 const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: string, client: IClinetRating, dog: IDogRating }) => {
 
   if (!requestId) {
@@ -439,6 +440,7 @@ const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: 
           firstName: true,
           lastName: true,
           profileImage: true,
+          fcmToken: true,
           email: true,
           createdAt: true,
           phone: true,
@@ -484,6 +486,37 @@ const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: 
       ratingsReceivedId: serviceReuestData.dogId,
     },
   })
+
+
+
+  const sitterReviewPayload = {
+    title: `You have received a new review`,
+    body: `${serviceReuestData.client.firstName} ${serviceReuestData.client.lastName} rated you ${client.rating} stars with a comment: "${client.review}"`,
+    type: NotificationType.GENERAL,
+    data: JSON.stringify({
+      requestId: requestId,
+      sitterId: serviceReuestData.sitterId,
+      rating: client.rating,
+    }),
+    receiverId: serviceReuestData.clientId,
+  };
+
+  
+      if (serviceReuestData.client?.fcmToken) {
+        await notificationService.sendNotification(
+          serviceReuestData.client?.fcmToken,
+          sitterReviewPayload,
+          serviceReuestData.clientId
+        );
+      }
+
+      //save notification to the courier
+      await notificationService.saveNotification(
+        sitterReviewPayload,
+        serviceReuestData.clientId
+      );
+
+
   return {
     clientReviwe,
     dogReview

@@ -137,7 +137,7 @@ const createPaymentIntent = async ({
             title: `Payment Completed for ${clientRequest.serviceType}`,
             body: `The payment for your ${clientRequest.serviceType} request by ${clientRequest.client.firstName + ' ' + clientRequest.client.lastName} has been successfully completed.`
             ,
-            type: NotificationType.BOOKING,
+            type: NotificationType.PAYMENT,
             data: JSON.stringify({
               requestId: clientRequest.id,
               sitterId: clientRequest.sitterId,
