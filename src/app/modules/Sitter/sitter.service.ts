@@ -1,6 +1,6 @@
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiErrors";
-import { PaymenttStatus, Prisma, ServiceType, UserRole } from "@prisma/client";
+import { NotificationType, PaymenttStatus, Prisma, ServiceType, UserRole } from "@prisma/client";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
 import { omit } from "lodash";
@@ -11,6 +11,7 @@ import {
   ICreateRating,
 } from "./sitter.interface";
 import config from "../../../config";
+import { notificationService } from "../notification/notification.service";
 
 // Calculate distance between two points using Haversine formula
 const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
@@ -473,6 +474,16 @@ const rateSitter = async (
           firstName: true,
           lastName: true,
           profileImage: true,
+          fcmToken: true,
+        },
+      },
+      ratingsReceived: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          fcmToken: true,
         },
       },
     },
@@ -493,6 +504,37 @@ const rateSitter = async (
       totalReviews: sitterRatings.length,
     },
   });
+
+
+
+   const sitterReviewPayload = {
+      title: `You have received a new review`,
+      body: `${rating.ratingsGiven.firstName} ${rating.ratingsGiven.lastName} rated you ${rating.rating} stars with a comment: "${rating.review}"`,
+      type: NotificationType.GENERAL,
+      data: JSON.stringify({
+        requestId: rating.id,
+        sitterId: rating.ratingsReceivedId,
+        rating: rating.ratingsGivenId,
+      }),
+      receiverId: rating.ratingsReceivedId,
+    };
+  
+    
+        if (rating.ratingsReceived?.fcmToken) {
+          await notificationService.sendNotification(
+            rating.ratingsReceived?.fcmToken,
+            sitterReviewPayload,
+            rating.ratingsReceivedId
+          );
+        }
+  
+        //save notification to the courier
+        await notificationService.saveNotification(
+          sitterReviewPayload,
+            rating.ratingsReceivedId
+        );
+
+
 
   return rating;
 };
