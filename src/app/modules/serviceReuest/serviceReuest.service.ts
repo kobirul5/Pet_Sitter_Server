@@ -2,9 +2,10 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiErrors";
 import prisma from "../../../shared/prisma";
 import { ICreateRequestData } from "../Sitter/sitter.interface";
-import { PaymenttStatus, RequestStatus } from "@prisma/client";
+import { NotificationType, PaymenttStatus, RequestStatus } from "@prisma/client";
 import { IClinetRating, IDogRating } from "./serviceRequest.interface";
 import { result } from "lodash";
+import { notificationService } from "../notification/notification.service";
 
 const createClientRequestService = async (data: ICreateRequestData) => {
   // Validate sitter exists and is active
@@ -43,7 +44,34 @@ const createClientRequestService = async (data: ICreateRequestData) => {
       totalPrice: data.totalPrice,
       dogs: data.dogs,
     },
+    include: {
+      dog: true,
+      client: true,
+    }
   });
+
+
+  const payload = {
+    title: `You have a new request ${request.serviceType}`,
+    body: `You have a new request ${request.serviceType} from ${request.client.firstName + ' ' + request.client.lastName} please accept the request`,
+    type: NotificationType.BOOKING,
+    data: JSON.stringify({
+      requestId: request.id,
+      sitterId: request.sitterId,
+    }),
+    receiverId: request.sitterId
+  }
+
+
+
+  if (sitter?.fcmToken) {
+    await notificationService.sendNotification(sitter?.fcmToken, payload, request.clientId);
+  }
+
+
+
+  //save notification to the courier
+  await notificationService.saveNotification(payload, request.clientId);
 
   return request;
 };
@@ -116,7 +144,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     where: {
       sitterId,
       paymentStatus: PaymenttStatus.COMPLETED,
-      status:  {
+      status: {
         notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
       },
       endTime: {
@@ -131,7 +159,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
 
 
 
-  return {allRequests,ongoingRequests, upComeingRequests};
+  return { allRequests, ongoingRequests, upComeingRequests };
 };
 
 // update service status
@@ -151,18 +179,22 @@ const updateServicestatus = async (requestId: string, status: string, sitterId: 
       id: requestId,
       sitterId: sitterId
     },
+    include: {
+      client: true,
+      sitter: true
+    }
   });
 
   if (!serviceRequest) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Service request not found');
   }
 
-  if(status === RequestStatus.ONGOING && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED){
+  if (status === RequestStatus.ONGOING && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Service request is not completed Not payment yet');
   }
 
 
-  if(status === RequestStatus.COMPLETED && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED){
+  if (status === RequestStatus.COMPLETED && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Service request is not completed Not payment yet ');
   }
 
@@ -175,6 +207,68 @@ const updateServicestatus = async (requestId: string, status: string, sitterId: 
       status: status,
     },
   });
+
+  let title = "";
+  let body = "";
+  const serviceType = serviceRequest.serviceType;
+  const sitterName = serviceRequest.sitter?.firstName + " " + serviceRequest.sitter?.lastName
+
+  switch (status) {
+    case "ACCEPTED":
+      title = `Your ${serviceType} request has been ACCEPTED`;
+      body = `Your request for ${serviceType} has been accepted by ${sitterName}. Please proceed with the payment to confirm the service.`;
+      break;
+
+    case "COMPLETED":
+      title = `Your ${serviceType} request has been COMPLETED`;
+      body = `Your request for ${serviceType} has been completed by ${sitterName}. Payment is completed.`;
+      break;
+
+    case "ONGOING":
+      title = `Your ${serviceType} request is ONGOING`;
+      body = `Your ${serviceType} service with ${sitterName} is currently ongoing.`;
+      break;
+
+    case "DENIED":
+      title = `Your ${serviceType} request has been DENIED`;
+      body = `Unfortunately, your request for ${serviceType} was denied by ${sitterName}. You may request another sitter.`;
+      break;
+
+    default:
+      throw new Error(
+        "Cannot update status! Status must be ACCEPTED, COMPLETED, ONGOING or DENIED"
+      );
+  }
+
+  const payload = {
+    title,
+    body,
+    type: NotificationType.BOOKING,
+    data: JSON.stringify({
+      requestId: serviceRequest.id,
+      sitterId: serviceRequest.sitterId,
+    }),
+    receiverId: serviceRequest.client.id,
+  };
+
+
+  if (serviceRequest?.client?.fcmToken) {
+    await notificationService.sendNotification(
+      serviceRequest?.client?.fcmToken,
+      payload,
+      serviceRequest.sitter.id
+    );
+  }
+
+  //save notification to the courier
+  await notificationService.saveNotification(
+    payload,
+    serviceRequest.sitter.id
+  );
+
+
+
+
   return result;
 };
 
@@ -218,7 +312,7 @@ const getAllUpcomingAndOngoingCleintServices = async (clientId: string) => {
     where: {
       clientId,
       paymentStatus: PaymenttStatus.COMPLETED,
-      status:  {
+      status: {
         notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
       },
       endTime: {
@@ -245,14 +339,14 @@ const getAllUpcomingAndOngoingCleintServices = async (clientId: string) => {
 
 
 
-  return {ongoingRequests, upComeingRequests, completedRequests};
+  return { ongoingRequests, upComeingRequests, completedRequests };
 }
 
 // get clinet and dog details by request id
 
 const getClinetAndDogProfileById = async (requestId: string) => {
 
-  if(!requestId){
+  if (!requestId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot get! unauthorized request');
   }
 
@@ -323,15 +417,15 @@ const acceptClinerRequest = async (requestId: string, sitterId: string) => {
   return result;
 };
 
-const createReviewCinetAndDog = async ({ requestId, client, dog}: {requestId: string, client:IClinetRating, dog:IDogRating}) => {
- 
+const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: string, client: IClinetRating, dog: IDogRating }) => {
+
   if (!requestId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
   }
-  if(!client){
+  if (!client) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! client not found');
   }
-  if(!dog){
+  if (!dog) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! dog not found');
   }
 
@@ -401,7 +495,7 @@ const createReviewCinetAndDog = async ({ requestId, client, dog}: {requestId: st
 
 const getAllAcceptedRequests = async (sitterId: string) => {
 
-  if(!sitterId){
+  if (!sitterId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status! unauthorized request');
   }
 
@@ -422,7 +516,7 @@ const getAllAcceptedRequests = async (sitterId: string) => {
 
 const getAcceptServiceForPayment = async (clientId: string) => {
 
-  if(!clientId){
+  if (!clientId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot get! unauthorized request');
   }
   const result = await prisma.clientRequest.findMany({

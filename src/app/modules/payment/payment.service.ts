@@ -1,9 +1,10 @@
-import { PaymenttStatus, RequestStatus, UserRole } from "@prisma/client";
+import { NotificationType, PaymenttStatus, RequestStatus, UserRole } from "@prisma/client";
 import ApiError from "../../../errors/ApiErrors";
 import { getTransactionId } from "../../../helpars/getTransactionId";
 import prisma from "../../../shared/prisma";
 import stripe from "../../../shared/stripe";
 import httpStatus from "http-status";
+import { notificationService } from "../notification/notification.service";
 
 
 interface IPaymentIntent {
@@ -47,7 +48,7 @@ const createPaymentIntent = async ({
     throw new ApiError(httpStatus.BAD_REQUEST, "Service request is not Accepted");
   }
 
-  if(clientRequest.paymentStatus === PaymenttStatus.COMPLETED){
+  if (clientRequest.paymentStatus === PaymenttStatus.COMPLETED) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Payment already completed");
   }
 
@@ -108,29 +109,56 @@ const createPaymentIntent = async ({
       });
 
 
-        let room = await prisma.room.findFirst({
-              where: {
-                OR: [
-                  { senderId: clientRequest.clientId, receiverId: clientRequest.sitterId },
-                  { senderId: clientRequest.sitterId, receiverId: clientRequest.clientId },
-                ],
-              },
-            });
+      let room = await prisma.room.findFirst({
+        where: {
+          OR: [
+            { senderId: clientRequest.clientId, receiverId: clientRequest.sitterId },
+            { senderId: clientRequest.sitterId, receiverId: clientRequest.clientId },
+          ],
+        },
+      });
 
-            if (!room) {
-              room = await prisma.room.create({
-                data: { senderId: clientRequest.clientId, receiverId: clientRequest.sitterId},
-              });
-            }
+      if (!room) {
+        room = await prisma.room.create({
+          data: { senderId: clientRequest.clientId, receiverId: clientRequest.sitterId },
+        });
+      }
 
-            const chat = await prisma.chat.create({
-              data: {
-                senderId: clientRequest.clientId,
-                receiverId: clientRequest.sitterId,
-                roomId: room.id,
-                message : `I have successfully completed the payment for the ${clientRequest.serviceType} service. Thank you! If you  want to discuss any details, feel free to reach out.`,
-              },
-            });
+      const chat = await prisma.chat.create({
+        data: {
+          senderId: clientRequest.clientId,
+          receiverId: clientRequest.sitterId,
+          roomId: room.id,
+          message: `I have successfully completed the payment for the ${clientRequest.serviceType} service. Thank you! If you  want to discuss any details, feel free to reach out.`,
+        },
+      });
+
+      const payload = {
+            title: `Payment Completed for ${clientRequest.serviceType}`,
+            body: `The payment for your ${clientRequest.serviceType} request by ${clientRequest.client.firstName + ' ' + clientRequest.client.lastName} has been successfully completed.`
+            ,
+            type: NotificationType.BOOKING,
+            data: JSON.stringify({
+              requestId: clientRequest.id,
+              sitterId: clientRequest.sitterId,
+            }),
+            receiverId: clientRequest.sitter.id
+          }
+
+      if (clientRequest.sitter?.fcmToken) {
+        await notificationService.sendNotification(
+          clientRequest.sitter?.fcmToken,
+          payload,
+          clientRequest.clientId
+        );
+      }
+
+      //save notification to the courier
+      await notificationService.saveNotification(
+        payload,
+        clientRequest.client.id
+      );
+
 
 
       return paymentRecord;
@@ -154,7 +182,7 @@ const createCard = async (
   { payment_method, isDefault }: ICreateCardRequest
 ) => {
   try {
-   
+
 
 
     const user = await prisma.user.findUnique({
@@ -230,11 +258,11 @@ const getAllPayments = async (userId: string) => {
     }
   })
 
-  if(!user){
+  if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  if(user.role !== UserRole.Admin){
+  if (user.role !== UserRole.Admin) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Only admin can get all payments");
   }
 
@@ -252,7 +280,7 @@ const getMyPayments = async (userId: string) => {
     }
   })
 
-  if(!user){
+  if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 

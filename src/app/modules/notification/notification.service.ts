@@ -12,7 +12,7 @@ interface INotificationPayload {
   body: string;
   type: NotificationType;
   data?: string;
-  receiverId?: string;
+  receiverId: string;
   slug?: string;
   fcmToken?: string;
 }
@@ -37,7 +37,7 @@ const sendNotification = async (
     data: {
       type: payload.type,
       data: payload.data || "",
-      receiverId: payload.receiverId || "",
+      receiverId: payload.receiverId,
       slug: payload.slug || "",
     },
     token: deviceToken,
@@ -56,24 +56,7 @@ const sendNotification = async (
 
     console.log("Notification response:", response);
 
-    // // If there was no response, throw an error
-    // if (!response) {
-    //   throw new ApiError(httpStatus.BAD_REQUEST, 'Error sending notification');
-    // }
 
-    // Save the notification to the database
-    // await prisma.notification.create({
-    //   data: {
-    //     title: payload.title,
-    //     body: payload.body,
-    //     type: payload.type,
-    //     data: payload.data,
-    //     receiverId: payload.receiverId || "",
-    //     slug: payload.slug || "",
-    //     userId,
-    //     fcmToken: deviceToken,
-    //   },
-    // });
 
     console.log("Notification sent successfully");
   } catch (error) {
@@ -89,37 +72,33 @@ const saveNotification = async (
   userId: string,
 ) => {
 
-  const allowedTypes = [
-    NotificationType.BOOKING,
-    NotificationType.PAYMENT,
-    NotificationType.GENERAL,
-    NotificationType.REMINDER
-  ];
 
-  // If no type provided, set default
-  if (!payload.type) {
-    payload.type = NotificationType.GENERAL;
-  }
 
-  // Validate type
-  if (!allowedTypes.includes(payload.type)) {
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      `Notification type must be one of: ${allowedTypes.join(", ")}`
-    );
-  }
+ 
+  // const allowedTypes = [
+  //   NotificationType.BOOKING,
+  //   NotificationType.PAYMENT,
+  //   NotificationType.GENERAL,
+  //   NotificationType.REMINDER
+  // ];
 
-  const receiverId = await prisma.user.findUnique({
-    where: {
-      id: payload.receiverId
-    }
-  })
+  // // If no type provided, set default
+  // if (!payload.type) {
+  //   payload.type = NotificationType.GENERAL;
+  // }
 
-  if (!receiverId) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid receiverId");
-  }
+  // // Validate type
+  // if (!allowedTypes.includes(payload.type)) {
+  //   throw new ApiError(
+  //     httpStatus.BAD_REQUEST,
+  //     `Notification type must be one of: ${allowedTypes.join(", ")}`
+  //   );
+  // }
+
+
 
   try {
+    console.log("try to save notification");
     // Save the notification to the database
     const notification = await prisma.notification.create({
       data: {
@@ -127,12 +106,14 @@ const saveNotification = async (
         body: payload.body,
         type: payload.type,
         data: payload.data,
-        receiverId: payload.receiverId || "",
+        receiverId: payload.receiverId,
         slug: payload.slug || "",
         senderId: userId,
         fcmToken: payload.fcmToken || "", // Ensure fcmToken is included
       },
     });
+
+    console.log("dd", notification)
 
     if (!notification) {
       throw new ApiError(httpStatus.BAD_REQUEST, "Error saving notification");
@@ -145,6 +126,23 @@ const saveNotification = async (
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to save notification");
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const getAllNotifications = async () => {

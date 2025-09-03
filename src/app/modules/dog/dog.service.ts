@@ -2,7 +2,8 @@ import httpStatus from 'http-status';
 import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiErrors';
 import { fileUploader } from '../../../helpars/fileUploader';
-import { deleteImageFromSpaces } from '../../../helpars/fileDelete';
+import { deleteImageFromDigitalOcean } from '../../../helpars/fileDelete';
+
 
 
 interface Dog {
@@ -99,7 +100,7 @@ const deleteDog = async (dogId: string, userId: string) => {
   let deleted
 
  for (const url of urls) {
-   deleted = await deleteImageFromSpaces(url);
+   deleted = await deleteImageFromDigitalOcean(url);
   }
 
 
