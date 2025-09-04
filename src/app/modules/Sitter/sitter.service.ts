@@ -284,7 +284,7 @@ const getSitterBoarding = async () => {
       serviceId: { not: null }
       // status: "ACTIVE",
     }
-  });
+  }); 
   return services;
 }
 
