@@ -42,7 +42,6 @@ const createIntoDb = async ({ clientData, petData, sitterId }: IReview) => {
     }),
     ]);
 
-    console.log("hello------------")
 
      const sitterName = `${clientRating.ratingsGiven.firstName} ${clientRating.ratingsGiven.lastName}`;
     const clientName = `${clientRating.ratingsReceived.firstName} ${clientRating.ratingsReceived.lastName}`;

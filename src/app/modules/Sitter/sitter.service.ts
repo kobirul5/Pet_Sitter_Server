@@ -524,14 +524,14 @@ const rateSitter = async (
           await notificationService.sendNotification(
             rating.ratingsReceived?.fcmToken,
             sitterReviewPayload,
-            rating.ratingsReceivedId
+            rating.ratingsGivenId
           );
         }
   
         //save notification to the courier
         await notificationService.saveNotification(
           sitterReviewPayload,
-            rating.ratingsReceivedId
+            rating.ratingsGivenId
         );
 
 
