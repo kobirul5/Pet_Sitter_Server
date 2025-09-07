@@ -131,9 +131,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     where: {
       sitterId,
       paymentStatus: PaymenttStatus.COMPLETED,
-      status: {
-        in: ["ONGOING", "ACCEPTED"]
-      },
+      status: "ONGOING",
     },
     include: {
 
@@ -148,10 +146,9 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     where: {
       sitterId,
       paymentStatus: PaymenttStatus.COMPLETED,
-      status: "PENDING",
-      // status: {
-      //   notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
-      // },
+      status: {
+        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
+      },
       endTime: {
         gt: nowTime,
       },
