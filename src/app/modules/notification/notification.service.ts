@@ -74,7 +74,7 @@ const saveNotification = async (
 
 
 
- 
+
   // const allowedTypes = [
   //   NotificationType.BOOKING,
   //   NotificationType.PAYMENT,
@@ -203,7 +203,7 @@ const getNotificationByreceiverId = async (receiverId: string) => {
       },
     });
 
-    if(!notifications || notifications.length === 0) {
+    if (!notifications || notifications.length === 0) {
       throw new ApiError(httpStatus.NOT_FOUND, "Notifications not found");
     }
     return notifications;
