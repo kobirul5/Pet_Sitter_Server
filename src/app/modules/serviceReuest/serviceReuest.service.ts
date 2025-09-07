@@ -131,7 +131,9 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     where: {
       sitterId,
       paymentStatus: PaymenttStatus.COMPLETED,
-      status: "ONGOING",
+      status: {
+        in: ["ONGOING", "ACCEPTED"]
+      },
     },
     include: {
 
@@ -140,13 +142,16 @@ const getServiceForSitterRequests = async (sitterId: string) => {
 
     },
   });
+
+  console.log(ongoingRequests, "what")
   const upComeingRequests = await prisma.clientRequest.findMany({
     where: {
       sitterId,
       paymentStatus: PaymenttStatus.COMPLETED,
-      status: {
-        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
-      },
+      status: "PENDING",
+      // status: {
+      //   notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
+      // },
       endTime: {
         gt: nowTime,
       },
