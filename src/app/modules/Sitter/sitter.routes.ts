@@ -31,7 +31,7 @@ router.get(
   SitterController.getAllSitterForServices
 );
 
- // get sitter services for dog care
+ // get sitter services for DAYCARE
 router.get(
   "/sitter/dog-care-services",
   auth(),

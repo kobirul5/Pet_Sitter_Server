@@ -319,7 +319,7 @@ enum NotificationType {
 
 enum ServiceType {
   NOSERVICE
-  DOGCARE
+  DAYCARE
   BOARDING
   WALKING
 }

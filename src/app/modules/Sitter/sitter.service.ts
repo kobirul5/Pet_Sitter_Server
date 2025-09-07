@@ -315,7 +315,7 @@ const getSitterServicesForWalking = async () => {
   return services;
 }
 
-//  GET ALL SITTERS  SERvice for DOGCARE
+//  GET ALL SITTERS  SERvice for DAYCARE
 
 const getSitterServicesForDogCare = async () => {
   const services = await prisma.user.findMany({
@@ -337,7 +337,7 @@ const getSitterServicesForDogCare = async () => {
     },
     where: {
       role: UserRole.Sitter,
-      serviceType: ServiceType.DOGCARE,
+      serviceType: ServiceType.DAYCARE,
       serviceId: { not: null },
       // status: "ACTIVE",
     }

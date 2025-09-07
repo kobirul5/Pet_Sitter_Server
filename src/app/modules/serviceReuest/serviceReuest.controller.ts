@@ -42,12 +42,12 @@ const createClientRequestController = catchAsync(
 
     const allowedServiceTypes = [
       ServiceType.BOARDING,
-      ServiceType.DOGCARE,
+      ServiceType.DAYCARE,
       ServiceType.WALKING,
     ];
 
     if (!allowedServiceTypes.includes(serviceType)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, `Service type ${ServiceType.BOARDING} or  ${ServiceType.DOGCARE} or  ${ServiceType.WALKING}`);
+      throw new ApiError(httpStatus.BAD_REQUEST, `Service type ${ServiceType.BOARDING} or  ${ServiceType.DAYCARE} or  ${ServiceType.WALKING}`);
     }
 
 
@@ -80,6 +80,8 @@ const getServiceRequestsController = catchAsync(
 // Get service requests by siiterId for sitter
 const getServiceRequestsForSitterController = catchAsync(
   async (req: Request, res: Response) => {
+
+    console.log("hey")
 
     const sitterId = req.user.id
     const requests = await serviceReuestService.getServiceForSitterRequests(sitterId);

@@ -141,7 +141,6 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     },
   });
 
-  console.log(ongoingRequests, "what")
   const upComeingRequests = await prisma.clientRequest.findMany({
     where: {
       sitterId,
@@ -156,10 +155,24 @@ const getServiceForSitterRequests = async (sitterId: string) => {
       dog: true,
     },
   });
+  const completedRequests = await prisma.clientRequest.findMany({
+    where: {
+      sitterId,
+      paymentStatus: PaymenttStatus.COMPLETED,
+      status: "COMPLETED",
+      // endTime: {
+      //   gt: nowTime,
+      // },
+    },
+    include: {
+      client: true,
+      dog: true,
+    },
+  });
 
 
 
-  return { allRequests, ongoingRequests, upComeingRequests };
+  return { allRequests, ongoingRequests, upComeingRequests , completedRequests};
 };
 
 // update service status

@@ -373,7 +373,7 @@ const addSitterService = async (
     name: string;
     description?: string;
     price: number;
-    serviceType: "NOSERVICE" | "DOGCARE" | "BOARDING" | "WALKING"; // corrected spelling
+    serviceType: "NOSERVICE" | "DAYCARE" | "BOARDING" | "WALKING"; // corrected spelling
   }
 ) => {
   const decodedToken = jwtHelpers.verifyToken(userToken, config.jwt.jwt_secret!);
@@ -381,7 +381,7 @@ const addSitterService = async (
   const existingUser = await prisma.user.findUnique({ where: { id: decodedToken.id } });
   if (!existingUser) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
 
-  const allowedTypes = ["DOGCARE", "BOARDING", "WALKING"];
+  const allowedTypes = ["DAYCARE", "BOARDING", "WALKING"];
   if (!allowedTypes.includes(serviceData.serviceType)) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
@@ -496,7 +496,7 @@ const changeSitterStatus = async ({ userId, serviceStatus }: { userId: string; s
 
   const serviceStatusType = Object.values(ServiceType);
   if (!serviceStatusType.includes(serviceStatus)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, `Invalid service status ${ServiceType.BOARDING} or ${ServiceType.WALKING} or ${ServiceType.DOGCARE} required `);
+    throw new ApiError(httpStatus.BAD_REQUEST, `Invalid service status ${ServiceType.BOARDING} or ${ServiceType.WALKING} or ${ServiceType.DAYCARE} required `);
   }
 
   const services = await prisma.service.findFirst({
