@@ -560,12 +560,41 @@ const getAllAcceptedRequests = async (sitterId: string) => {
 }
 
 
-const getAcceptServiceForPayment = async (clientId: string) => {
+// const getAcceptServiceForPayment = async (clientId: string) => {
 
+//   if (!clientId) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot get! unauthorized request');
+//   }
+//   const result = await prisma.clientRequest.findMany({
+//     where: {
+//       clientId: clientId,
+//       status: RequestStatus.ACCEPTED,
+//       paymentStatus: PaymenttStatus.PENDING
+//     },
+//     include: {
+//       sitter: {
+//         select: {
+//           firstName: true,
+//           lastName: true,
+//           profileImage: true,
+//           email: true,
+//           createdAt: true,
+//           phone: true,
+//           address: true,
+//         }
+//       }
+//     },
+//   })
+//   return result;
+// }
+
+const getAcceptServiceForPayment = async (clientId: string) => {
   if (!clientId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot get! unauthorized request');
   }
-  const result = await prisma.clientRequest.findMany({
+
+  // Fetch all requests for sitter with related data
+  const pendingServices = await prisma.clientRequest.findMany({
     where: {
       clientId: clientId,
       status: RequestStatus.ACCEPTED,
@@ -585,8 +614,74 @@ const getAcceptServiceForPayment = async (clientId: string) => {
       }
     },
   })
-  return result;
-}
+
+  const ongoingServices = await prisma.clientRequest.findMany({
+    where: {
+      clientId: clientId,
+      status: RequestStatus.ONGOING,
+      paymentStatus: PaymenttStatus.COMPLETED
+    },
+    include: {
+      sitter: {
+        select: {
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          email: true,
+          createdAt: true,
+          phone: true,
+          address: true,
+        }
+      }
+    },
+  })
+
+  const upcommingServices = await prisma.clientRequest.findMany({
+    where: {
+      clientId: clientId,
+      status: RequestStatus.ACCEPTED,
+      paymentStatus: PaymenttStatus.COMPLETED
+    },
+    include: {
+      sitter: {
+        select: {
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          email: true,
+          createdAt: true,
+          phone: true,
+          address: true,
+        }
+      }
+    },
+  })
+
+  const completedServices = await prisma.clientRequest.findMany({
+    where: {
+      clientId: clientId,
+      status: RequestStatus.COMPLETED,
+      paymentStatus: PaymenttStatus.COMPLETED
+    },
+    include: {
+      sitter: {
+        select: {
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          email: true,
+          createdAt: true,
+          phone: true,
+          address: true,
+        }
+      }
+    },
+  })
+
+
+
+  return { pendingServices, ongoingServices, upcommingServices, completedServices };
+};
 
 export const serviceReuestService = {
   createClientRequestService,
