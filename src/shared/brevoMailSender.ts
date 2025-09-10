@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from "../config";
+import ApiError from '../errors/ApiErrors';
 
 const emailSender = async (email: string, html: string, subject: string) => {
   if (!config.brevoMail.api_key) {
@@ -9,8 +10,8 @@ const emailSender = async (email: string, html: string, subject: string) => {
   try {
     const payload = {
       sender: {
-        name: "Sendiate",
-        email: "svetlana.shabdeen@gmail.com"
+        name: "Fur Seasons",
+        email: "johnchen0213@gmail.com"
       },
       to: [
         {
@@ -43,7 +44,7 @@ const emailSender = async (email: string, html: string, subject: string) => {
         requestPayload: error.config?.data ? JSON.parse(error.config.data) : null
       });
     }
-    throw new Error(error.response?.data?.message || 'Failed to send email');
+    throw new ApiError(400,error.response?.data?.message || error, 'Failed to send email');
   }
 };
 
