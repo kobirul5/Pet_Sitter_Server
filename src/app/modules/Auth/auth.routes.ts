@@ -39,4 +39,10 @@ router.post("/verify-otp", AuthController.verifyForgotPasswordOtp);
 //delete user
 router.delete("/delete-user", auth(), AuthController.deleteUser);
 
+router.post(
+  "/email-verification-otp",
+  // auth(),
+  AuthController.sendEmailVerificationOtp 
+)
+
 export const AuthRoutes = router;

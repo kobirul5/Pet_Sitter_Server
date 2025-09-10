@@ -36,6 +36,10 @@ const auth = (...roles: string[]) => {
         throw new ApiError(httpStatus.NOT_FOUND, "User not found!");
       }
 
+      if(user.isEmailVerify === false) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "Please verify your email!");
+      }
+
       // if (user.status === "BLOCKED") {
       //   throw new ApiError(httpStatus.FORBIDDEN, "Your account is blocked!");
       // }

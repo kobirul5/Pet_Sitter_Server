@@ -76,6 +76,20 @@ const forgotPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const sendEmailVerificationOtp = catchAsync(async (req: Request, res: Response) => {
+  console.log("req.body.email, ------------------", req.body.email);
+  const result = await AuthServices.sendEmailVerificationOtp(req.body.email);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Check your email",
+    data: result,
+  });
+})
+
+
 //resend otp
 const resendOtp = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthServices.resendOtp(req.body.phone);
@@ -145,4 +159,5 @@ export const AuthController = {
   verifyForgotPasswordOtp,
   deleteUser,
   createUser,
+  sendEmailVerificationOtp
 };
