@@ -225,6 +225,13 @@ const getSitterRecommendations = async (
 
 const getAllServices = async (clientId: string, searchText?: string) => {
 
+  const client = await prisma.user.findUnique({
+    where: { id: clientId },
+    select: { deniedServices: true },
+  });
+
+  const deniedServiceIds = client?.deniedServices || [];
+
 
   const services = await prisma.user.findMany({
     select: {
@@ -244,7 +251,11 @@ const getAllServices = async (clientId: string, searchText?: string) => {
     },
     where: {
       role: UserRole.Sitter,
-      serviceId: { not: null },
+      id: { notIn: deniedServiceIds },
+
+      serviceId: {
+        not: null,
+      },
       ...(searchText && {
         OR: [
           { firstName: { contains: searchText, mode: "insensitive" } },
@@ -261,7 +272,16 @@ const getAllServices = async (clientId: string, searchText?: string) => {
 
 
 
-const getSitterBoarding = async () => {
+const getSitterBoarding = async (clientId: string) => {
+
+  const client = await prisma.user.findUnique({
+    where: { id: clientId },
+    select: { deniedServices: true },
+  });
+
+  const deniedServiceIds = client?.deniedServices || [];
+
+
   const services = await prisma.user.findMany({
     select: {
       id: true,
@@ -281,14 +301,24 @@ const getSitterBoarding = async () => {
     where: {
       role: UserRole.Sitter,
       serviceType: ServiceType.BOARDING,
+      id: { notIn: deniedServiceIds },
       serviceId: { not: null }
       // status: "ACTIVE",
     }
-  }); 
+  });
   return services;
 }
 
-const getSitterServicesForWalking = async () => {
+const getSitterServicesForWalking = async (clientId: string) => {
+
+
+  const client = await prisma.user.findUnique({
+    where: { id: clientId },
+    select: { deniedServices: true },
+  });
+
+  const deniedServiceIds = client?.deniedServices || [];
+
   const services = await prisma.user.findMany({
     select: {
       id: true,
@@ -308,6 +338,7 @@ const getSitterServicesForWalking = async () => {
     where: {
       role: UserRole.Sitter,
       serviceType: ServiceType.WALKING,
+      id: { notIn: deniedServiceIds },
       serviceId: { not: null },
       // status: "ACTIVE",
     }
@@ -317,7 +348,18 @@ const getSitterServicesForWalking = async () => {
 
 //  GET ALL SITTERS  SERvice for DAYCARE
 
-const getSitterServicesForDogCare = async () => {
+const getSitterServicesForDogCare = async (clientId: string) => {
+
+  const client = await prisma.user.findUnique({
+    where: { id: clientId },
+    select: { deniedServices: true },
+  });
+
+  const deniedServiceIds = client?.deniedServices || [];
+
+
+
+
   const services = await prisma.user.findMany({
     select: {
       id: true,
@@ -338,6 +380,7 @@ const getSitterServicesForDogCare = async () => {
     where: {
       role: UserRole.Sitter,
       serviceType: ServiceType.DAYCARE,
+      id: { notIn: deniedServiceIds },
       serviceId: { not: null },
       // status: "ACTIVE",
     }
@@ -507,32 +550,32 @@ const rateSitter = async (
 
 
 
-   const sitterReviewPayload = {
-      title: `You have received a new review`,
-      body: `${rating.ratingsGiven.firstName} ${rating.ratingsGiven.lastName} rated you ${rating.rating} stars with a comment: "${rating.review}"`,
-      type: NotificationType.GENERAL,
-      data: JSON.stringify({
-        requestId: rating.id,
-        sitterId: rating.ratingsReceivedId,
-        rating: rating.ratingsGivenId,
-      }),
-      receiverId: rating.ratingsReceivedId,
-    };
-  
-    
-        if (rating.ratingsReceived?.fcmToken) {
-          await notificationService.sendNotification(
-            rating.ratingsReceived?.fcmToken,
-            sitterReviewPayload,
-            rating.ratingsGivenId
-          );
-        }
-  
-        //save notification to the courier
-        await notificationService.saveNotification(
-          sitterReviewPayload,
-            rating.ratingsGivenId
-        );
+  const sitterReviewPayload = {
+    title: `You have received a new review`,
+    body: `${rating.ratingsGiven.firstName} ${rating.ratingsGiven.lastName} rated you ${rating.rating} stars with a comment: "${rating.review}"`,
+    type: NotificationType.GENERAL,
+    data: JSON.stringify({
+      requestId: rating.id,
+      sitterId: rating.ratingsReceivedId,
+      rating: rating.ratingsGivenId,
+    }),
+    receiverId: rating.ratingsReceivedId,
+  };
+
+
+  if (rating.ratingsReceived?.fcmToken) {
+    await notificationService.sendNotification(
+      rating.ratingsReceived?.fcmToken,
+      sitterReviewPayload,
+      rating.ratingsGivenId
+    );
+  }
+
+  //save notification to the courier
+  await notificationService.saveNotification(
+    sitterReviewPayload,
+    rating.ratingsGivenId
+  );
 
 
 

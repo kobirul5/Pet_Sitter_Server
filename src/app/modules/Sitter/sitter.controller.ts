@@ -89,7 +89,8 @@ const rateSitter = catchAsync(
 //  get sitter services
 const getSitterServicesForBoarding = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await SitterService.getSitterBoarding();
+    const clientId = req.user.id
+    const result = await SitterService.getSitterBoarding(clientId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -103,7 +104,9 @@ const getSitterServicesForBoarding = catchAsync(
 const getSitterServicesForWalkingController = catchAsync(
   async (req: Request, res: Response) => {
 
-    const result = await SitterService.getSitterServicesForWalking();
+    const clientId = req.user.id
+
+    const result = await SitterService.getSitterServicesForWalking(clientId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -116,7 +119,8 @@ const getSitterServicesForWalkingController = catchAsync(
 const getSitterServicesForDogCareController = catchAsync(
   async (req: Request, res: Response) => {
 
-    const result = await SitterService.getSitterServicesForDogCare();
+    const clientId = req.user.id
+    const result = await SitterService.getSitterServicesForDogCare(clientId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

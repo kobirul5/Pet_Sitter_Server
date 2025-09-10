@@ -76,5 +76,10 @@ router.get(
   serviceReuestController.getAcceptServiceForPaymentController
 );
 
+router.put(
+  "/deny-request/:id",
+  auth(),
+  serviceReuestController.denyClinerRequestController
+)
 
 export const serviceReuestRoutes = router;

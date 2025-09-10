@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  phone     String? @default("")
-  email     String  @unique
-  isEmailVerify  Boolean @default(false)
-  password  String
-  firstName String? @default("")
-  lastName  String? @default("")
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  phone         String? @default("")
+  email         String  @unique
+  isEmailVerify Boolean @default(false)
+  password      String
+  firstName     String? @default("")
+  lastName      String? @default("")
 
   profileImage          String?     @default("")
   expirationOtp         DateTime?   @default(now())
@@ -39,11 +39,12 @@ model User {
   stripeCustomerId String? @default("")
 
   // Sitter specific fields
-  perDayFee     Float?         @default(0)
-  totalRating   Float?         @default(0)
-  totalReviews  Int?           @default(0)
-  experience    String?        @default("")
-  about         String?        @default("")
+  perDayFee      Float?   @default(0)
+  totalRating    Float?   @default(0)
+  totalReviews   Int?     @default(0)
+  experience     String?  @default("")
+  about          String?  @default("")
+  deniedServices String[] @default([]) @db.ObjectId
 
   sitterProfile SitterProfile?
 
@@ -60,7 +61,7 @@ model User {
 
   // Requests the user has made as a client
   clientRequests ClientRequest[] @relation("ClientRequestsAsClient")
-  senderPayment  Payment[] @relation("SenderPayment")
+  senderPayment  Payment[]       @relation("SenderPayment")
 
   // Requests the user has received as a sitter
   sitterRequests        ClientRequest[] @relation("ClientRequestsAsSitter")
@@ -71,8 +72,8 @@ model User {
   savedCards            SavedCard[]
 
   // Services
-  serviceId       String?  @db.ObjectId
-  services Service? @relation("UserSelectedService", fields: [serviceId], references: [id],  onDelete: NoAction, onUpdate: NoAction)
+  serviceId String?  @db.ObjectId
+  services  Service? @relation("UserSelectedService", fields: [serviceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   // Services he provides
   servicesProvided Service[] @relation("ServiceProviderID")
@@ -99,20 +100,19 @@ model SitterProfile {
 }
 
 model Service {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  description String?  @default("")
-  hourlyRate       Float
+  description String?     @default("")
+  hourlyRate  Float
   // userId      String   @db.ObjectId
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  serviceType ServiceType 
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  serviceType ServiceType
 
   // Relations
   // Provider relation
   ServiceProviderId String @db.ObjectId
-  ServiceProvider User @relation("ServiceProviderID",fields: [ServiceProviderId], references: [id], onDelete: Cascade)
-
+  ServiceProvider   User   @relation("ServiceProviderID", fields: [ServiceProviderId], references: [id], onDelete: Cascade)
 
   // Reverse relation
   selectedBy User[] @relation("UserSelectedService")
@@ -136,10 +136,10 @@ model Dog {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   ClientRequest ClientRequest[] @relation("RequestedDog")
-  
+
   //   requestId String[] @db.ObjectId
   //  clientRequest   ClientRequest[]    @relation("RequestedDog", fields: [requestId], references: [id])
 
@@ -159,7 +159,7 @@ model ClientRequest {
   //   dog   Dog[]    @relation("RequestedDog", fields: [dogId], references: [id])
   // dogId String[] @db.ObjectId
 
-  dogs  Json[]  @default([])
+  dogs     Json[] @default([])
   // The sitter who is receiving the request
   sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
   sitterId String @db.ObjectId
@@ -267,8 +267,8 @@ model Payment {
   // Link to the request being paid for
   requestId String        @db.ObjectId
   request   ClientRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
-  senderId String @db.ObjectId
-  sender User @relation("SenderPayment", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId  String        @db.ObjectId
+  sender    User          @relation("SenderPayment", fields: [senderId], references: [id], onDelete: Cascade)
 
   amount        Float
   currency      String         @default("USD") // You can change default to your currency

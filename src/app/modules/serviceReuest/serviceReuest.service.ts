@@ -683,6 +683,19 @@ const getAcceptServiceForPayment = async (clientId: string) => {
   return { pendingServices, ongoingServices, upcommingServices, completedServices };
 };
 
+const denyClinerRequest = async (requestId: string, clientId: string) => {
+  const result = await prisma.user.updateMany({
+    where:{
+      id: clientId
+    },
+    data: {
+      deniedServices: {
+        push: requestId
+      }
+    }
+  })
+}
+
 export const serviceReuestService = {
   createClientRequestService,
   getServiceRequests,
@@ -693,6 +706,7 @@ export const serviceReuestService = {
   createReviewCinetAndDog,
   getAllAcceptedRequests,
   getAllUpcomingAndOngoingCleintServices,
-  getAcceptServiceForPayment
+  getAcceptServiceForPayment,
+  denyClinerRequest
 
 };

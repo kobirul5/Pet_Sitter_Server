@@ -199,6 +199,20 @@ const getAcceptServiceForPaymentController = catchAsync(
   }
 )
 
+const denyClinerRequestController = catchAsync(
+  async (req: Request, res: Response) => {
+    const  requestId  = req.params.id
+    const clientId = req.user.id
+    const result = await serviceReuestService.denyClinerRequest(requestId, clientId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Service status updated successfully',
+      data: result,
+    });
+  }
+)
+
 export const serviceReuestController = {
   createClientRequestController,
   getServiceRequestsController,
@@ -209,5 +223,6 @@ export const serviceReuestController = {
   createReviewCinetAndDogController,
   getAllAcceptedRequests,
   getAllUpcomingAndOngoingCleintRequests,
-  getAcceptServiceForPaymentController
+  getAcceptServiceForPaymentController,
+  denyClinerRequestController,
 };

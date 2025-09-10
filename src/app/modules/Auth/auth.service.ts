@@ -431,7 +431,7 @@ const sendEmailVerificationOtp = async (email: string) => {
 
   return {
     message: "Verification OTP sent to email",
-     otp: otp,
+    //  otp: otp,
   };
 };
 
