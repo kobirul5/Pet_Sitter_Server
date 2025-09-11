@@ -49,6 +49,16 @@ const createClientRequestService = async (data: ICreateRequestData) => {
       client: true,
     }
   });
+  
+  await prisma.chat.create({
+    data: {
+      senderId: request.clientId,
+      receiverId: request.sitterId,
+      clientRequestId: request.id,
+      message: `Hi! I have just sent a request for the ${request.serviceType} service. Please review and accept it if everything looks good.`,
+    },
+  });
+
 
 
   const payload = {
@@ -172,7 +182,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
 
 
 
-  return { allRequests, ongoingRequests, upComeingRequests , completedRequests};
+  return { allRequests, ongoingRequests, upComeingRequests, completedRequests };
 };
 
 // update service status
@@ -514,20 +524,20 @@ const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: 
     receiverId: serviceReuestData.clientId,
   };
 
-  
-      if (serviceReuestData.client?.fcmToken) {
-        await notificationService.sendNotification(
-          serviceReuestData.client?.fcmToken,
-          sitterReviewPayload,
-          serviceReuestData.clientId
-        );
-      }
 
-      //save notification to the courier
-      await notificationService.saveNotification(
-        sitterReviewPayload,
-        serviceReuestData.clientId
-      );
+  if (serviceReuestData.client?.fcmToken) {
+    await notificationService.sendNotification(
+      serviceReuestData.client?.fcmToken,
+      sitterReviewPayload,
+      serviceReuestData.clientId
+    );
+  }
+
+  //save notification to the courier
+  await notificationService.saveNotification(
+    sitterReviewPayload,
+    serviceReuestData.clientId
+  );
 
 
   return {
@@ -685,7 +695,7 @@ const getAcceptServiceForPayment = async (clientId: string) => {
 
 const denyClinerRequest = async (requestId: string, clientId: string) => {
   const result = await prisma.user.updateMany({
-    where:{
+    where: {
       id: clientId
     },
     data: {
