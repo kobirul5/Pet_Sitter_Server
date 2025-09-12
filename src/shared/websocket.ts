@@ -196,6 +196,7 @@ export function setupWebSocket(server: Server) {
           case "messageList": {
             if (!ws.userId) return;
 
+            // 1️⃣ Fetch client requests with last chat
             const clientRequests = await prisma.clientRequest.findMany({
               where: {
                 OR: [{ clientId: ws.userId }, { sitterId: ws.userId }],
@@ -208,11 +209,46 @@ export function setupWebSocket(server: Server) {
               },
             });
 
+            if (!clientRequests.length) {
+              ws.send(JSON.stringify({ event: "messageList", data: [] }));
+              return;
+            }
+
+            // 2️⃣ Collect all other user IDs
+            const otherUserIds = clientRequests.map((cr) =>
+              ws.userId === cr.clientId ? cr.sitterId : cr.clientId
+            );
+
+            // 3️⃣ Fetch user info in one query
+            const users = await prisma.user.findMany({
+              where: { id: { in: otherUserIds } },
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                profileImage: true,
+              },
+            });
+
+            // 4️⃣ Map client requests with user info and last chat
             const formatted = clientRequests.map((cr) => {
-              const lastChat = cr.chats[0] || null;
               const otherUserId =
                 ws.userId === cr.clientId ? cr.sitterId : cr.clientId;
-              return { clientRequestId: cr.id, lastChat, otherUserId };
+              const otherUser = users.find((u) => u.id === otherUserId) || null;
+
+              const lastChat = cr.chats[0]
+                ? {
+                    ...cr.chats[0],
+                    createdAt: cr.chats[0].createdAt.toISOString(),
+                    updatedAt: cr.chats[0].updatedAt.toISOString(),
+                  }
+                : null;
+
+              return {
+                clientRequestId: cr.id,
+                user: otherUser,
+                lastMessage: lastChat,
+              };
             });
 
             ws.send(JSON.stringify({ event: "messageList", data: formatted }));
