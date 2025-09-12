@@ -3,6 +3,7 @@ import prisma from '../../../shared/prisma';
 import ApiError from '../../../errors/ApiErrors';
 import { fileUploader } from '../../../helpars/fileUploader';
 import { deleteImageFromDigitalOcean } from '../../../helpars/fileDelete';
+import { UserRole } from '@prisma/client';
 
 
 
@@ -24,15 +25,20 @@ interface IDog {data: Dog, files:{ [fieldname: string]: Express.Multer.File[] },
 
 const createIntoDb = async ({data, files, userId}:IDog) => {
 
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
 
-
-  if(!userId){
+  if(!user){
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found')
   }
   if(!data){
     throw new ApiError(httpStatus.BAD_REQUEST, 'Data not found')
   }
   
+  if(user.role === UserRole.Sitter){
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Sitter can not create dog profile')
+  }
 
   if (!files || !files.images || files.images.length === 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, "No images provided");
