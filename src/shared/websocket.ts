@@ -27,7 +27,6 @@ export function setupWebSocket(server: Server) {
         const parsedData = JSON.parse(data);
 
         switch (parsedData.event) {
-
           // ========== AUTHENTICATE ==========
           case "authenticate": {
             const token = parsedData.token;
@@ -95,7 +94,9 @@ export function setupWebSocket(server: Server) {
             }
             locationSubscribers.get(targetUserId)!.add(ws);
 
-            console.log(`${ws.userId} subscribed to location of ${targetUserId}`);
+            console.log(
+              `${ws.userId} subscribed to location of ${targetUserId}`
+            );
             break;
           }
 
@@ -108,6 +109,20 @@ export function setupWebSocket(server: Server) {
               where: { id: clientRequestId },
             });
             if (!clientRequest) return;
+
+            if (
+              ws.userId !== clientRequest.clientId &&
+              ws.userId !== clientRequest.sitterId
+            ) {
+              // Unauthorized – message
+              ws.send(
+                JSON.stringify({
+                  event: "error",
+                  message: "You are not a participant of this request",
+                })
+              );
+              return;
+            }
 
             // Determine receiverId
             const receiverId =
@@ -128,7 +143,9 @@ export function setupWebSocket(server: Server) {
             // Send to receiver if online
             const receiverSocket = userSockets.get(receiverId);
             if (receiverSocket?.readyState === WebSocket.OPEN) {
-              receiverSocket.send(JSON.stringify({ event: "message", data: chat }));
+              receiverSocket.send(
+                JSON.stringify({ event: "message", data: chat })
+              );
             }
 
             // Confirmation to sender
@@ -166,7 +183,10 @@ export function setupWebSocket(server: Server) {
             ws.send(
               JSON.stringify({
                 event: "unReadMessages",
-                data: { messages: unReadMessages, count: unReadMessages.length },
+                data: {
+                  messages: unReadMessages,
+                  count: unReadMessages.length,
+                },
               })
             );
             break;
@@ -190,7 +210,8 @@ export function setupWebSocket(server: Server) {
 
             const formatted = clientRequests.map((cr) => {
               const lastChat = cr.chats[0] || null;
-              const otherUserId = ws.userId === cr.clientId ? cr.sitterId : cr.clientId;
+              const otherUserId =
+                ws.userId === cr.clientId ? cr.sitterId : cr.clientId;
               return { clientRequestId: cr.id, lastChat, otherUserId };
             });
 
@@ -234,11 +255,6 @@ function broadcastToAll(wss: WebSocketServer, message: object) {
     }
   });
 }
-
-
-
-
-
 
 // import { Server } from "http";
 // import { WebSocket, WebSocketServer } from "ws";
@@ -291,7 +307,7 @@ function broadcastToAll(wss: WebSocketServer, message: object) {
 //               event: "userStatus",
 //               data: { userId: id, isOnline: true },
 //             });
-            
+
 //             break;
 //           }
 
