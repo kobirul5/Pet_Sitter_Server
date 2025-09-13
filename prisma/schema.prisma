@@ -34,12 +34,11 @@ model User {
   address               String?     @default("")
   serviceDayTotal       Int?        @default(0)
   serviceAvailableDates DateTime[]  @default([])
-  serviceType           ServiceType @default(NOSERVICE)
+  // serviceType           ServiceType @default(NOSERVICE)
 
   stripeCustomerId String? @default("")
 
   // Sitter specific fields
-  perDayFee      Float?   @default(0)
   totalRating    Float?   @default(0)
   totalReviews   Int?     @default(0)
   experience     String?  @default("")
@@ -71,12 +70,12 @@ model User {
   receivedNotifications Notification[]  @relation("ReceivedNotifications")
   savedCards            SavedCard[]
 
-  // Services
-  serviceId String?  @db.ObjectId
-  services  Service? @relation("UserSelectedService", fields: [serviceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  // // Services
+  // serviceId String?  @db.ObjectId
+  // services  Service? @relation("UserSelectedService", fields: [serviceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   // Services he provides
-  servicesProvided Service[] @relation("ServiceProviderID")
+  services Service[] @relation("userId")
 
   @@map("users")
 }
@@ -103,7 +102,7 @@ model Service {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String?     @default("")
-  hourlyRate  Float
+  price  Float
   // userId      String   @db.ObjectId
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -111,11 +110,11 @@ model Service {
 
   // Relations
   // Provider relation
-  ServiceProviderId String @db.ObjectId
-  ServiceProvider   User   @relation("ServiceProviderID", fields: [ServiceProviderId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+  user   User   @relation("userId", fields: [userId], references: [id], onDelete: Cascade)
 
   // Reverse relation
-  selectedBy User[] @relation("UserSelectedService")
+  // selectedBy User[] @relation("UserSelectedService")
 
   @@map("services")
 }

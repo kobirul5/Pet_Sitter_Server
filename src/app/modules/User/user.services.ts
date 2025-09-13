@@ -69,8 +69,6 @@ const updateUserProfile = async (userId: string, updateData: Partial<IUser>, fil
       gender: true,
       createdAt: true,
       updatedAt: true,
-      serviceType: true,
-      serviceId: true,
       services: true
     },
   });
@@ -311,7 +309,6 @@ const updateSitterProfile = async (
     data: updateData,
     select: {
       id: true,
-      perDayFee: true,
       experience: true,
       about: true,
       location: true,
@@ -393,9 +390,9 @@ const addSitterService = async (
     data: {
       name: serviceData.name,
       description: serviceData.description,
-      hourlyRate: serviceData.price,
+      price: serviceData.price,
       serviceType: serviceData.serviceType, // ensure DB column matches spelling
-      ServiceProviderId: decodedToken.id,
+      userId: decodedToken.id,
     },
   });
 
@@ -411,7 +408,7 @@ const getSitterServices = async (userToken: string) => {
   );
 
   const services = await prisma.service.findMany({
-    where: { ServiceProviderId: decodedToken.id },
+    where: { userId: decodedToken.id },
     orderBy: { createdAt: "desc" },
   });
 
@@ -436,7 +433,7 @@ const updateSitterService = async (
   const existingService = await prisma.service.findFirst({
     where: {
       id: serviceId,
-      ServiceProviderId: decodedToken.id,
+      userId: decodedToken.id,
     },
   });
 
@@ -464,7 +461,7 @@ const deleteSitterService = async (userToken: string, serviceId: string) => {
   const existingService = await prisma.service.findFirst({
     where: {
       id: serviceId,
-      ServiceProviderId: decodedToken.id,
+      userId: decodedToken.id,
     },
   });
 
@@ -507,16 +504,27 @@ const changeSitterStatus = async ({ userId, serviceStatus }: { userId: string; s
     throw new ApiError(httpStatus.BAD_REQUEST, "Service not found");
   }
 
-  const result = await prisma.user.update({
-    where: { id: userId },
+  // const result = await prisma.user.update({
+  //   where: { id: userId },
+  //   data: {
+  //     serviceId: services.id,
+  //     serviceType: serviceStatus
+  //   },
+  //   include: {
+  //     services: true
+  //   }
+  // });
+
+  const result = await prisma.service.create({
     data: {
-      serviceId: services.id,
-      serviceType: serviceStatus
+      name: services.name,
+      description: services.description,
+      price: services.price,
+      serviceType: serviceStatus, // ensure DB column matches spelling
+      userId: userId,
     },
-    include: {
-      services: true
-    }
   });
+
 
   return result;
 }
