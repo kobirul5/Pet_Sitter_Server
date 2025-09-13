@@ -370,7 +370,7 @@ const addSitterService = async (
     name: string;
     description?: string;
     price: number;
-    serviceType: "NOSERVICE" | "DAYCARE" | "BOARDING" | "WALKING"; // corrected spelling
+    serviceType: "DAYCARE" | "BOARDING" | "WALKING"; // corrected spelling
   }
 ) => {
   const decodedToken = jwtHelpers.verifyToken(userToken, config.jwt.jwt_secret!);

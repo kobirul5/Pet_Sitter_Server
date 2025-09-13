@@ -297,6 +297,7 @@ const getSitterBoarding = async (clientId: string) => {
   //   }
   // });
 
+  console.log("deniedServiceIds", deniedServiceIds)
   const services = await prisma.service.findMany({
     where: {
       serviceType: ServiceType.BOARDING,
@@ -311,7 +312,7 @@ const getSitterBoarding = async (clientId: string) => {
           profileImage: true,
           serviceAvailableDates: true,
           sitterProfile: true,
-          services: true,
+          // services: true,
           about: true,
           email: true,
           totalRating: true,
@@ -320,6 +321,7 @@ const getSitterBoarding = async (clientId: string) => {
       },
     }
   });
+  console.log(services)
 
   return services;
 }
@@ -348,7 +350,7 @@ const getSitterServicesForWalking = async (clientId: string) => {
           profileImage: true,
           serviceAvailableDates: true,
           sitterProfile: true,
-          services: true,
+          // services: true,
           about: true,
           email: true,
           totalRating: true,
@@ -388,7 +390,7 @@ const getSitterServicesForDogCare = async (clientId: string) => {
           profileImage: true,
           serviceAvailableDates: true,
           sitterProfile: true,
-          services: true,
+          // services: true,
           about: true,
           email: true,
           totalRating: true,
