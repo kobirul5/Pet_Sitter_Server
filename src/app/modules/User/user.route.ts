@@ -79,7 +79,7 @@ router.patch(
 );
 
 router.delete(
-  "/sitter/services/:serviceId",
+  "/services/delete/:serviceId",
   auth(),
   UserController.deleteSitterService
 );

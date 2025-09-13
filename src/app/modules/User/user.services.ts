@@ -469,6 +469,27 @@ const deleteSitterService = async (userToken: string, serviceId: string) => {
     throw new ApiError(httpStatus.NOT_FOUND, "Service not found");
   }
 
+  const user = await prisma.user.findUnique({
+    where: { id: decodedToken.id },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const service = await prisma.service.findUnique({
+    where: { id: serviceId },
+  });
+
+  if (!service) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Service not found");
+  }
+
+  if(service.userId !== user.id) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "You can only delete your own services");
+  }
+
+
   await prisma.service.delete({
     where: { id: serviceId },
   });

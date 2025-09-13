@@ -243,7 +243,7 @@ const updateSitterService = catchAsync(async (req: Request, res: Response) => {
 // Delete sitter service
 const deleteSitterService = catchAsync(async (req: Request, res: Response) => {
   const token = req.headers.authorization;
-  const { serviceId } = req.params;
+  const  serviceId  = req.params.serviceId;
 
   const result = await UserService.deleteSitterService(
     token as string,
