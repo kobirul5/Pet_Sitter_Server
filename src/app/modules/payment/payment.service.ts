@@ -1,4 +1,4 @@
-import { NotificationType, PaymenttStatus, RequestStatus, UserRole } from "@prisma/client";
+import { NotificationType, PaymentStatus, RequestStatus, UserRole } from "@prisma/client";
 import ApiError from "../../../errors/ApiErrors";
 import { getTransactionId } from "../../../helpars/getTransactionId";
 import prisma from "../../../shared/prisma";
@@ -48,7 +48,7 @@ const createPaymentIntent = async ({
     throw new ApiError(httpStatus.BAD_REQUEST, "Service request is not Accepted");
   }
 
-  if (clientRequest.paymentStatus === PaymenttStatus.COMPLETED) {
+  if (clientRequest.paymentStatus === PaymentStatus.COMPLETED) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Payment already completed");
   }
 
@@ -75,7 +75,7 @@ const createPaymentIntent = async ({
           transactionId,
           requestId,
           amount: clientRequest.totalPrice!,
-          paymentStatus: PaymenttStatus.FAILED,
+          paymentStatus: PaymentStatus.FAILED,
           senderId: userId,
           method: "CARD",
           methodCardId: paymentIntent.payment_method as string,
@@ -94,7 +94,7 @@ const createPaymentIntent = async ({
           transactionId,
           requestId,
           amount: clientRequest.totalPrice!,
-          paymentStatus: PaymenttStatus.COMPLETED,
+          paymentStatus: PaymentStatus.COMPLETED,
           senderId: userId,
           method: "CARD",
           methodCardId: paymentIntent.payment_method as string,
@@ -104,7 +104,7 @@ const createPaymentIntent = async ({
       await tx.clientRequest.update({
         where: { id: requestId },
         data: {
-          paymentStatus: PaymenttStatus.COMPLETED,
+          paymentStatus: PaymentStatus.COMPLETED,
         },
       });
 

@@ -16,24 +16,24 @@ model User {
   firstName     String? @default("")
   lastName      String? @default("")
 
-  profileImage          String?     @default("")
-  expirationOtp         DateTime?   @default(now())
-  fcmToken              String?     @default("")
-  location              String?     @default("")
-  gender                String?     @default("")
-  lat                   Float?      @default(0)
-  lng                   Float?      @default(0)
-  otp                   Int?        @default(0)
-  role                  UserRole    @default(User)
-  isNotificationOn      Boolean     @default(false)
-  isAvailable           Boolean     @default(true)
-  status                UserStatus  @default(ACTIVE)
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
-  otpExpiresAt          DateTime?   @default(now())
-  address               String?     @default("")
-  serviceDayTotal       Int?        @default(0)
-  serviceAvailableDates DateTime[]  @default([])
+  profileImage          String?    @default("")
+  expirationOtp         DateTime?  @default(now())
+  fcmToken              String?    @default("")
+  location              String?    @default("")
+  gender                String?    @default("")
+  lat                   Float?     @default(0)
+  lng                   Float?     @default(0)
+  otp                   Int?       @default(0)
+  role                  UserRole   @default(User)
+  isNotificationOn      Boolean    @default(false)
+  isAvailable           Boolean    @default(true)
+  status                UserStatus @default(ACTIVE)
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  otpExpiresAt          DateTime?  @default(now())
+  address               String?    @default("")
+  serviceDayTotal       Int?       @default(0)
+  serviceAvailableDates DateTime[] @default([])
   // serviceType           ServiceType @default(NOSERVICE)
 
   stripeCustomerId String? @default("")
@@ -47,8 +47,6 @@ model User {
 
   sitterProfile SitterProfile?
 
-  // SenderRooms   Room[] @relation("SenderRooms")
-  // ReceiverRooms Room[] @relation("ReceiverRooms")
   SentChats     Chat[] @relation("SentChats")
   ReceivedChats Chat[] @relation("ReceivedChats")
 
@@ -70,12 +68,8 @@ model User {
   receivedNotifications Notification[]  @relation("ReceivedNotifications")
   savedCards            SavedCard[]
 
-  // // Services
-  // serviceId String?  @db.ObjectId
-  // services  Service? @relation("UserSelectedService", fields: [serviceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
   // Services he provides
-  services Service[] @relation("userId")
+  services Service[]
 
   @@map("users")
 }
@@ -102,7 +96,7 @@ model Service {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String?     @default("")
-  price  Float
+  price       Float
   // userId      String   @db.ObjectId
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -111,13 +105,72 @@ model Service {
   // Relations
   // Provider relation
   userId String @db.ObjectId
-  user   User   @relation("userId", fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Reverse relation
   // selectedBy User[] @relation("UserSelectedService")
 
   @@map("services")
 }
+
+// model Dog {
+//   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+//   userId      String   @db.ObjectId
+//   name        String?  @default("")
+//   gender      String?  @default("")
+//   age         String?  @default("")
+//   breed       String?  @default("")
+//   weight      String?  @default("")
+//   vaccination String?  @default("")
+//   spayed      String?  @default("")
+//   about       String?  @default("")
+//   images      String[] @default([])
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+
+//   // Relations
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   ClientRequest ClientRequest[] @relation("RequestedDog")
+
+//   //   requestId String[] @db.ObjectId
+//   //  clientRequest   ClientRequest[]    @relation("RequestedDog", fields: [requestId], references: [id])
+
+//   @@map("dogs")
+// }
+
+// model ClientRequest {
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
+
+//   // The person requesting the service
+//   client   User   @relation("ClientRequestsAsClient", fields: [clientId], references: [id], onDelete: Cascade)
+//   clientId String @db.ObjectId
+
+//   dog   Dog    @relation("RequestedDog", fields: [dogId], references: [id], onDelete: Cascade)
+//   dogId String @db.ObjectId
+
+//   //   dog   Dog[]    @relation("RequestedDog", fields: [dogId], references: [id])
+//   // dogId String[] @db.ObjectId
+
+//   dogs     Json[] @default([])
+//   // The sitter who is receiving the request
+//   sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
+//   sitterId String @db.ObjectId
+
+//   startTime     DateTime
+//   endTime       DateTime
+//   serviceType   ServiceType
+//   hourlyRate    Float
+//   totalPrice    Float
+//   status        RequestStatus  @default(PENDING)
+//   paymentStatus PaymentStatus @default(PENDING)
+//   Payment       Payment[]
+//   chats         Chat[]
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
 
 model Dog {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -137,45 +190,50 @@ model Dog {
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  ClientRequest ClientRequest[] @relation("RequestedDog")
-
-  //   requestId String[] @db.ObjectId
-  //  clientRequest   ClientRequest[]    @relation("RequestedDog", fields: [requestId], references: [id])
+  requests RequestDog[]   // Many-to-many via RequestDog
 
   @@map("dogs")
 }
 
 model ClientRequest {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  // The person requesting the service
-  client   User   @relation("ClientRequestsAsClient", fields: [clientId], references: [id], onDelete: Cascade)
-  clientId String @db.ObjectId
-
-  dog   Dog    @relation("RequestedDog", fields: [dogId], references: [id], onDelete: Cascade)
-  dogId String @db.ObjectId
-
-  //   dog   Dog[]    @relation("RequestedDog", fields: [dogId], references: [id])
-  // dogId String[] @db.ObjectId
-
-  dogs     Json[] @default([])
-  // The sitter who is receiving the request
-  sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
-  sitterId String @db.ObjectId
-
-  startTime     DateTime
-  endTime       DateTime
-  serviceType   ServiceType
-  hourlyRate    Float
-  totalPrice    Float
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  clientId    String   @db.ObjectId
+  sitterId    String   @db.ObjectId
+  startTime   DateTime
+  endTime     DateTime
+  serviceType ServiceType
+  price  Float
+  totalPrice  Float
   status        RequestStatus  @default(PENDING)
-  paymentStatus PaymenttStatus @default(PENDING)
-  Payment       Payment[]
-   chats      Chat[]
+  paymentStatus PaymentStatus @default(PENDING)
+  // paymentStatus PaymentStatus @default(PENDING)
+
+  // Relations
+  client User @relation("ClientRequestsAsClient", fields: [clientId], references: [id], onDelete: Cascade)
+  sitter User @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
+
+  dogs     RequestDog[]   // Many-to-many via RequestDog
+  payments Payment[]
+  chats    Chat[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+/// Pivot table for many-to-many
+model RequestDog {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  requestId String @db.ObjectId
+  dogId     String @db.ObjectId
+
+  request ClientRequest @relation(fields: [requestId], references: [id])
+  dog     Dog           @relation(fields: [dogId], references: [id])
+
+  @@unique([requestId, dogId])
+}
+
+
+
 
 model Rating {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -241,15 +299,13 @@ model Chat {
 
   isRead Boolean @default(false)
 
-  sender   User          @relation("SentChats", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver User          @relation("ReceivedChats", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender        User          @relation("SentChats", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver      User          @relation("ReceivedChats", fields: [receiverId], references: [id], onDelete: Cascade)
   clientRequest ClientRequest @relation(fields: [clientRequestId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
 
 // model Chat {
 //   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -294,7 +350,7 @@ model Payment {
   currency      String         @default("USD") // You can change default to your currency
   method        PaymentMethod  @default(CARD)
   methodCardId  String
-  paymentStatus PaymenttStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
 
   transactionId String?   @unique
   paidAt        DateTime?
@@ -353,7 +409,7 @@ enum RequestStatus {
   COMPLETED
 }
 
-enum PaymenttStatus {
+enum PaymentStatus {
   PENDING
   ACCEPTED
   DENIED

@@ -1,6 +1,6 @@
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiErrors";
-import { NotificationType, PaymenttStatus, Prisma, ServiceType, UserRole } from "@prisma/client";
+import { NotificationType, Prisma, ServiceType, UserRole } from "@prisma/client";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
 import { omit } from "lodash";

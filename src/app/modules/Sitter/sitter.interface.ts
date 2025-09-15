@@ -92,16 +92,29 @@ export interface ICreateRating {
   ratingsReceivedId: string;
 } 
 
+// export interface ICreateRequestData {
+//   clientId: string;
+//   sitterId: string;
+//   dogId: string;
+//   startTime: string | Date;
+//   endTime: string | Date;
+//   serviceType: ServiceType
+//   hourlyRate: number;
+//   totalPrice: number;
+//   currency?: string;
+//   status?: RequestStatus;
+//   dogs: Dog[] // Optional, defaults to 'PENDING'
+// }
+
 export interface ICreateRequestData {
   clientId: string;
   sitterId: string;
-  dogId: string;
+  dogIds: string[];        // One or multiple dog IDs
   startTime: string | Date;
   endTime: string | Date;
-  serviceType: ServiceType
-  hourlyRate: number;
+  serviceType: ServiceType;
+  price: number;
   totalPrice: number;
   currency?: string;
-  status?: RequestStatus;
-  dogs: Dog[] // Optional, defaults to 'PENDING'
+  status?: RequestStatus;   // defaults to PENDING if not provided
 }

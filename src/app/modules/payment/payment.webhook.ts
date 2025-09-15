@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import Stripe from "stripe";
 import httpStatus from "http-status";
 import prisma from "../../../shared/prisma";
-import { PaymenttStatus } from "@prisma/client";
+import { PaymentStatus } from "@prisma/client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -30,7 +30,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
 
         await prisma.payment.updateMany({
           where: { transactionId },
-          data: { paymentStatus: PaymenttStatus.COMPLETED },
+          data: { paymentStatus: PaymentStatus.COMPLETED },
         });
 
         console.log(`Payment successful for transactionId: ${transactionId}`);
@@ -43,7 +43,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
 
         await prisma.payment.updateMany({
           where: { transactionId },
-          data: { paymentStatus: PaymenttStatus.FAILED },
+          data: { paymentStatus: PaymentStatus.FAILED },
         });
 
         console.log(` Payment failed for transactionId: ${transactionId}`);

@@ -7,63 +7,38 @@ import { ServiceType } from "@prisma/client";
 import { serviceReuestService } from "./serviceReuest.service";
 
 // Create client request
-const createClientRequestController = catchAsync(
-  async (req: Request, res: Response) => {
+const createClientRequestController = catchAsync(async (req: Request, res: Response) => {
+  const clientId = req.user.id;
+  const { sitterId, startTime, endTime, serviceType, price, totalPrice, dogIds } = req.body;
 
-    const clientId = req.user.id
-
-
-    const {
-      sitterId,
-      startTime,
-      endTime,
-      serviceType,
-      hourlyRate,
-      currency,
-      totalPrice,
-      dogId,
-      dogs
-    } = req.body;
-
-    if (
-      !sitterId ||
-      !startTime ||
-      !endTime ||
-      !hourlyRate ||
-      !totalPrice ||
-      !dogId ||
-      !dogs
-    ) {
-      return res.status(httpStatus.BAD_REQUEST).json({
-        success: false,
-        message: 'Missing required fields',
-      });
-    }
-
-    const allowedServiceTypes = [
-      ServiceType.BOARDING,
-      ServiceType.DAYCARE,
-      ServiceType.WALKING,
-    ];
-
-    if (!allowedServiceTypes.includes(serviceType)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, `Service type ${ServiceType.BOARDING} or  ${ServiceType.DAYCARE} or  ${ServiceType.WALKING}`);
-    }
-
-
-
-    const newRequest = await serviceReuestService.createClientRequestService({
-      clientId, endTime, hourlyRate, serviceType, sitterId, startTime, totalPrice, currency, dogId, dogs
-    });
-
-    sendResponse(res, {
-      statusCode: httpStatus.CREATED,
-      success: true,
-      message: 'Client request created successfully',
-      data: newRequest,
-    });
+  if (!sitterId || !startTime || !endTime || !price || !totalPrice || !dogIds?.length) {
+    return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: "Missing required fields" });
   }
-);
+
+  const allowedServices = [ServiceType.BOARDING, ServiceType.DAYCARE, ServiceType.WALKING];
+  if (!allowedServices.includes(serviceType)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, `Service type must be one of: ${allowedServices.join(", ")}`);
+  }
+
+  const newRequest = await serviceReuestService.createClientRequestService({
+    clientId,
+    sitterId,
+    startTime,
+    endTime,
+    serviceType,
+    price: price,
+    totalPrice,
+    dogIds,
+  });
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Client request created successfully",
+    data: newRequest,
+  });
+});
+
 
 // Get all service requests
 const getServiceRequestsController = catchAsync(
@@ -72,7 +47,7 @@ const getServiceRequestsController = catchAsync(
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service requests retrieved successfully',
+      message: "Service requests retrieved successfully",
       data: requests,
     });
   }
@@ -80,138 +55,156 @@ const getServiceRequestsController = catchAsync(
 // Get service requests by siiterId for sitter
 const getServiceRequestsForSitterController = catchAsync(
   async (req: Request, res: Response) => {
+    console.log("hey");
 
-    console.log("hey")
-
-    const sitterId = req.user.id
-    const requests = await serviceReuestService.getServiceForSitterRequests(sitterId);
+    const sitterId = req.user.id;
+    const requests = await serviceReuestService.getServiceForSitterRequests(
+      sitterId
+    );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service requests retrieved successfully',
+      message: "Service requests retrieved successfully",
       data: requests,
     });
   }
 );
 
-
 //updateServicestatusController
 const updateServicestatusController = catchAsync(
   async (req: Request, res: Response) => {
-    const { requestId, status } = req.body
-    const sitterId = req.user.id
-    const result = await serviceReuestService.updateServicestatus(requestId, status, sitterId);
+    const { requestId, status } = req.body;
+    const sitterId = req.user.id;
+    const result = await serviceReuestService.updateServicestatus(
+      requestId,
+      status,
+      sitterId
+    );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service status updated successfully',
+      message: "Service status updated successfully",
       data: result,
     });
   }
-)
+);
 
 // get clinet and dog details
 const getClinetAndDogProfileByIdController = catchAsync(
   async (req: Request, res: Response) => {
-    const  requestId  = req.params.requestid
-    const result = await serviceReuestService.getClinetAndDogProfileById(requestId);
+    const requestId = req.params.requestid;
+    const result = await serviceReuestService.getClinetAndDogProfileById(
+      requestId
+    );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'get clinet and dog details successfully',
+      message: "get clinet and dog details successfully",
       data: result,
     });
   }
-)
+);
 
 const acceptClinerRequestController = catchAsync(
   async (req: Request, res: Response) => {
-    const  requestId  = req.params.id
+    const requestId = req.params.id;
 
-    const sitterId = req.user.id
+    const sitterId = req.user.id;
 
-    const result = await serviceReuestService.acceptClinerRequest(requestId, sitterId);
+    const result = await serviceReuestService.acceptClinerRequest(
+      requestId,
+      sitterId
+    );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service status updated successfully',
+      message: "Service status updated successfully",
       data: result,
     });
   }
-)
+);
 
 // createReviewCinetAndDogController
 const createReviewCinetAndDogController = catchAsync(
   async (req: Request, res: Response) => {
-    const { requestId, client, dog } = req.body
+    const { requestId, client, dog } = req.body;
 
-    const result = await serviceReuestService.createReviewCinetAndDog({requestId, client, dog });
+    const result = await serviceReuestService.createReviewCinetAndDog({
+      requestId,
+      client,
+      dog,
+    });
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Review created successfully',
+      message: "Review created successfully",
       data: result,
     });
   }
-)
-
+);
 
 const getAllAcceptedRequests = catchAsync(
   async (req: Request, res: Response) => {
-    const sitterId = req.user.id
+    const sitterId = req.user.id;
     const result = await serviceReuestService.getAllAcceptedRequests(sitterId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service requests retrieved successfully',
+      message: "Service requests retrieved successfully",
       data: result,
     });
   }
-)
+);
 
-// getAllUpcomingAndOngoingCleintRequests 
+// getAllUpcomingAndOngoingCleintRequests
 const getAllUpcomingAndOngoingCleintRequests = catchAsync(
   async (req: Request, res: Response) => {
-    const sitterId = req.user.id
-    const result = await serviceReuestService.getAllUpcomingAndOngoingCleintServices(sitterId);
+    const sitterId = req.user.id;
+    const result =
+      await serviceReuestService.getAllUpcomingAndOngoingCleintServices(
+        sitterId
+      );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service requests retrieved successfully',
+      message: "Service requests retrieved successfully",
       data: result,
     });
   }
-)
-
+);
 
 // Get all service requests payment
 const getAcceptServiceForPaymentController = catchAsync(
   async (req: Request, res: Response) => {
-
-    const clientId = req.user.id
-    const result = await serviceReuestService.getAcceptServiceForPayment(clientId);
+    const clientId = req.user.id;
+    const result = await serviceReuestService.getAcceptServiceForPayment(
+      clientId
+    );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service requests retrieved successfully',
+      message: "Service requests retrieved successfully",
       data: result,
     });
   }
-)
+);
 
 const denyClinerRequestController = catchAsync(
   async (req: Request, res: Response) => {
-    const  requestId  = req.params.id
-    const clientId = req.user.id
-    const result = await serviceReuestService.denyClinerRequest(requestId, clientId);
+    const requestId = req.params.id;
+    const clientId = req.user.id;
+    const result = await serviceReuestService.denyClinerRequest(
+      requestId,
+      clientId
+    );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Service status updated successfully',
+      message: "Service status updated successfully",
       data: result,
     });
   }
-)
+);
 
 export const serviceReuestController = {
   createClientRequestController,

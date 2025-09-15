@@ -43,7 +43,6 @@ const createUserIntoDb = async (payload: User) => {
     },
   });
 
-
   const token = jwtHelpers.generateToken(
     {
       id: newUser.id,
@@ -69,16 +68,21 @@ const loginUser = async (payload: {
     },
   });
 
-  if (!userData?.isEmailVerify) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Please verify your email " + payload.email)
-  }
-
-  if (!userData?.email) {
+    if (!userData?.email) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
       "User not found! with this email " + payload.email
     );
   }
+
+  if (!userData?.isEmailVerify) {
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "Please verify your email " + payload.email
+    );
+  }
+
+
   const isCorrectPassword: boolean = await bcrypt.compare(
     payload.password,
     userData.password
@@ -121,7 +125,7 @@ const changePassword = async (
     config.jwt.jwt_secret!
   );
 
-  console.log(decodedToken, userToken)
+  console.log(decodedToken, userToken);
   const user = await prisma.user.findUnique({
     where: { id: decodedToken?.id },
   });
@@ -194,8 +198,12 @@ const forgotPassword = async (payload: { email: string }) => {
 </div> `;
 
     // Send the OTP email to the user
-    const response = await emailSender(userData.email, html, "Forgot Password OTP");
-    console.log(response)
+    const response = await emailSender(
+      userData.email,
+      html,
+      "Forgot Password OTP"
+    );
+    console.log(response);
   } catch (error) {
     console.error(`Failed to send OTP email:`, error);
   }
@@ -320,7 +328,6 @@ const verifyForgotPasswordOtp = async (payload: {
     data: updateData,
   });
 
-
   return { message: "OTP verification successful" };
 };
 
@@ -387,7 +394,6 @@ const deleteUser = async (userToken: string) => {
   return deletedUser;
 };
 
-
 const sendEmailVerificationOtp = async (email: string) => {
   // check if user exists
   const user = await prisma.user.findUnique({
@@ -405,11 +411,11 @@ const sendEmailVerificationOtp = async (email: string) => {
     <p style="text-align:center;color:#555;">This code will expire in <b>15 minutes</b>.</p>
   </div>`;
 
-  if(!user) {
+  if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  if(user.isEmailVerify) {
+  if (user.isEmailVerify) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email already verified");
   }
 
@@ -434,8 +440,6 @@ const sendEmailVerificationOtp = async (email: string) => {
     //  otp: otp,
   };
 };
-
-
 
 export const AuthServices = {
   loginUser,

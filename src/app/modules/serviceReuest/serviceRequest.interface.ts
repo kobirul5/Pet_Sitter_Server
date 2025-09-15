@@ -3,6 +3,7 @@ export interface IClinetRating {
   review: string;
 }
 export interface IDogRating {
+  dogId: string;
   rating: number;
   review: string;
 }

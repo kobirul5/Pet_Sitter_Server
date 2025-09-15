@@ -2,89 +2,149 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiErrors";
 import prisma from "../../../shared/prisma";
 import { ICreateRequestData } from "../Sitter/sitter.interface";
-import { NotificationType, PaymenttStatus, RequestStatus } from "@prisma/client";
+import { NotificationType,  PaymentStatus,  RequestStatus } from "@prisma/client";
 import { IClinetRating, IDogRating } from "./serviceRequest.interface";
 import { result } from "lodash";
 import { notificationService } from "../notification/notification.service";
+import { Pay } from "twilio/lib/twiml/VoiceResponse";
+
+// const createClientRequestService = async (data: ICreateRequestData) => {
+//   // Validate sitter exists and is active
+//   const sitter = await prisma.user.findFirst({
+//     where: {
+//       id: data.sitterId,
+//       role: 'Sitter',
+//       status: 'ACTIVE',
+//     },
+//   });
+
+//   if (!sitter) {
+//     throw new ApiError(httpStatus.NOT_FOUND, 'Sitter not found or inactive');
+//   }
+
+//   const dog = await prisma.dog.findFirst({
+//     where: {
+//       id: data.dogId,
+//     },
+//   });
+
+//   if (!dog) {
+//     throw new ApiError(httpStatus.NOT_FOUND, 'Wrong Dog Id, Dog not found');
+//   }
+
+//   // Create the client request
+//   const request = await prisma.clientRequest.create({
+//     data: {
+//       clientId: data.clientId,
+//       sitterId: data.sitterId,
+//       dogId: data.dogId,
+//       startTime: new Date(data.startTime),
+//       endTime: new Date(data.endTime),
+//       serviceType: data.serviceType,
+//       hourlyRate: data.hourlyRate,
+//       totalPrice: data.totalPrice,
+//       dogs: data.dogs,
+//     },
+//     include: {
+//       dog: true,
+//       client: true,
+//     }
+//   });
+  
+//   await prisma.chat.create({
+//     data: {
+//       senderId: request.clientId,
+//       receiverId: request.sitterId,
+//       clientRequestId: request.id,
+//       message: `Hi! I have just sent a request for the ${request.serviceType} service. Please review and accept it if everything looks good.`,
+//     },
+//   });
+
+
+
+//   const payload = {
+//     title: `You have a new request ${request.serviceType}`,
+//     body: `You have a new request ${request.serviceType} from ${request.client.firstName + ' ' + request.client.lastName} please accept the request`,
+//     type: NotificationType.BOOKING,
+//     data: JSON.stringify({
+//       requestId: request.id,
+//       sitterId: request.sitterId,
+//     }),
+//     receiverId: request.sitterId
+//   }
+
+
+
+//   if (sitter?.fcmToken) {
+//     await notificationService.sendNotification(sitter?.fcmToken, payload, request.clientId);
+//   }
+
+
+
+//   //save notification to the courier
+//   await notificationService.saveNotification(payload, request.clientId);
+
+//   return request;
+// };
+
 
 const createClientRequestService = async (data: ICreateRequestData) => {
-  // Validate sitter exists and is active
+  // Validate sitter
   const sitter = await prisma.user.findFirst({
-    where: {
-      id: data.sitterId,
-      role: 'Sitter',
-      status: 'ACTIVE',
-    },
+    where: { id: data.sitterId, role: 'Sitter', status: 'ACTIVE' },
   });
+  if (!sitter) throw new ApiError(httpStatus.NOT_FOUND, 'Sitter not found or inactive');
 
-  if (!sitter) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Sitter not found or inactive');
-  }
+  // Validate dogs
+  const dogs = await prisma.dog.findMany({ where: { id: { in: data.dogIds } } });
+  if (dogs.length !== data.dogIds.length)
+    throw new ApiError(httpStatus.NOT_FOUND, 'One or more Dog IDs are invalid');
 
-  const dog = await prisma.dog.findFirst({
-    where: {
-      id: data.dogId,
-    },
-  });
-
-  if (!dog) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Wrong Dog Id, Dog not found');
-  }
-
-  // Create the client request
+  // Create client request
   const request = await prisma.clientRequest.create({
     data: {
       clientId: data.clientId,
       sitterId: data.sitterId,
-      dogId: data.dogId,
       startTime: new Date(data.startTime),
       endTime: new Date(data.endTime),
       serviceType: data.serviceType,
-      hourlyRate: data.hourlyRate,
+      price: data.price,
       totalPrice: data.totalPrice,
-      dogs: data.dogs,
     },
-    include: {
-      dog: true,
-      client: true,
-    }
+    include: { client: true, sitter: true, dogs: { include: { dog: true } } },
   });
-  
+
+  // Link dogs via pivot
+  await prisma.requestDog.createMany({
+    data: data.dogIds.map((dogId) => ({ requestId: request.id, dogId })),
+  });
+
+  // Create chat
   await prisma.chat.create({
     data: {
       senderId: request.clientId,
       receiverId: request.sitterId,
       clientRequestId: request.id,
-      message: `Hi! I have just sent a request for the ${request.serviceType} service. Please review and accept it if everything looks good.`,
+      message: `Hi! I have just sent a request for ${request.serviceType}. Please review and accept it.`,
     },
   });
 
-
-
+  // Notification
   const payload = {
-    title: `You have a new request ${request.serviceType}`,
-    body: `You have a new request ${request.serviceType} from ${request.client.firstName + ' ' + request.client.lastName} please accept the request`,
+    title: `New request: ${request.serviceType}`,
+    body: `${request.client.firstName} ${request.client.lastName} sent you a request.`,
     type: NotificationType.BOOKING,
-    data: JSON.stringify({
-      requestId: request.id,
-      sitterId: request.sitterId,
-    }),
-    receiverId: request.sitterId
-  }
+    data: JSON.stringify({ requestId: request.id, sitterId: request.sitterId }),
+    receiverId: request.sitterId,
+  };
 
-
-
-  if (sitter?.fcmToken) {
-    await notificationService.sendNotification(sitter?.fcmToken, payload, request.clientId);
-  }
-
-
-
-  //save notification to the courier
+  if (sitter.fcmToken) await notificationService.sendNotification(sitter.fcmToken, payload, request.clientId);
   await notificationService.saveNotification(payload, request.clientId);
 
   return request;
 };
+
+
 
 const getServiceRequests = async () => {
   const requests = await prisma.clientRequest.findMany({
@@ -119,34 +179,52 @@ const getServiceRequests = async () => {
 
 const getServiceForSitterRequests = async (sitterId: string) => {
   const nowTime = new Date()
-
+console.log(sitterId, "sitterId");
   // Fetch all requests for sitter with related data
   const allRequests = await prisma.clientRequest.findMany({
     where: {
       sitterId,
-      paymentStatus: PaymenttStatus.COMPLETED,
-      status: {
-        notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
-      },
+      paymentStatus: PaymentStatus.COMPLETED,
     },
     include: {
       // sitter: true,
-      client: true,
-      dog: true,
+      client: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          address: true,
+          email: true,
+        }
+      },
+      dogs: {
+        include: {
+          dog: {
+            select: {
+              name: true,
+              breed: true,
+              images: true,
+            }
+          }
+        }
+      },
       // dog: true, // uncomment if needed
     },
   });
 
+  console.log(allRequests, "allRequests");
+
   const ongoingRequests = await prisma.clientRequest.findMany({
     where: {
       sitterId,
-      paymentStatus: PaymenttStatus.COMPLETED,
+      paymentStatus: PaymentStatus.COMPLETED,
       status: "ONGOING",
     },
     include: {
 
       client: true,
-      dog: true,
+      dogs: true,
 
     },
   });
@@ -154,7 +232,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
   const upComeingRequests = await prisma.clientRequest.findMany({
     where: {
       sitterId,
-      paymentStatus: PaymenttStatus.COMPLETED,
+      paymentStatus: PaymentStatus.COMPLETED,
       status: "ACCEPTED",
       // endTime: {
       //   gt: nowTime,
@@ -162,13 +240,13 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     },
     include: {
       client: true,
-      dog: true,
+      dogs: true,
     },
   });
   const completedRequests = await prisma.clientRequest.findMany({
     where: {
       sitterId,
-      paymentStatus: PaymenttStatus.COMPLETED,
+      paymentStatus: PaymentStatus.COMPLETED,
       status: "COMPLETED",
       // endTime: {
       //   gt: nowTime,
@@ -176,7 +254,7 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     },
     include: {
       client: true,
-      dog: true,
+      dogs: true,
     },
   });
 
@@ -212,12 +290,12 @@ const updateServicestatus = async (requestId: string, status: string, sitterId: 
     throw new ApiError(httpStatus.NOT_FOUND, 'Service request not found');
   }
 
-  if (status === RequestStatus.ONGOING && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED) {
+  if (status === RequestStatus.ONGOING && serviceRequest.paymentStatus !== PaymentStatus.COMPLETED) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Service request is not completed Not payment yet');
   }
 
 
-  if (status === RequestStatus.COMPLETED && serviceRequest.paymentStatus !== PaymenttStatus.COMPLETED) {
+  if (status === RequestStatus.COMPLETED && serviceRequest.paymentStatus !== PaymentStatus.COMPLETED) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update status!. Service request is not completed Not payment yet ');
   }
 
@@ -305,7 +383,7 @@ const getAllUpcomingAndOngoingCleintServices = async (clientId: string) => {
   // const allRequests = await prisma.clientRequest.findMany({
   //   where: {
   //     clientId,
-  //     paymentStatus: PaymenttStatus.COMPLETED,
+  //     paymentStatus: PaymentStatus.COMPLETED,
   //     status: {
   //       notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
   //     },
@@ -321,20 +399,20 @@ const getAllUpcomingAndOngoingCleintServices = async (clientId: string) => {
   const ongoingRequests = await prisma.clientRequest.findMany({
     where: {
       clientId,
-      paymentStatus: PaymenttStatus.COMPLETED,
+      paymentStatus: PaymentStatus.COMPLETED,
       status: "ONGOING",
     },
     include: {
 
       client: true,
-      dog: true,
+      dogs: true,
 
     },
   });
   const upComeingRequests = await prisma.clientRequest.findMany({
     where: {
       clientId,
-      paymentStatus: PaymenttStatus.COMPLETED,
+      paymentStatus: PaymentStatus.COMPLETED,
       status: {
         notIn: ["PENDING", "DENIED", "COMPLETED", "ONGOING"],
       },
@@ -344,19 +422,19 @@ const getAllUpcomingAndOngoingCleintServices = async (clientId: string) => {
     },
     include: {
       client: true,
-      dog: true,
+      dogs: true,
     },
   });
 
   const completedRequests = await prisma.clientRequest.findMany({
     where: {
       clientId,
-      paymentStatus: PaymenttStatus.COMPLETED,
+      paymentStatus: PaymentStatus.COMPLETED,
       status: "COMPLETED",
     },
     include: {
       client: true,
-      dog: true,
+      dogs: true,
     },
   });
 
@@ -390,19 +468,23 @@ const getClinetAndDogProfileById = async (requestId: string) => {
           address: true,
         }
       },
-      dog: {
-        select: {
-          name: true,
-          breed: true,
-          images: true,
-          gender: true,
-          age: true,
-          vaccination: true,
-          spayed: true,
-          about: true,
-          createdAt: true
+     dogs: {
+       include: {
+        dog: {
+          select: {
+            name: true,
+            breed: true,
+            images: true,
+            gender: true,
+            age: true,
+            vaccination: true,
+            spayed: true,
+            about: true,
+            createdAt: true
+          }
         }
-      },
+       }
+      }
     },
   });
   return result;
@@ -470,18 +552,22 @@ const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: 
           address: true,
         }
       },
-      dog: {
-        select: {
-          name: true,
-          breed: true,
-          images: true,
-          gender: true,
-          age: true,
-          vaccination: true,
-          spayed: true,
-          about: true,
-          createdAt: true
+      dogs: {
+       include: {
+        dog: {
+          select: {
+            name: true,
+            breed: true,
+            images: true,
+            gender: true,
+            age: true,
+            vaccination: true,
+            spayed: true,
+            about: true,
+            createdAt: true
+          }
         }
+       }
       }
     },
   })
@@ -495,20 +581,20 @@ const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: 
     data: {
       review: client.review,
       rating: client.rating,
-      ratingsGivenId: serviceReuestData.clientId,
-      ratingsReceivedId: serviceReuestData.sitterId,
+      ratingsGivenId: serviceReuestData.sitterId,
+      ratingsReceivedId: serviceReuestData.clientId,
     },
   })
 
 
-  const dogReview = await prisma.petRating.create({
-    data: {
-      review: dog.review,
-      rating: dog.rating,
-      ratingsGivenId: serviceReuestData.clientId,
-      ratingsReceivedId: serviceReuestData.dogId,
-    },
-  })
+  // const dogReview = await prisma.petRating.create({
+  //   data: {
+  //     review: dog.review,
+  //     rating: dog.rating,
+  //     ratingsGivenId: serviceReuestData.clientId,
+  //     ratingsReceivedId: serviceReuestData.dogId,
+  //   },
+  // })
 
 
 
@@ -542,7 +628,7 @@ const createReviewCinetAndDog = async ({ requestId, client, dog }: { requestId: 
 
   return {
     clientReviwe,
-    dogReview
+    // dogReview
   }
 
 
@@ -560,7 +646,7 @@ const getAllAcceptedRequests = async (sitterId: string) => {
     where: {
       sitterId: sitterId,
       status: RequestStatus.PENDING,
-      paymentStatus: PaymenttStatus.PENDING
+      paymentStatus: PaymentStatus.PENDING
     },
     include: {
       client: true,
@@ -570,33 +656,6 @@ const getAllAcceptedRequests = async (sitterId: string) => {
 }
 
 
-// const getAcceptServiceForPayment = async (clientId: string) => {
-
-//   if (!clientId) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot get! unauthorized request');
-//   }
-//   const result = await prisma.clientRequest.findMany({
-//     where: {
-//       clientId: clientId,
-//       status: RequestStatus.ACCEPTED,
-//       paymentStatus: PaymenttStatus.PENDING
-//     },
-//     include: {
-//       sitter: {
-//         select: {
-//           firstName: true,
-//           lastName: true,
-//           profileImage: true,
-//           email: true,
-//           createdAt: true,
-//           phone: true,
-//           address: true,
-//         }
-//       }
-//     },
-//   })
-//   return result;
-// }
 
 const getAcceptServiceForPayment = async (clientId: string) => {
   if (!clientId) {
@@ -608,7 +667,7 @@ const getAcceptServiceForPayment = async (clientId: string) => {
     where: {
       clientId: clientId,
       status: RequestStatus.ACCEPTED,
-      paymentStatus: PaymenttStatus.PENDING
+      paymentStatus: PaymentStatus.PENDING
     },
     include: {
       sitter: {
@@ -629,7 +688,7 @@ const getAcceptServiceForPayment = async (clientId: string) => {
     where: {
       clientId: clientId,
       status: RequestStatus.ONGOING,
-      paymentStatus: PaymenttStatus.COMPLETED
+      paymentStatus: PaymentStatus.COMPLETED
     },
     include: {
       sitter: {
@@ -650,7 +709,7 @@ const getAcceptServiceForPayment = async (clientId: string) => {
     where: {
       clientId: clientId,
       status: RequestStatus.ACCEPTED,
-      paymentStatus: PaymenttStatus.COMPLETED
+      paymentStatus: PaymentStatus.COMPLETED
     },
     include: {
       sitter: {
@@ -671,7 +730,7 @@ const getAcceptServiceForPayment = async (clientId: string) => {
     where: {
       clientId: clientId,
       status: RequestStatus.COMPLETED,
-      paymentStatus: PaymenttStatus.COMPLETED
+      paymentStatus: PaymentStatus.COMPLETED
     },
     include: {
       sitter: {
