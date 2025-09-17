@@ -157,29 +157,9 @@ const getServiceRequests = async () => {
   return requests;
 };
 
-// get service for sitter
-// const getServiceForSitterRequests = async (sitterId: string) => {
-//   const requests = await prisma.clientRequest.findMany({
-//     where: {
-//       sitterId: sitterId,
-//       status:{
-//         notIn: ["PENDING","DENIED"]
-//       }
-//     },
-//     include:{
-//       sitter: true,
-//       client: true,
-//       dog: true
-//     }
-//   });
-//   return requests;
-// };
-
-// get service requests by siiterId for sitter
-
 const getServiceForSitterRequests = async (sitterId: string) => {
   const nowTime = new Date()
-console.log(sitterId, "sitterId");
+
   // Fetch all requests for sitter with related data
   const allRequests = await prisma.clientRequest.findMany({
     where: {
@@ -209,7 +189,7 @@ console.log(sitterId, "sitterId");
           }
         }
       },
-      // dog: true, // uncomment if needed
+  
     },
   });
 

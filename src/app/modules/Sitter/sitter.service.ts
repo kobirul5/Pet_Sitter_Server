@@ -217,7 +217,7 @@ const getSitterRecommendations = async (
 
 
 const getAllServices = async (clientId: string, searchText?: string) => {
-
+  // 1. Fetch the client to get denied services
   const client = await prisma.user.findUnique({
     where: { id: clientId },
     select: { deniedServices: true },
@@ -225,83 +225,26 @@ const getAllServices = async (clientId: string, searchText?: string) => {
 
   const deniedServiceIds = client?.deniedServices || [];
 
-
-  const services = await prisma.user.findMany({
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      profileImage: true,
-      serviceAvailableDates: true,
-      sitterProfile: true,
-      services: true,
-      about: true,
-      email: true,
-      totalRating: true,
-      ratingsReceived: true,
-    },
-    where: {
-      role: UserRole.Sitter,
-      id: { notIn: deniedServiceIds },
-
-      services: {
-        some: {}, 
-      },
-      ...(searchText && {
-        OR: [
-          { firstName: { contains: searchText, mode: "insensitive" } },
-          { lastName: { contains: searchText, mode: "insensitive" } },
-          { about: { contains: searchText, mode: "insensitive" } },
-          { email: { contains: searchText, mode: "insensitive" } },
-        ],
-      }),
-    },
-  });
-
-  return services;
-};
-
-
-
-const getSitterBoarding = async (clientId: string) => {
-
-  const client = await prisma.user.findUnique({
-    where: { id: clientId },
-    select: { deniedServices: true },
-  });
-
-  const deniedServiceIds = client?.deniedServices || [];
-
-
-  // const services = await prisma.user.findMany({
-  //   select: {
-  //     id: true,
-  //     firstName: true,
-  //     lastName: true,
-  //     profileImage: true,
-  //     // serviceType: true,
-  //     serviceAvailableDates: true,
-  //     sitterProfile: true,
-  //     services: true,
-  //     about: true,
-  //     email: true,
-  //     totalRating: true,
-  //     ratingsReceived: true,
-  //   },
-  //   where: {
-  //     role: UserRole.Sitter,
-  //     serviceType: ServiceType.BOARDING,
-  //     id: { notIn: deniedServiceIds },
-  //     services: { some: {},  }
-  //     // status: "ACTIVE",
-  //   }
-  // });
-
-  console.log("deniedServiceIds", deniedServiceIds)
+  // 2. Fetch all services excluding denied ones and apply search filter
   const services = await prisma.service.findMany({
     where: {
-      serviceType: ServiceType.BOARDING,
       id: { notIn: deniedServiceIds },
+      ...(searchText && {
+        OR: [
+          { name: { contains: searchText, mode: "insensitive" } },
+          { description: { contains: searchText, mode: "insensitive" } },
+          {
+            user: {
+              OR: [
+                { firstName: { contains: searchText, mode: "insensitive" } },
+                { lastName: { contains: searchText, mode: "insensitive" } },
+                { about: { contains: searchText, mode: "insensitive" } },
+                { email: { contains: searchText, mode: "insensitive" } },
+              ],
+            },
+          },
+        ],
+      }),
     },
     include: {
       user: {
@@ -312,19 +255,70 @@ const getSitterBoarding = async (clientId: string) => {
           profileImage: true,
           serviceAvailableDates: true,
           sitterProfile: true,
-          // services: true,
           about: true,
           email: true,
           totalRating: true,
           ratingsReceived: true,
         },
       },
-    }
+    },
   });
-  console.log(services)
 
   return services;
-}
+};
+
+
+const getSitterBoarding = async (clientId: string, searchText?: string) => {
+  // 1. Get denied services for this client
+  const client = await prisma.user.findUnique({
+    where: { id: clientId },
+    select: { deniedServices: true },
+  });
+
+  const deniedServiceIds = client?.deniedServices || [];
+
+  // 2. Fetch BOARDING services excluding denied ones, with optional search
+  const services = await prisma.service.findMany({
+    where: {
+      serviceType: ServiceType.BOARDING,
+      id: { notIn: deniedServiceIds },
+      ...(searchText && {
+        OR: [
+          { name: { contains: searchText, mode: "insensitive" } },
+          { description: { contains: searchText, mode: "insensitive" } },
+          {
+            user: {
+              OR: [
+                { firstName: { contains: searchText, mode: "insensitive" } },
+                { lastName: { contains: searchText, mode: "insensitive" } },
+                { about: { contains: searchText, mode: "insensitive" } },
+                { email: { contains: searchText, mode: "insensitive" } },
+              ],
+            },
+          },
+        ],
+      }),
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          serviceAvailableDates: true,
+          sitterProfile: true,
+          about: true,
+          email: true,
+          totalRating: true,
+          ratingsReceived: true,
+        },
+      },
+    },
+  });
+
+  return services;
+};
 
 const getSitterServicesForWalking = async (clientId: string) => {
 
