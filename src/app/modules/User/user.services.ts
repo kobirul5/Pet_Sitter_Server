@@ -19,6 +19,9 @@ const getMyProfile = async (userToken: string) => {
     where: {
       id: decodedToken.id,
     },
+    include: {
+      services: true,
+    }
   });
 
   if (!userProfile) {
