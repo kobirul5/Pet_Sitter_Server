@@ -223,6 +223,22 @@ const getSitterRecommendations = async (
     orderBy: {
       price: "asc", 
     },
+    include: {
+      user:{
+        select: {
+           id: true,
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          serviceAvailableDates: true,
+          sitterProfile: true,
+          about: true,
+          email: true,
+          totalRating: true,
+          ratingsReceived: true,
+        }
+      },
+    },
   });
 
   // Get total count for pagination
