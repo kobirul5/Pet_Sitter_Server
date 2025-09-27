@@ -110,8 +110,9 @@ const loginUser = async (payload: {
   );
 
   const role = userData.role;
+  const id = userData.id;
 
-  return { token: accessToken, role };
+  return { token: accessToken, role, id };
 };
 
 // change password
