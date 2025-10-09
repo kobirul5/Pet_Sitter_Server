@@ -178,6 +178,7 @@ model Dog {
   name        String?  @default("")
   gender      String?  @default("")
   age         String?  @default("")
+  status   DogStatus @default(ACTIVE)
   breed       String?  @default("")
   weight      String?  @default("")
   vaccination String?  @default("")
@@ -193,6 +194,12 @@ model Dog {
   requests RequestDog[]   // Many-to-many via RequestDog
 
   @@map("dogs")
+}
+
+enum DogStatus {
+  ACTIVE
+  BLOCKED
+  DELETED
 }
 
 model ClientRequest {

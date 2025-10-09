@@ -76,7 +76,7 @@ const createIntoDb = async ({data, files, userId}:IDog) => {
 
 const getDogList = async (userId: string) => {
   const result = await prisma.dog.findMany({
-    where: { userId: userId },
+    where: { userId: userId, status: { not: 'DELETED' } },
   });
   return result;
 };
@@ -110,8 +110,9 @@ const deleteDog = async (dogId: string, userId: string) => {
   }
 
 
-  const result = await prisma.dog.delete({
+  const result = await prisma.dog.update({
     where: { id: dogId },
+    data: { status: 'DELETED' },
   });
 
 
