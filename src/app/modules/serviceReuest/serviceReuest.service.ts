@@ -100,13 +100,15 @@ const createClientRequestService = async (data: ICreateRequestData) => {
   if (dogs.length !== data.dogIds.length)
     throw new ApiError(httpStatus.NOT_FOUND, 'One or more Dog IDs are invalid');
 
+  const endTime = data.endTime ? new Date(data.endTime) : null;
+
   // Create client request
   const request = await prisma.clientRequest.create({
     data: {
       clientId: data.clientId,
       sitterId: data.sitterId,
       startTime: new Date(data.startTime),
-      endTime: new Date(data.endTime),
+      endTime: endTime,
       serviceType: data.serviceType,
       price: data.price,
       totalPrice: data.totalPrice,

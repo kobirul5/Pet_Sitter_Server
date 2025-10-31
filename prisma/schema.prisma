@@ -113,63 +113,6 @@ model Service {
   @@map("services")
 }
 
-// model Dog {
-//   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-//   userId      String   @db.ObjectId
-//   name        String?  @default("")
-//   gender      String?  @default("")
-//   age         String?  @default("")
-//   breed       String?  @default("")
-//   weight      String?  @default("")
-//   vaccination String?  @default("")
-//   spayed      String?  @default("")
-//   about       String?  @default("")
-//   images      String[] @default([])
-//   createdAt   DateTime @default(now())
-//   updatedAt   DateTime @updatedAt
-
-//   // Relations
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   ClientRequest ClientRequest[] @relation("RequestedDog")
-
-//   //   requestId String[] @db.ObjectId
-//   //  clientRequest   ClientRequest[]    @relation("RequestedDog", fields: [requestId], references: [id])
-
-//   @@map("dogs")
-// }
-
-// model ClientRequest {
-//   id String @id @default(auto()) @map("_id") @db.ObjectId
-
-//   // The person requesting the service
-//   client   User   @relation("ClientRequestsAsClient", fields: [clientId], references: [id], onDelete: Cascade)
-//   clientId String @db.ObjectId
-
-//   dog   Dog    @relation("RequestedDog", fields: [dogId], references: [id], onDelete: Cascade)
-//   dogId String @db.ObjectId
-
-//   //   dog   Dog[]    @relation("RequestedDog", fields: [dogId], references: [id])
-//   // dogId String[] @db.ObjectId
-
-//   dogs     Json[] @default([])
-//   // The sitter who is receiving the request
-//   sitter   User   @relation("ClientRequestsAsSitter", fields: [sitterId], references: [id], onDelete: Cascade)
-//   sitterId String @db.ObjectId
-
-//   startTime     DateTime
-//   endTime       DateTime
-//   serviceType   ServiceType
-//   hourlyRate    Float
-//   totalPrice    Float
-//   status        RequestStatus  @default(PENDING)
-//   paymentStatus PaymentStatus @default(PENDING)
-//   Payment       Payment[]
-//   chats         Chat[]
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
 
 
 model Dog {
@@ -207,7 +150,7 @@ model ClientRequest {
   clientId    String   @db.ObjectId
   sitterId    String   @db.ObjectId
   startTime   DateTime
-  endTime     DateTime
+  endTime     DateTime?
   serviceType ServiceType
   price  Float
   totalPrice  Float
@@ -238,9 +181,6 @@ model RequestDog {
 
   @@unique([requestId, dogId])
 }
-
-
-
 
 model Rating {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -314,35 +254,6 @@ model Chat {
   updatedAt DateTime @updatedAt
 }
 
-// model Chat {
-//   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-//   message    String
-//   senderId   String   @db.ObjectId
-//   receiverId String   @db.ObjectId
-//   roomId     String   @db.ObjectId
-//   images     String[] @default([])
-
-//   isRead Boolean @default(false)
-
-//   sender   User @relation("SentChats", fields: [senderId], references: [id], onDelete: Cascade)
-//   receiver User @relation("ReceivedChats", fields: [receiverId], references: [id], onDelete: Cascade)
-//   room     Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
-
-// model Room {
-//   id         String @id @default(auto()) @map("_id") @db.ObjectId
-//   senderId   String @db.ObjectId
-//   receiverId String @db.ObjectId
-//   sender     User   @relation("SenderRooms", fields: [senderId], references: [id], onDelete: Cascade)
-//   receiver   User   @relation("ReceiverRooms", fields: [receiverId], references: [id], onDelete: Cascade)
-//   chats      Chat[]
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
 
 model Payment {
   id String @id @default(auto()) @map("_id") @db.ObjectId

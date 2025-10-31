@@ -27,177 +27,6 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
   return distance;
 };
 
-// Get sitter recommendations based on location and filters
-// const getSitterRecommendations = async (
-//   userID: string,
-//   filters: ISitterFilters
-// ): Promise<{ meta: any; data: any }> => {
-
-//   // Get user's location
-//   const user = await prisma.user.findUnique({
-//     where: { id: userID },
-//     select: { lat: true, lng: true, location: true }
-//   });
-
-//   if (!user) {
-//     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
-//   }
-
-//   const page = Number(filters.page || 1);
-//   const limit = Number(filters.limit || 10);
-//   const skip = (page - 1) * limit;
-//   const sortBy = filters.sortBy || "totalRating";
-//   const sortOrder = filters.sortOrder || "desc";
-
-//   // Build where conditions for sitters
-//   const whereConditions: Prisma.UserWhereInput = {
-//     role: "Sitter",
-//     status: "ACTIVE",
-//     isAvailable: true,
-//   };
-
-//   // Add search term filter
-//   if (filters.searchTerm) {
-//     whereConditions.OR = [
-//       {
-//         firstName: {
-//           contains: filters.searchTerm,
-//           mode: "insensitive",
-//         },
-//       },
-//       {
-//         lastName: {
-//           contains: filters.searchTerm,
-//           mode: "insensitive",
-//         },
-//       },
-//       {
-//         location: {
-//           contains: filters.searchTerm,
-//           mode: "insensitive",
-//         },
-//       },
-//       {
-//         about: {
-//           contains: filters.searchTerm,
-//           mode: "insensitive",
-//         },
-//       },
-//     ];
-//   }
-
-//   // Add location filter
-//   if (filters.location) {
-//     whereConditions.location = {
-//       contains: filters.location,
-//       mode: "insensitive",
-//     };
-//   }
-
-//   // // Add price range filter
-//   // if (filters.minPrice || filters.maxPrice) {
-//   //   whereConditions. = {};
-//   //   if (filters.minPrice) {
-//   //     whereConditions.perDayFee.gte = filters.minPrice;
-//   //   }
-//   //   if (filters.maxPrice) {
-//   //     whereConditions.perDayFee.lte = filters.maxPrice;
-//   //   }
-//   // }
-
-//   // Add rating filter
-//   if (filters.minRating) {
-//     whereConditions.totalRating = {
-//       gte: filters.minRating,
-//     };
-//   }
-
-//   // Get total count
-//   const total = await prisma.user.count({
-//     where: whereConditions,
-//   });
-
-//   // Get sitters with their services and profile
-//   const sitters = await prisma.user.findMany({
-//     where:  {
-//     ...whereConditions,
-//     services: {
-//       some: {},  
-//     },
-//   },
-//     skip,
-//     take: limit,
-//     orderBy: {
-//       [sortBy]: sortOrder,
-//     },
-//    include:{
-//     services: true
-//    }
-//   });
-
-//   // Calculate distances and filter by max distance if provided
-//   let filteredSitters = sitters;
-//   if (user.lat && user.lng && filters.maxDistance) {
-//     filteredSitters = sitters.filter(sitter => {
-//       if (sitter.lat && sitter.lng) {
-//         const distance = calculateDistance(
-//           user.lat!,
-//           user.lng!,
-//           sitter.lat,
-//           sitter.lng
-//         );
-//         return distance <= filters.maxDistance!;
-//       }
-//       return true;
-//     });
-//   }
-
-//   // Add distance to each sitter
-//   const sittersWithDistance = filteredSitters.map(sitter => {
-//     let distance = null;
-//     if (user.lat && user.lng && sitter.lat && sitter.lng) {
-//       distance = calculateDistance(
-//         user.lat,
-//         user.lng,
-//         sitter.lat,
-//         sitter.lng
-//       );
-//     }
-
-//     return {
-//       ...sitter,
-//       distance: distance ? Math.round(distance * 100) / 100 : null, // Round to 2 decimal places
-//     };
-//   });
-
-//   // Sort by distance if user location is available
-//   if (user.lat && user.lng) {
-//     sittersWithDistance.sort((a, b) => {
-//       if (a.distance === null && b.distance === null) return 0;
-//       if (a.distance === null) return 1;
-//       if (b.distance === null) return -1;
-//       return a.distance - b.distance;
-//     });
-//   }
-
-//    let services = sitters.flatMap((sitter) =>
-//     sitter.services.map((service) => {
-//       let distance: number | null = null;
-//       if (user.lat && user.lng && sitter.lat && sitter.lng) {
-//         distance = calculateDistance(user.lat, user.lng, sitter.lat, sitter.lng);
-//       }}));
-
-
-//   return {
-//     meta: {
-//       page,
-//       limit,
-//       total: filteredSitters.length,
-//       totalPage: Math.ceil(filteredSitters.length / limit),
-//     },
-//     data: services,
-//   };
-// };
 
 const getSitterRecommendations = async (
   clientId: string,
@@ -365,7 +194,7 @@ const getSitterBoarding = async (clientId: string, searchText?: string) => {
   return services;
 };
 
-const getSitterServicesForWalking = async (clientId: string) => {
+const getSitterServicesForWalking = async (clientId: string, searchText?: string) => {
 
 
   const client = await prisma.user.findUnique({
@@ -379,6 +208,22 @@ const getSitterServicesForWalking = async (clientId: string) => {
     where: {
       serviceType: ServiceType.WALKING,
       id: { notIn: deniedServiceIds },
+      ...(searchText && {
+        OR: [
+          { name: { contains: searchText, mode: "insensitive" } },
+          { description: { contains: searchText, mode: "insensitive" } },
+          {
+            user: {
+              OR: [
+                { firstName: { contains: searchText, mode: "insensitive" } },
+                { lastName: { contains: searchText, mode: "insensitive" } },
+                { about: { contains: searchText, mode: "insensitive" } },
+                { email: { contains: searchText, mode: "insensitive" } },
+              ],
+            },
+          },
+        ],
+      }),
     },
     include: {
       user: {
@@ -403,7 +248,7 @@ const getSitterServicesForWalking = async (clientId: string) => {
 
 //  GET ALL SITTERS  SERvice for DAYCARE
 
-const getSitterServicesForDogCare = async (clientId: string) => {
+const getSitterServicesForDogCare = async (clientId: string, searchText?: string) => {
 
   const client = await prisma.user.findUnique({
     where: { id: clientId },
@@ -419,6 +264,22 @@ const getSitterServicesForDogCare = async (clientId: string) => {
     where: {
       serviceType: ServiceType.DAYCARE,
       id: { notIn: deniedServiceIds },
+      ...(searchText && {
+        OR: [
+          { name: { contains: searchText, mode: "insensitive" } },
+          { description: { contains: searchText, mode: "insensitive" } },
+          {
+            user: {
+              OR: [
+                { firstName: { contains: searchText, mode: "insensitive" } },
+                { lastName: { contains: searchText, mode: "insensitive" } },
+                { about: { contains: searchText, mode: "insensitive" } },
+                { email: { contains: searchText, mode: "insensitive" } },
+              ],
+            },
+          },
+        ],
+      }),
     },
     include: {
       user: {

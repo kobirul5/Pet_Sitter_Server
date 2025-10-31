@@ -11,7 +11,7 @@ const createClientRequestController = catchAsync(async (req: Request, res: Respo
   const clientId = req.user.id;
   const { sitterId, startTime, endTime, serviceType, price, totalPrice, dogIds } = req.body;
 
-  if (!sitterId || !startTime || !endTime || !price || !totalPrice || !dogIds?.length) {
+  if (!sitterId || !startTime  || !price || !totalPrice || !dogIds?.length) {
     return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: "Missing required fields" });
   }
 
