@@ -195,7 +195,7 @@ model Rating {
   ratingsGiven    User @relation("RatingsGiven", fields: [ratingsGivenId], references: [id], onDelete: Cascade)
   ratingsReceived User @relation("RatingsReceived", fields: [ratingsReceivedId], references: [id], onDelete: Cascade)
 
-  @@unique([ratingsGivenId, ratingsReceivedId])
+  // @@unique([ratingsGivenId, ratingsReceivedId])
   @@map("ratings")
 }
 
@@ -212,7 +212,7 @@ model PetRating {
   ratingsPetGiven    User @relation("RatingsPetGiven", fields: [ratingsGivenId], references: [id], onDelete: Cascade)
   ratingsPetReceived User @relation("RatingsPetReceived", fields: [ratingsReceivedId], references: [id], onDelete: Cascade)
 
-  @@unique([ratingsGivenId, ratingsReceivedId])
+  // @@unique([ratingsGivenId, ratingsReceivedId])
   @@map("petRatings")
 }
 

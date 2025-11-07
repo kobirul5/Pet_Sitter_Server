@@ -19,8 +19,21 @@ const createReviewClinetAndDog = catchAsync(async (req, res) => {
   });
 });
 
+const createReviewSitter = catchAsync(async (req, res) => {
+  const sitterData = req.body;
 
+  const userId = req.user.id;
+
+  const result = await reviewService.createReviewSitter({ sitterData, userId });
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Review created successfully',
+    data: result,
+  });
+});
 
 export const reviewController = {
   createReviewClinetAndDog,
+  createReviewSitter,
 };

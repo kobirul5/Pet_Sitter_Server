@@ -13,5 +13,11 @@ auth(),
 reviewController.createReviewClinetAndDog,
 );
 
+router.post(
+'/review-sitter',
+auth(),
+// validateRequest(reviewValidation.createSchema),
+reviewController.createReviewSitter,
+);
 
 export const reviewRoutes = router;

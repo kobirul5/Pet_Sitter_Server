@@ -76,6 +76,44 @@ const createIntoDb = async ({ clientData, petData, sitterId }: IReview) => {
   }
 };
 
+const createReviewSitter = async ({ sitterData, userId }: { sitterData: any; userId: string }) => {
+console.log("Sitter Data:", sitterData);
+
+  const sitterExists = await prisma.user.findFirst({
+    where: {
+      id: sitterData.sitterId,
+    },
+  });
+  if (!sitterExists) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Sitter not found");
+  }
+
+  try {
+    const sitterRating = await prisma.rating.create({
+      data: {
+        ratingsGivenId: userId,  // user giving the rating as sitter
+        ratingsReceivedId: sitterData.sitterId,  // sitter being rated
+        review: sitterData.review,
+        rating: sitterData.rating,
+      },
+      include: {
+        ratingsGiven: {select: { firstName: true, lastName: true , email: true,  profileImage: true }},
+        ratingsReceived: {select: { firstName: true, lastName: true , email: true,  profileImage: true }},
+      },
+    });
+
+    return sitterRating;
+  } catch (error) {
+    console.error("Error creating sitter rating:", error);
+    // You can handle Prisma or DB errors here as needed
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to create sitter rating"
+    );
+  }
+};
+
 export const reviewService = {
   createIntoDb,
+  createReviewSitter,
 };
