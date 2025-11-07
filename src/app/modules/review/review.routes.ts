@@ -20,4 +20,10 @@ auth(),
 reviewController.createReviewSitter,
 );
 
+ router.get(
+'/:id',
+auth(),
+reviewController.getUserOrSitterReviews,
+);
+
 export const reviewRoutes = router;

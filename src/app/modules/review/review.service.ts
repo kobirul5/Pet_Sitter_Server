@@ -77,7 +77,7 @@ const createIntoDb = async ({ clientData, petData, sitterId }: IReview) => {
 };
 
 const createReviewSitter = async ({ sitterData, userId }: { sitterData: any; userId: string }) => {
-console.log("Sitter Data:", sitterData);
+
 
   const sitterExists = await prisma.user.findFirst({
     where: {
@@ -102,6 +102,21 @@ console.log("Sitter Data:", sitterData);
       },
     });
 
+    const totalRatings = await prisma.rating.aggregate({
+      where: { ratingsReceivedId: sitterData.sitterId },
+      _avg: { rating: true },
+    });
+
+    console.log("Total Ratings Average:", totalRatings._avg.rating);
+    const totalRatingValue = Number(totalRatings._avg.rating?.toFixed(1)) || 0;
+
+    const userUpdate =  await prisma.user.update({
+      where: { id: sitterData.sitterId },
+      data: {
+        totalRating: totalRatingValue,
+      },
+    });
+
     return sitterRating;
   } catch (error) {
     console.error("Error creating sitter rating:", error);
@@ -113,7 +128,37 @@ console.log("Sitter Data:", sitterData);
   }
 };
 
+const getUserOrSitterReviews = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+const reviews = await prisma.rating.findMany({
+    where: {
+      ratingsReceivedId: userId,
+    },
+    include: {
+      ratingsGiven: { select: { firstName: true, lastName: true, profileImage: true, email: true } },
+    },
+})
+
+const averageRatingData = await prisma.rating.aggregate({
+    where: { ratingsReceivedId: userId },
+    _avg: { rating: true },
+  });
+
+  const averageRating = Number(averageRatingData._avg.rating?.toFixed(1)) || 0;
+
+
+
+  return {  averageRating ,reviews };
+
+
+
+}
+
 export const reviewService = {
   createIntoDb,
   createReviewSitter,
+  getUserOrSitterReviews,
 };

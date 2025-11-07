@@ -33,7 +33,20 @@ const createReviewSitter = catchAsync(async (req, res) => {
   });
 });
 
+const getUserOrSitterReviews = catchAsync(async (req, res) => {
+  const userId = req.params.id;
+
+  const result = await reviewService.getUserOrSitterReviews(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Reviews fetched successfully',
+    data: result,
+  });
+});
+
 export const reviewController = {
   createReviewClinetAndDog,
   createReviewSitter,
+  getUserOrSitterReviews,
 };
