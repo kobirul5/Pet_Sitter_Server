@@ -206,7 +206,17 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     include: {
 
       client: true,
-      dogs: true,
+      dogs: {
+        include: {
+          dog: {
+            select: {
+              name: true,
+              breed: true,
+              images: true,
+            }
+          }
+        }
+      },
 
     },
   });
@@ -222,7 +232,17 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     },
     include: {
       client: true,
-      dogs: true,
+      dogs: {
+        include: {
+          dog: {
+            select: {
+              name: true,
+              breed: true,
+              images: true,
+            }
+          }
+        }
+      },
     },
   });
   const completedRequests = await prisma.clientRequest.findMany({
@@ -236,7 +256,17 @@ const getServiceForSitterRequests = async (sitterId: string) => {
     },
     include: {
       client: true,
-      dogs: true,
+      dogs: {
+        include: {
+          dog: {
+            select: {
+              name: true,
+              breed: true,
+              images: true,
+            }
+          }
+        }
+      },
     },
   });
 
