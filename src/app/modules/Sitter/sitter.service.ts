@@ -397,19 +397,7 @@ const rateSitter = async (
     throw new ApiError(httpStatus.BAD_REQUEST, "You cannot rate yourself");
   }
 
-  // Check if already rated
-  const existingRating = await prisma.rating.findUnique({
-    where: {
-      ratingsGivenId_ratingsReceivedId: {
-        ratingsGivenId,
-        ratingsReceivedId: ratingData.ratingsReceivedId,
-      },
-    },
-  });
 
-  if (existingRating) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "You have already rated this sitter");
-  }
 
   // Validate rating value
   if (ratingData.rating < 1 || ratingData.rating > 5) {
