@@ -4,6 +4,7 @@ import validateRequest from '../../middlewares/validateRequest';
 import { paymentController } from './payment.controller';
 import { paymentValidation } from './payment.validation';
 import { handleStripeWebhook } from './payment.webhook';
+import { UserRole } from '@prisma/client';
 
 const router = express.Router();
 
@@ -31,5 +32,11 @@ router.get("/get-all-payments", auth(), paymentController.getAllPayment);
 
 router.get("/get-my-payments", auth(), paymentController.getMyPayments);
 
+//
+router.post(
+  "/create-stripe-account",
+  auth(UserRole.Sitter),
+  paymentController.createStripeAccount
+);
 
 export const paymentRoutes = router;

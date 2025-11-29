@@ -5,6 +5,8 @@ import prisma from "../../../shared/prisma";
 import stripe from "../../../shared/stripe";
 import httpStatus from "http-status";
 import { notificationService } from "../notification/notification.service";
+import config from "../../../config";
+import { jwtHelpers } from "../../../helpars/jwtHelpers";
 
 
 interface IPaymentIntent {
@@ -291,10 +293,56 @@ const getMyPayments = async (userId: string) => {
   });
   return result;
 }
+// create stripe
+const createStripeAccount = async (userToken: string) => {
+  try {
+    const decodedToken = jwtHelpers.verifyToken(
+      userToken,
+      config.jwt.jwt_secret!
+    );
 
+    const user = await prisma.user.findUnique({
+      where: { id: decodedToken.id },
+    });
+
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    }
+
+    const account = await stripe.accounts.create({
+      type: "express",
+      country: "US",
+      email: user.email || undefined,
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: decodedToken.id },
+      data: {
+        stripeAccountId: account.id,
+      },
+    });
+
+    const accountLink = await stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: `${config.client.url}/payment-refresh`,
+      return_url: `${config.client.url}/payment-success`,
+      type: "account_onboarding",
+    });
+
+    return accountLink.url;
+  } catch (error) {
+    console.error("Error creating Stripe account:", error);
+    throw error;
+  }
+};
 export const paymentService = {
   createPaymentIntent,
   createCard,
   getAllPayments,
-  getMyPayments
+  getMyPayments,
+  createStripeAccount
 };

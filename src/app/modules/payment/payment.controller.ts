@@ -61,11 +61,28 @@ const getMyPayments = catchAsync(async (req, res) => {
   });
 });
 
+//
+const createStripeAccount = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization;
+    // const decodedToken = jwtHelpers.verifyToken(token!, config.jwt.jwt_secret!);
+
+    const accountLink = await paymentService.createStripeAccount(token!);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Stripe account creation link generated",
+      data: { url: accountLink },
+    });
+  }
+);
 
 export const paymentController = {
   createPayment,
   createCard,
   getAllPayment,
-  getMyPayments
+  getMyPayments,
+  createStripeAccount
 
 };
