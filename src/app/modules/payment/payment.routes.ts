@@ -39,6 +39,8 @@ router.post(
   paymentController.createStripeAccount
 );
 router.get("/dashboard-link", auth(UserRole.Sitter), paymentController.getTaskerDashboardLink);
+router.patch("/release-fund/:requestId", auth(UserRole.Sitter), paymentController.releaseSitterFund);
+
 
 
 export const paymentRoutes = router;

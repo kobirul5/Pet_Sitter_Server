@@ -89,13 +89,25 @@ const getTaskerDashboardLink = catchAsync(async (req, res) => {
   });
 });
 
+const releaseSitterFund = catchAsync(async (req: Request, res: Response) => {
+  const { requestId } = req.params;
+  const transfer = await paymentService.releaseSitterFund(req.user.id, requestId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Tasker fund released successfully",
+    data: transfer,
+  });
+});
+
 export const paymentController = {
   createPayment,
   createCard,
   getAllPayment,
   getMyPayments,
   createStripeAccount,
-  getTaskerDashboardLink
+  getTaskerDashboardLink,
+  releaseSitterFund
   
 
 };

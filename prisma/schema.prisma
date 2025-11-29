@@ -172,7 +172,7 @@ model ClientRequest {
   updatedAt DateTime @updatedAt
 }
 
-/// Pivot table for many-to-many
+// Pivot table for many-to-many
 model RequestDog {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   requestId String @db.ObjectId
@@ -271,6 +271,7 @@ model Payment {
   method        PaymentMethod  @default(CARD)
   methodCardId  String
   paymentStatus PaymentStatus @default(PENDING)
+  sitterPaymentStatus  PaymentStatus @default(PENDING)
 
   transactionId String?   @unique
   paidAt        DateTime?

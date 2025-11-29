@@ -358,11 +358,111 @@ const getTaskerDashboardLink = async (userId: string) => {
 
   return loginLink.url;
 };
+
+// const releaseTaskerFund = async (userId: string, orderId: string) => {
+//   const order = await prisma.order.findUnique({ where: { id: orderId } });
+//   if (!order) throw new ApiError(httpStatus.NOT_FOUND, "Order not found");
+
+//   if (order.taskerReceiveStatus === "COMPLETED")
+//     throw new ApiError(httpStatus.BAD_REQUEST, "Tasker fund already released");
+
+//   const tasker = await prisma.user.findUnique({ where: { id: order.userId } });
+//    const customer = await prisma.user.findUnique({ where: { id: order.customerId } });
+//   if (!tasker || !tasker.stripeAccountId)
+//     throw new ApiError(httpStatus.BAD_REQUEST, "Tasker Stripe account not found");
+
+//   // ✅ Stripe transfer
+//   const transfer = await stripe.transfers.create({
+//     amount: Math.round(order.taskerReceivedAmount! * 100),
+//     currency: "usd",
+//     destination: tasker.stripeAccountId,
+//     metadata: { orderId: order.id, releasedBy: userId },
+//   });
+
+//   // Update order status
+//   await prisma.order.update({
+//     where: { id: order.id },
+//     data: { taskerReceiveStatus: "COMPLETED" },
+//   });
+
+
+//   return {
+//     message: "✅ Fund released successfully",
+//     transfer,
+//   };
+// };
+
+const releaseSitterFund = async (userId: string, requestId: string) => {
+  // Fetch request
+  const request = await prisma.clientRequest.findUnique({
+    where: { id: requestId },
+  });
+
+  if (!request) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Request not found");
+  }
+
+  const payment = await prisma.payment.findFirst({
+    where: { requestId: requestId },
+  });
+
+  if (payment?.sitterPaymentStatus === "COMPLETED") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Sitter fund already released");
+  }
+
+  // Fetch sitter
+  const sitter = await prisma.user.findUnique({
+    where: { id: request.sitterId },
+  });
+
+  if (!sitter || !sitter.stripeAccountId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Sitter Stripe account not found");
+  }
+
+  // -----------------------------
+  // 💰 Calculate payout (91%)
+  // -----------------------------
+  const sitterAmount = request.totalPrice * 0.91; // sitter gets 91%
+  const platformFee = request.totalPrice * 0.09;  // you keep 9%
+
+  // -----------------------------
+  // 🔁 Stripe Transfer
+  // -----------------------------
+  const transfer = await stripe.transfers.create({
+    amount: Math.round(sitterAmount * 100), // cents
+    currency: "usd",
+    destination: sitter.stripeAccountId,
+    metadata: {
+      requestId: request.id,
+      releasedBy: userId,
+      platformFee: platformFee,
+    },
+  });
+
+  // Update payout status
+  await prisma.clientRequest.update({
+    where: { id: request.id },
+    data: {
+      paymentStatus: "COMPLETED",
+    },
+  });
+
+  return {
+    message: "Fund released successfully",
+    sitterAmount,
+    platformFee,
+    transfer,
+  };
+};
+ 
+
+
 export const paymentService = {
   createPaymentIntent,
   createCard,
   getAllPayments,
   getMyPayments,
   createStripeAccount,
-  getTaskerDashboardLink
+  getTaskerDashboardLink,
+  releaseSitterFund
 };
