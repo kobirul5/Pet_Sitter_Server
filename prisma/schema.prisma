@@ -45,6 +45,7 @@ model User {
   about          String?  @default("")
   deniedServices String[] @default([]) @db.ObjectId
   stripeAccountId String?
+  stripeAccountUrl String?
 
   sitterProfile SitterProfile?
 

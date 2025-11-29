@@ -339,10 +339,30 @@ const createStripeAccount = async (userToken: string) => {
     throw error;
   }
 };
+
+const getTaskerDashboardLink = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user || !user.stripeAccountId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Stripe account not found!");
+  }
+
+  const loginLink = await stripe.accounts.createLoginLink(user.stripeAccountId);
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { stripeAccountUrl: loginLink.url },
+  });
+
+  return loginLink.url;
+};
 export const paymentService = {
   createPaymentIntent,
   createCard,
   getAllPayments,
   getMyPayments,
-  createStripeAccount
+  createStripeAccount,
+  getTaskerDashboardLink
 };

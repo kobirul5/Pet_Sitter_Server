@@ -78,11 +78,24 @@ const createStripeAccount = catchAsync(
   }
 );
 
+
+const getTaskerDashboardLink = catchAsync(async (req, res) => {
+  const result = await paymentService.getTaskerDashboardLink(req.user.id);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Tasker dashboard link generated",
+    data: result,
+  });
+});
+
 export const paymentController = {
   createPayment,
   createCard,
   getAllPayment,
   getMyPayments,
-  createStripeAccount
+  createStripeAccount,
+  getTaskerDashboardLink
+  
 
 };
