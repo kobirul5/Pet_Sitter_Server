@@ -7,6 +7,7 @@ import httpStatus from "http-status";
 import { notificationService } from "../notification/notification.service";
 import config from "../../../config";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
+import { get } from "lodash";
 
 
 interface IPaymentIntent {
@@ -485,6 +486,7 @@ const checkStripeAccountStatus = async (userId: string) => {
     //   });
     //   onboardingUrl = accountLink.url;
     // }
+    onboardingUrl = await getTaskerDashboardLink(userId);
 
     return {
       status: isComplete ? "complete" : "incomplete",
