@@ -456,6 +456,51 @@ const releaseSitterFund = async (userId: string, requestId: string) => {
 };
  
 
+const checkStripeAccountStatus = async (userId: string) => {
+  try {
+    // Find user
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user || !user.stripeAccountId) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Stripe account not found");
+    }
+
+    // Fetch Stripe account details
+    const account = await stripe.accounts.retrieve(user.stripeAccountId);
+
+    // Check if account is fully activated
+    const isComplete = account.charges_enabled && account.payouts_enabled;
+
+    let onboardingUrl: string | null = null;
+
+    // If account incomplete, generate new onboarding link
+    // if (!isComplete) {
+    //   const accountLink = await stripe.accountLinks.create({
+    //     account: account.id,
+    //     refresh_url: `${config.client.url}/payment-refresh`,
+    //     return_url: `${config.client.url}/payment-success`,
+    //     type: "account_onboarding",
+    //   });
+    //   onboardingUrl = accountLink.url;
+    // }
+
+    return {
+      status: isComplete ? "complete" : "incomplete",
+      details: {
+        chargesEnabled: account.charges_enabled,
+        payoutsEnabled: account.payouts_enabled,
+      },
+      onboardingUrl, // null if complete, else new onboarding link
+    };
+  } catch (error) {
+    console.error("Error checking Stripe account status:", error);
+    throw error;
+  }
+};
+
+
 
 export const paymentService = {
   createPaymentIntent,
@@ -464,5 +509,6 @@ export const paymentService = {
   getMyPayments,
   createStripeAccount,
   getTaskerDashboardLink,
-  releaseSitterFund
+  releaseSitterFund,
+  checkStripeAccountStatus
 };

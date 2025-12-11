@@ -38,6 +38,7 @@ router.post(
   auth(UserRole.Sitter),
   paymentController.createStripeAccount
 );
+router.get("/check-stripe-status", auth(UserRole.Sitter), paymentController.checkStripeAccountStatus);
 router.get("/dashboard-link", auth(UserRole.Sitter), paymentController.getTaskerDashboardLink);
 router.patch("/release-fund/:requestId", auth(UserRole.Sitter), paymentController.releaseSitterFund);
 

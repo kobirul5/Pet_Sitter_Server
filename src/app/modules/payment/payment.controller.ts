@@ -100,6 +100,17 @@ const releaseSitterFund = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// check stripe account status
+const checkStripeAccountStatus = catchAsync(async (req: Request, res: Response) => {
+  const status = await paymentService.checkStripeAccountStatus(req.user.id);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Stripe account status",
+    data: status,
+  });
+});
+
 export const paymentController = {
   createPayment,
   createCard,
@@ -107,7 +118,7 @@ export const paymentController = {
   getMyPayments,
   createStripeAccount,
   getTaskerDashboardLink,
-  releaseSitterFund
-  
+  releaseSitterFund,
+  checkStripeAccountStatus
 
 };
