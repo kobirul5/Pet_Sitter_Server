@@ -14,6 +14,35 @@ const createIntoDb = async ({ clientData, petData, sitterId }: IReview) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "Pet data is required");
   }
 
+  const [existingClientRating, existingPetRating] = await Promise.all([
+    prisma.rating.findFirst({
+      where: {
+        ratingsGivenId: sitterId,
+        ratingsReceivedId: clientData.clientId,
+      },
+    }),
+    prisma.petRating.findFirst({
+      where: {
+        ratingsGivenId: sitterId,
+        ratingsReceivedId: petData.dogId,
+      },
+    }),
+  ]);
+
+  if (existingClientRating) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      "You have already reviewed this client"
+    );
+  }
+
+  if (existingPetRating) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      "You have already reviewed this dog"
+    );
+  }
+
   try {
     const [petRating, clientRating] = await Promise.all([
       prisma.petRating.create({
@@ -86,6 +115,24 @@ const createReviewSitter = async ({ sitterData, userId }: { sitterData: any; use
   });
   if (!sitterExists) {
     throw new ApiError(httpStatus.NOT_FOUND, "Sitter not found");
+  }
+
+  if (userId === sitterData.sitterId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "You cannot review yourself");
+  }
+
+  const existingSitterRating = await prisma.rating.findFirst({
+    where: {
+      ratingsGivenId: userId,
+      ratingsReceivedId: sitterData.sitterId,
+    },
+  });
+
+  if (existingSitterRating) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      "You have already reviewed this sitter"
+    );
   }
 
   try {
