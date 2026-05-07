@@ -515,43 +515,44 @@ const changeSitterStatus = async ({ userId, serviceStatus }: { userId: string; s
     throw new ApiError(httpStatus.BAD_REQUEST, "Only sitters can change status");
   }
 
-  const serviceStatusType = Object.values(ServiceType);
-  if (!serviceStatusType.includes(serviceStatus)) {
+  const allowedServiceStatus: ServiceType[] = [ServiceType.BOARDING, ServiceType.WALKING, ServiceType.DAYCARE];
+  if (!allowedServiceStatus.includes(serviceStatus)) {
     throw new ApiError(httpStatus.BAD_REQUEST, `Invalid service status ${ServiceType.BOARDING} or ${ServiceType.WALKING} or ${ServiceType.DAYCARE} required `);
   }
 
-  const services = await prisma.service.findFirst({
+  const selectedService = await prisma.service.findFirst({
     where: { serviceType: serviceStatus },
   });
 
-  if(!services){
+  if(!selectedService){
     throw new ApiError(httpStatus.BAD_REQUEST, "Service not found");
   }
 
-  // const result = await prisma.user.update({
-  //   where: { id: userId },
-  //   data: {
-  //     serviceId: services.id,
-  //     serviceType: serviceStatus
-  //   },
-  //   include: {
-  //     services: true
-  //   }
-  // });
-
-  const result = await prisma.service.create({
-    data: {
-      name: services.name,
-      description: services.description,
-      price: services.price,
-      serviceType: serviceStatus, // ensure DB column matches spelling
-      userId: userId,
-    },
+  const existingService = await prisma.service.findFirst({
+    where: { userId },
   });
 
+  const serviceData = {
+    name: selectedService.name,
+    description: selectedService.description,
+    price: selectedService.price,
+    serviceType: serviceStatus,
+  };
+
+  const result = existingService
+    ? await prisma.service.update({
+        where: { id: existingService.id },
+        data: serviceData,
+      })
+    : await prisma.service.create({
+        data: {
+          ...serviceData,
+          userId,
+        },
+      });
 
   return result;
-}
+};
 
 export const UserService = {
   getMyProfile,
