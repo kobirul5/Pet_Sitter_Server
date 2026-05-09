@@ -246,6 +246,7 @@ export function setupWebSocket(server: Server) {
 
               return {
                 clientRequestId: cr.id,
+                isCompleted: cr.status === "COMPLETED" ? true : false,
                 user: otherUser,
                 lastMessage: lastChat,
               };
