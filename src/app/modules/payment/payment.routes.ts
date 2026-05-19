@@ -32,6 +32,18 @@ router.get("/get-all-payments", auth(), paymentController.getAllPayment);
 
 router.get("/get-my-payments", auth(), paymentController.getMyPayments);
 
+router.get(
+  "/stripe-connect-accounts",
+  // auth(UserRole.Admin),
+  paymentController.getAllStripeConnectAccounts
+);
+
+router.get(
+  "/stripe-transactions",
+  // auth(UserRole.Admin),
+  paymentController.getStripeTransactions
+);
+
 //
 router.post(
   "/create-stripe-account",

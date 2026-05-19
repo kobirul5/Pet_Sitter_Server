@@ -61,6 +61,42 @@ const getMyPayments = catchAsync(async (req, res) => {
   });
 });
 
+const getAllStripeConnectAccounts = catchAsync(async (req: Request, res: Response) => {
+  const limit = req.query.limit ? Number(req.query.limit) : 100;
+  const startingAfter = req.query.startingAfter as string | undefined;
+
+  const result = await paymentService.getAllStripeConnectAccounts(
+    Number.isNaN(limit) ? 100 : limit,
+    startingAfter
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Stripe Connect accounts retrieved successfully",
+    data: result,
+  });
+});
+
+const getStripeTransactions = catchAsync(async (req: Request, res: Response) => {
+  const limit = req.query.limit ? Number(req.query.limit) : 100;
+  const startingAfter = req.query.startingAfter as string | undefined;
+  const connectedAccountId = req.query.connectedAccountId as string | undefined;
+
+  const result = await paymentService.getStripeTransactions(
+    Number.isNaN(limit) ? 100 : limit,
+    startingAfter,
+    connectedAccountId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Stripe transactions retrieved successfully",
+    data: result,
+  });
+});
+
 //
 const createStripeAccount = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -116,6 +152,8 @@ export const paymentController = {
   createCard,
   getAllPayment,
   getMyPayments,
+  getAllStripeConnectAccounts,
+  getStripeTransactions,
   createStripeAccount,
   getTaskerDashboardLink,
   releaseSitterFund,

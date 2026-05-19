@@ -294,6 +294,67 @@ const getMyPayments = async (userId: string) => {
   });
   return result;
 }
+
+const getAllStripeConnectAccounts = async (limit = 100, startingAfter?: string) => {
+  const accounts = await stripe.accounts.list({
+    limit,
+    ...(startingAfter ? { starting_after: startingAfter } : {}),
+  });
+
+  return {
+    accounts: accounts.data.map((account) => ({
+      id: account.id,
+      type: account.type,
+      country: account.country,
+      email: account.email,
+      businessType: account.business_type,
+      chargesEnabled: account.charges_enabled,
+      payoutsEnabled: account.payouts_enabled,
+      detailsSubmitted: account.details_submitted,
+      created: account.created,
+      defaultCurrency: account.default_currency,
+    })),
+    hasMore: accounts.has_more,
+    nextStartingAfter: accounts.data.length
+      ? accounts.data[accounts.data.length - 1].id
+      : null,
+  };
+};
+
+const getStripeTransactions = async (
+  limit = 100,
+  startingAfter?: string,
+  connectedAccountId?: string
+) => {
+  const transactions = await stripe.balanceTransactions.list(
+    {
+      limit,
+      ...(startingAfter ? { starting_after: startingAfter } : {}),
+    },
+    connectedAccountId ? { stripeAccount: connectedAccountId } : undefined
+  );
+
+  return {
+    transactions: transactions.data.map((transaction) => ({
+      id: transaction.id,
+      amount: transaction.amount / 100,
+      currency: transaction.currency,
+      fee: transaction.fee / 100,
+      net: transaction.net / 100,
+      type: transaction.type,
+      status: transaction.status,
+      source: transaction.source,
+      description: transaction.description,
+      created: transaction.created,
+      availableOn: transaction.available_on,
+      reportingCategory: transaction.reporting_category,
+    })),
+    hasMore: transactions.has_more,
+    nextStartingAfter: transactions.data.length
+      ? transactions.data[transactions.data.length - 1].id
+      : null,
+  };
+};
 // create stripe
 const createStripeAccount = async (userToken: string) => {
   try {
@@ -309,6 +370,8 @@ const createStripeAccount = async (userToken: string) => {
     if (!user) {
       throw new ApiError(httpStatus.NOT_FOUND, "User not found");
     }
+    
+    console.log("Creating Stripe account for user:", user.id, user.email);
 
     const account = await stripe.accounts.create({
       type: "express",
@@ -319,6 +382,8 @@ const createStripeAccount = async (userToken: string) => {
         transfers: { requested: true },
       },
     });
+
+    console.log("Stripe account created:", account);
 
     await prisma.user.update({
       where: { id: decodedToken.id },
@@ -509,6 +574,8 @@ export const paymentService = {
   createCard,
   getAllPayments,
   getMyPayments,
+  getAllStripeConnectAccounts,
+  getStripeTransactions,
   createStripeAccount,
   getTaskerDashboardLink,
   releaseSitterFund,
