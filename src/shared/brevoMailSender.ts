@@ -10,8 +10,8 @@ const emailSender = async (email: string, html: string, subject: string) => {
   try {
     const payload = {
       sender: {
-        name: "Fur Seasons",
-        email: "johnchen0213@gmail.com"
+        name: "Pet Sitter",
+        email: "kobirul7k@gmail.com"
       },
       to: [
         {

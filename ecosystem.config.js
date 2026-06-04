@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: 'johnchen0213-server',
+            name: 'Pet_Sitter_server-server',
             script: './dist/server.js',
             args: 'start',
             env: {
