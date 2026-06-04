@@ -72,6 +72,7 @@ Store all secrets in `.env` and do not commit it. Important env variables includ
 - `JWT_SECRET`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
+- `FIREBASE_PROJECT_ID`
 - `FIREBASE_PRIVATE_KEY`
 - `FIREBASE_CLIENT_EMAIL`
 - `EMAIL`
@@ -81,6 +82,8 @@ Store all secrets in `.env` and do not commit it. Important env variables includ
 - `TWILIO_AUTH_TOKEN`
 - `DO_SPACE_ACCESS_KEY`
 - `DO_SPACE_SECRET_KEY`
+
+You can also provide a full Firebase service account JSON via `FIREBASE_SERVICE_ACCOUNT_JSON`.
 
 ## Notes
 
