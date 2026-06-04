@@ -11,7 +11,7 @@
       "name": "auth",
       "item": [
         {
-          "name": "login",
+          "name": "POST /auth/login",
           "request": {
             "method": "POST",
             "header": [
@@ -125,7 +125,7 @@
           ]
         },
         {
-          "name": "logout",
+          "name": "POST /auth/logout",
           "request": {
             "method": "POST",
             "header": [],
@@ -232,7 +232,7 @@
           ]
         },
         {
-          "name": "forgot_password with email",
+          "name": "POST /auth/forgot-password",
           "request": {
             "method": "POST",
             "header": [
@@ -330,7 +330,7 @@
           ]
         },
         {
-          "name": "EmailVerify otp",
+          "name": "POST /auth/email-verification-otp",
           "request": {
             "method": "POST",
             "header": [
@@ -428,7 +428,7 @@
           ]
         },
         {
-          "name": "otp_verification",
+          "name": "POST /auth/verify-otp",
           "request": {
             "method": "POST",
             "header": [
@@ -537,7 +537,7 @@
           ]
         },
         {
-          "name": "reset_password",
+          "name": "POST /auth/reset-password",
           "request": {
             "method": "POST",
             "header": [
@@ -646,7 +646,7 @@
           ]
         },
         {
-          "name": "change-password",
+          "name": "PUT /auth/change-password",
           "request": {
             "method": "PUT",
             "header": [
@@ -755,7 +755,7 @@
           ]
         },
         {
-          "name": "delete_account",
+          "name": "DELETE /auth/delete-user",
           "request": {
             "method": "DELETE",
             "header": [
@@ -865,7 +865,7 @@
       "name": "user",
       "item": [
         {
-          "name": "register",
+          "name": "POST /auth/register",
           "request": {
             "method": "POST",
             "header": [
@@ -970,7 +970,7 @@
           ]
         },
         {
-          "name": "update_profile",
+          "name": "PUT /users/update-profile",
           "request": {
             "method": "PUT",
             "header": [
@@ -1090,7 +1090,7 @@
           ]
         },
         {
-          "name": "my_profile",
+          "name": "GET /users/profile",
           "request": {
             "method": "GET",
             "header": [
@@ -1179,7 +1179,7 @@
           ]
         },
         {
-          "name": "Upload_Profile_Image",
+          "name": "PUT /users/update-profileImage",
           "request": {
             "method": "PUT",
             "header": [
@@ -1288,7 +1288,7 @@
           ]
         },
         {
-          "name": "toggle-notification-status",
+          "name": "PATCH /users/toggle-notification-status",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1393,7 +1393,7 @@
           ]
         },
         {
-          "name": "toggle-online-status",
+          "name": "PATCH /users/toggle-online-status",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1489,7 +1489,7 @@
           ]
         },
         {
-          "name": "sitter profile",
+          "name": "PATCH /users/sitter/profile",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1596,7 +1596,7 @@
           ]
         },
         {
-          "name": "sitter/profile-details",
+          "name": "PATCH /users/sitter/profile-details",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1703,7 +1703,7 @@
           ]
         },
         {
-          "name": "sitter services",
+          "name": "POST /users/sitter/services",
           "request": {
             "method": "POST",
             "header": [
@@ -1810,7 +1810,7 @@
           ]
         },
         {
-          "name": "Update sitter service",
+          "name": "PATCH /users/sitter/services/689527d21887bfd0f0ca3eda",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1909,7 +1909,7 @@
           ]
         },
         {
-          "name": "Delete sitter service",
+          "name": "DELETE /users/sitter/services/6895362dfd2b7a2dc2757825",
           "request": {
             "method": "DELETE",
             "header": [
@@ -2004,7 +2004,7 @@
       "name": "Reviews",
       "item": [
         {
-          "name": "Create review",
+          "name": "POST /reviews/review-sitter",
           "request": {
             "method": "POST",
             "header": [
@@ -2037,7 +2037,7 @@
           "response": []
         },
         {
-          "name": "Create review Copy",
+          "name": "GET /reviews/68ddeb334190fd226b3ff416",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -2073,7 +2073,7 @@
           "response": []
         },
         {
-          "name": "client  and dog review",
+          "name": "POST /reviews/review-client-and-dog",
           "request": {
             "method": "POST",
             "header": [
@@ -2111,7 +2111,7 @@
       "name": "Image Uploads",
       "item": [
         {
-          "name": "Chat Images Upload",
+          "name": "POST /chats/upload-images",
           "request": {
             "method": "POST",
             "header": [
@@ -2148,7 +2148,7 @@
           "response": []
         },
         {
-          "name": "User Profile Image Upload",
+          "name": "POST /users/update-profileImage",
           "request": {
             "method": "POST",
             "header": [
@@ -2187,7 +2187,7 @@
       "name": "Video Uploads",
       "item": [
         {
-          "name": "Profile Short Video upload",
+          "name": "POST /users/demo-class",
           "request": {
             "method": "POST",
             "header": [
@@ -2226,7 +2226,7 @@
       "name": "sitters",
       "item": [
         {
-          "name": "get",
+          "name": "GET /sitters/68c8426b3ba95bf5184e65e1",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -2320,7 +2320,7 @@
           ]
         },
         {
-          "name": "get all service user",
+          "name": "GET /sitters/sitter/all-services",
           "request": {
             "method": "GET",
             "header": [
@@ -2408,7 +2408,7 @@
           ]
         },
         {
-          "name": "Review from user for sitter",
+          "name": "POST /sitters/rate",
           "request": {
             "method": "POST",
             "header": [
@@ -2504,7 +2504,7 @@
       "name": "Dog Profile",
       "item": [
         {
-          "name": "Create Dog Profile",
+          "name": "POST /dogs",
           "request": {
             "method": "POST",
             "header": [
@@ -2545,7 +2545,7 @@
           "response": []
         },
         {
-          "name": "Delete Dog Profile Copy",
+          "name": "DELETE /dogs/68d994844190fd226b3ff3e1",
           "request": {
             "method": "DELETE",
             "header": [
@@ -2574,7 +2574,7 @@
       "name": "Client Home",
       "item": [
         {
-          "name": "Recommendations",
+          "name": "GET /sitters/recommendations",
           "request": {
             "method": "GET",
             "header": [
@@ -2661,7 +2661,7 @@
           ]
         },
         {
-          "name": "services all services",
+          "name": "GET /sitters/sitter/all-services",
           "request": {
             "method": "GET",
             "header": [
@@ -2756,7 +2756,7 @@
           ]
         },
         {
-          "name": "boarding-services",
+          "name": "GET /sitters/sitter/boarding-services",
           "request": {
             "method": "GET",
             "header": [
@@ -2852,7 +2852,7 @@
           ]
         },
         {
-          "name": "walk-services",
+          "name": "GET /sitters/sitter/walk-services",
           "request": {
             "method": "GET",
             "header": [
@@ -2947,7 +2947,7 @@
           ]
         },
         {
-          "name": "dog-care-services",
+          "name": "GET /sitters/sitter/dog-care-services",
           "request": {
             "method": "GET",
             "header": [
@@ -2978,7 +2978,7 @@
           "response": []
         },
         {
-          "name": "send services  request",
+          "name": "POST /service-requests/send-request",
           "request": {
             "method": "POST",
             "header": [
@@ -3083,7 +3083,7 @@
           ]
         },
         {
-          "name": "deny-request",
+          "name": "PUT /service-requests/deny-request/68b38ddecac16010a437a59a",
           "request": {
             "method": "PUT",
             "header": [
@@ -3189,7 +3189,7 @@
           ]
         },
         {
-          "name": "Sitter Details",
+          "name": "GET /sitters/68b329317462e9d671725714",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -3288,7 +3288,7 @@
           ]
         },
         {
-          "name": "Get my pets",
+          "name": "GET /dogs/my-pets",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -3387,7 +3387,7 @@
           ]
         },
         {
-          "name": "accepted-requests-for Payment",
+          "name": "GET /service-requests/accepted-requests-for-client",
           "request": {
             "method": "GET",
             "header": [
@@ -3411,7 +3411,7 @@
           "response": []
         },
         {
-          "name": "accepted-requests-for Payment Copy",
+          "name": "GET /service-requests/accept-service-payment",
           "request": {
             "method": "GET",
             "header": [
@@ -3435,7 +3435,7 @@
           "response": []
         },
         {
-          "name": "Ongoing and upcoming",
+          "name": "GET /service-requests/upcoming-and-ongoing-requests-for-client",
           "request": {
             "method": "GET",
             "header": [
@@ -3464,7 +3464,7 @@
       "name": "Service Requests",
       "item": [
         {
-          "name": "Boarding get",
+          "name": "GET /service-requests",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -3570,7 +3570,7 @@
           ]
         },
         {
-          "name": "Ongoing",
+          "name": "GET /service-requests/on-going-service",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -3677,7 +3677,7 @@
           ]
         },
         {
-          "name": "Sitter Rating",
+          "name": "POST /sitters/rate",
           "request": {
             "method": "POST",
             "header": [
@@ -3715,7 +3715,7 @@
       "name": "Sitter Home",
       "item": [
         {
-          "name": "get service Request",
+          "name": "GET /service-requests/sitter",
           "request": {
             "method": "GET",
             "header": [
@@ -3739,7 +3739,7 @@
           "response": []
         },
         {
-          "name": "update-status",
+          "name": "PUT /service-requests/update-status",
           "request": {
             "method": "PUT",
             "header": [
@@ -3772,7 +3772,7 @@
           "response": []
         },
         {
-          "name": "Change Service",
+          "name": "PATCH /users/change-sitter-service",
           "request": {
             "method": "PATCH",
             "header": [
@@ -3867,7 +3867,7 @@
           "response": []
         },
         {
-          "name": "get All Notifications",
+          "name": "Get All Notifications",
           "request": {
             "method": "GET",
             "header": [
@@ -3878,13 +3878,13 @@
               }
             ],
             "url": {
-              "raw": "{{url}}/notifications/all-noitifications",
+              "raw": "{{url}}/notifications/all-notifications",
               "host": [
                 "{{url}}"
               ],
               "path": [
                 "notifications",
-                "all-noitifications"
+                "all-notifications"
               ]
             }
           },
@@ -3915,7 +3915,7 @@
           "response": []
         },
         {
-          "name": "Delete Notifications By Id",
+          "name": "Delete Notification By Id",
           "request": {
             "method": "DELETE",
             "header": [
@@ -3926,14 +3926,14 @@
               }
             ],
             "url": {
-              "raw": "{{url}}/notifications/delete/68b61e2e75ca51eb64114282",
+              "raw": "{{url}}/notifications/delete/:id",
               "host": [
                 "{{url}}"
               ],
               "path": [
                 "notifications",
                 "delete",
-                "68b61e2e75ca51eb64114282"
+                ":id"
               ]
             }
           },
@@ -3949,7 +3949,7 @@
       "name": "Client Requests",
       "item": [
         {
-          "name": "get dog and client details",
+          "name": "GET /service-requests/client-and-dog/68b33631f8021589e261c97e",
           "request": {
             "method": "GET",
             "header": [
@@ -3974,7 +3974,7 @@
           "response": []
         },
         {
-          "name": "send review",
+          "name": "POST /service-requests/review-client-and-dog",
           "request": {
             "method": "POST",
             "header": [
@@ -4007,7 +4007,7 @@
           "response": []
         },
         {
-          "name": "accept client request",
+          "name": "PUT /service-requests/update-status",
           "request": {
             "method": "PUT",
             "header": [
@@ -4040,7 +4040,7 @@
           "response": []
         },
         {
-          "name": "client requests",
+          "name": "GET /service-requests/accepted-requests-for-client",
           "request": {
             "method": "GET",
             "header": [
@@ -4064,7 +4064,7 @@
           "response": []
         },
         {
-          "name": "client request ongoing status",
+          "name": "PUT /service-requests/ongoing",
           "request": {
             "method": "PUT",
             "header": [
@@ -4093,7 +4093,7 @@
       "name": "payment",
       "item": [
         {
-          "name": "Payment",
+          "name": "POST /payments",
           "request": {
             "method": "POST",
             "header": [
@@ -4125,7 +4125,7 @@
           "response": []
         },
         {
-          "name": "Payment Copy",
+          "name": "POST /payments/create-stripe-account",
           "request": {
             "method": "POST",
             "header": [
@@ -4149,7 +4149,7 @@
           "response": []
         },
         {
-          "name": "Create Card",
+          "name": "POST /payments/create-card",
           "request": {
             "method": "POST",
             "header": [
@@ -4182,7 +4182,7 @@
           "response": []
         },
         {
-          "name": "Get all payments",
+          "name": "GET /payments/get-all-payments",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4218,7 +4218,7 @@
           "response": []
         },
         {
-          "name": "Get all payments Copy",
+          "name": "GET /payments/get-my-payments",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4254,7 +4254,7 @@
           "response": []
         },
         {
-          "name": "check-stripe-status",
+          "name": "GET /payments/check-stripe-status",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4295,7 +4295,7 @@
       "name": "admin",
       "item": [
         {
-          "name": "add service",
+          "name": "POST /users/sitter/services",
           "request": {
             "method": "POST",
             "header": [
@@ -4329,7 +4329,7 @@
           "response": []
         },
         {
-          "name": "Delete service",
+          "name": "DELETE /users/services/delete/68c5ebeb23de59d0ec7f4dcb",
           "request": {
             "method": "DELETE",
             "header": [
@@ -4357,7 +4357,7 @@
       ]
     },
     {
-      "name": "New Request",
+      "name": "GET /service-requests/sitter",
       "request": {
         "method": "GET",
         "header": [
@@ -4381,7 +4381,7 @@
       "response": []
     },
     {
-      "name": "create",
+      "name": "POST /users/sitter/services",
       "request": {
         "method": "POST",
         "header": [
