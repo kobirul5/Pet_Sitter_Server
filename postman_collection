@@ -1,0 +1,4472 @@
+{
+  "info": {
+    "_postman_id": "4b593004-68c5-4e8d-b532-7a6b5c392df3",
+    "name": "Pet Sitter Server (Postman)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47095753",
+    "_collection_link": "https://go.postman.co/collection/47095753-4b593004-68c5-4e8d-b532-7a6b5c392df3?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"mushfiqurrahmanasif10@gmail.com\",\r\n    \"password\": \"12345678\"\r\n    // \"fcmToken\": \"optional-fcm-token\" // not mendatory \r\n}\r\n// {\r\n//     \"email\": \"asekaymustafa@gmail.com\",\r\n//     \"password\": \"12345678\"\r\n//     // \"fcmToken\": \"optional-fcm-token\" // not mendatory \r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/login",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"email\": \"tanvir.tutor@gmail.com\",\r\n    \"password\": \"12345678\",\r\n\r\n  \"fcmToken\": \"optional-fcm-token\" // not mendatory \r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OTEwYjU4YTI2NjQ2NGQ5NmZjOGNlZCIsImVtYWlsIjoia29iaXJ1bDdrQGdtYWlsLmNvbSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzU0MzM2MTAxLCJleHAiOjE3ODU4NzIxMDF9.94vMiUIGbnA-hP-CasbbOsSlqK9jwduvg8pfluVGoV4; Path=/; HttpOnly"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "309"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"135-HEQGjMhBHgZCpPRU3UlkgprYoxw\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 Aug 2025 19:35:01 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"success\": true,\n    \"message\": \"User logged in successfully\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OTEwYjU4YTI2NjQ2NGQ5NmZjOGNlZCIsImVtYWlsIjoia29iaXJ1bDdrQGdtYWlsLmNvbSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzU0MzM2MTAxLCJleHAiOjE3ODU4NzIxMDF9.94vMiUIGbnA-hP-CasbbOsSlqK9jwduvg8pfluVGoV4\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"tanvir.tutor@gmail.com\",\r\n    \"password\": \"12345678\",\r\n\r\n  \"fcmToken\": \"optional-fcm-token\" // not mendatory \r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/logout",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"email\": \"tanvir.tutor@gmail.com\",\r\n    \"password\": \"12345678\",\r\n\r\n  \"fcmToken\": \"optional-fcm-token\" // not mendatory \r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/login",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OTEwYjU4YTI2NjQ2NGQ5NmZjOGNlZCIsImVtYWlsIjoia29iaXJ1bDdrQGdtYWlsLmNvbSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzU0MzM2MTAxLCJleHAiOjE3ODU4NzIxMDF9.94vMiUIGbnA-hP-CasbbOsSlqK9jwduvg8pfluVGoV4; Path=/; HttpOnly"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "309"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"135-HEQGjMhBHgZCpPRU3UlkgprYoxw\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 04 Aug 2025 19:35:01 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"success\": true,\n    \"message\": \"User logged in successfully\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OTEwYjU4YTI2NjQ2NGQ5NmZjOGNlZCIsImVtYWlsIjoia29iaXJ1bDdrQGdtYWlsLmNvbSIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzU0MzM2MTAxLCJleHAiOjE3ODU4NzIxMDF9.94vMiUIGbnA-hP-CasbbOsSlqK9jwduvg8pfluVGoV4\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "forgot_password with email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"asekaymustafa@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/forgot-password",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "forgot_password",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"mgdton100@gmail.com\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/auth/forgot-password",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "129"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"81-yQPyUIIR7asFCwuZM4gHHbXLcPg\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 04 Jul 2025 00:13:03 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Check your email!\",\n    \"data\": {\n        \"message\": \"Reset password OTP sent to your email successfully\",\n        \"otp\": 4097\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "EmailVerify otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"sitter@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/email-verification-otp",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "email-verification-otp"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "forgot_password",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"mgdton100@gmail.com\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{url}}/auth/forgot-password",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "129"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"81-yQPyUIIR7asFCwuZM4gHHbXLcPg\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 04 Jul 2025 00:13:03 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Check your email!\",\n    \"data\": {\n        \"message\": \"Reset password OTP sent to your email successfully\",\n        \"otp\": 4097\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "otp_verification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"asekaymustafa@gmail.com\",\r\n    \"otp\": 4982\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/verify-otp",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "verify-otp"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"mgdton100@gmail.com\",\r\n    \"otp\": 9474\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/verify-otp",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "95"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5f-xLlz5N64s84lHn0ZSbUOn+KtdGs\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 05 Jul 2025 19:13:38 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Check your email!\",\n    \"data\": {\n        \"message\": \"OTP verification successful\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "reset_password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"asekaymustafa@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/reset-password",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\":\"mgdton100@gmail.com\",\r\n    \"password\": \"test1234\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/reset-password",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "44"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"2c-EFGL7lg52uhNrgKvW15v9DXw0FQ\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 05 Jul 2025 19:31:16 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Password Reset!\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "change-password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"oldPassword\": \"123456789\",\r\n    \"newPassword\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/change-password",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "change-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"oldPassword\": \"test1234\",\r\n    \"newPassword\": \"1234567890\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/change-password",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "change-password"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "109"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"6d-hUjdGh/npfSb6DaJvwCsb5gu9SU\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 05 Jul 2025 20:46:37 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Password changed successfully\",\n    \"data\": {\n        \"message\": \"Password changed successfully\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "delete_account",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/auth/delete-user",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "delete-user"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{url}}/auth/delete-account",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "delete-account"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "57"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"39-k7LB9Ttrv4KiKX8rm7zfKT4Mg8E\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 05 Jul 2025 21:22:19 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Account deleted successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"acbed@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"firstName\": \"sittier\",\r\n    \"lastName\": \"sitter\",\r\n    \"role\": \"User\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/register",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{ \r\n\"email\": \"kobirul72k@gmail.com\",\r\n    \"password\": \"12345678\"\r\n\r\n    // \"role\": \"TUTOR\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/auth/register",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "250"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"fa-JHdz5IBRRAP3nAwCs4n+ftPq9yk\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 20:53:10 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"User Registered successfully!\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"email\": \"kobirul72k@gmail.com\",\n        \"role\": \"User\",\n        \"createdAt\": \"2025-08-07T20:53:10.094Z\",\n        \"updatedAt\": \"2025-08-07T20:53:10.094Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "update_profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n  \"phone\": \"+8801712345678\",\n  \"firstName\": \"Rahim\",\n  \"lastName\": \"Khan\",\n  \"location\": \"Dhaka\",\n  \"gender\": \"Male\",\n  \"lat\": 23.8103,\n  \"lng\": 90.4125,\n  \"serviceAvailableDates\": [\n    \"2025-08-20T00:00:00.000Z\",\n    \"2025-08-21T00:00:00.000Z\",\n    \"2025-08-22T00:00:00.000Z\"\n  ]\n}\n",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "postman-cloud:///1f071792-d54f-4790-9990-01766a9cb818",
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/users/update-profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "update-profile"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "update_profile",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "data",
+                      "value": "{\n  \"phone\": \"+8801712345678\",\n  \"firstName\": \"Md.\",\n  \"lastName\": \"Tanvir Hossain\",\n  \"location\": \"Dhaka\",\n  \"gender\": \"Male\",\n  \"lat\": 23.8103,\n  \"lng\": 90.4125\n}\n",
+                      "type": "text"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": [
+                        "postman-cloud:///1f071792-d54f-4790-9990-01766a9cb818"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/users/update-profile",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "update-profile"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "515"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"203-1xn6Lpl0puV9IeSCSgkNOf4wETc\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 21:17:14 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"User profile updated successfully\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"firstName\": \"Md.\",\n        \"lastName\": \"Tanvir Hossain\",\n        \"email\": \"kobirul72k@gmail.com\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754601432314_4fca8dac-38c7-4f9d-a428-de60a5d24945_test.jpg\",\n        \"phone\": \"+8801712345678\",\n        \"role\": \"User\",\n        \"status\": \"ACTIVE\",\n        \"location\": \"Dhaka\",\n        \"gender\": \"Male\",\n        \"createdAt\": \"2025-08-07T20:53:10.094Z\",\n        \"updatedAt\": \"2025-08-07T21:17:14.171Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "my_profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/users//profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "",
+                "profile"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "my_profile",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/users//profile",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "",
+                    "profile"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "799"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"31f-YAaDYHRRdg2qOweZ+UyY5HwAphs\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 21:18:10 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"success\": true,\n    \"message\": \"User profile retrieved successfully\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"phone\": \"+8801712345678\",\n        \"email\": \"kobirul72k@gmail.com\",\n        \"firstName\": \"Md.\",\n        \"lastName\": \"Tanvir Hossain\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754601432314_4fca8dac-38c7-4f9d-a428-de60a5d24945_test.jpg\",\n        \"expirationOtp\": \"2025-08-07T20:53:10.094Z\",\n        \"location\": \"Dhaka\",\n        \"gender\": \"Male\",\n        \"lat\": 23.8103,\n        \"lng\": 90.4125,\n        \"otp\": 0,\n        \"role\": \"User\",\n        \"isNotificationOn\": false,\n        \"isAvailable\": true,\n        \"status\": \"ACTIVE\",\n        \"createdAt\": \"2025-08-07T20:53:10.094Z\",\n        \"updatedAt\": \"2025-08-07T21:17:14.171Z\",\n        \"otpExpiresAt\": \"2025-08-07T20:53:10.094Z\",\n        \"service\": \"\",\n        \"address\": \"\",\n        \"serviceDay\": \"0\",\n        \"perDayFee\": 0,\n        \"totalRating\": 0,\n        \"totalReviews\": 0,\n        \"experience\": \"\",\n        \"about\": \"\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upload_Profile_Image",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "postman-cloud:///1f071792-d54f-4790-9990-01766a9cb818"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/users/update-profileImage",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "update-profileImage"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "my_profile Copy",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": [
+                        "postman-cloud:///1f071792-d54f-4790-9990-01766a9cb818"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{url}}/users/update-profileImage",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "update-profileImage"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "325"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"145-d+RNcG/gGki1zpgStSJFnTzXkBY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 22:05:47 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"User profile image updated successfully!\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754604345221_fe9dfc2d-d9f6-4546-8a64-c6f6e6fe8e28_test.jpg\",\n        \"createdAt\": \"2025-08-07T20:53:10.094Z\",\n        \"updatedAt\": \"2025-08-07T22:05:47.020Z\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "toggle-notification-status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isNotificationOn\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/toggle-notification-status",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "toggle-notification-status"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Upload_Profile_Image Copy",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"isNotificationOn\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/users/toggle-notification-status",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "toggle-notification-status"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "188"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"bc-B4GpxUtjfghXavo63Q3QSKGt/+4\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 22:08:11 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"User notification is now on\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"isNotificationOn\": true,\n        \"updatedAt\": \"2025-08-07T22:08:11.072Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "toggle-online-status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/users/toggle-online-status",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "toggle-online-status"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "toggle-notification-status Copy",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"isNotificationOn\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/users/toggle-online-status",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "toggle-online-status"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "175"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"af-YIrjoD0UqPDRpI0GDTZ98/3LSso\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 22:08:59 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"User is now offline\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"isAvailable\": true,\n        \"updatedAt\": \"2025-08-07T22:08:11.072Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "sitter profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"experience\": \"3 years\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/sitter/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "sitter",
+                "profile"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "toggle-online-status Copy",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"experience\": \"3 years\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/users/sitter/profile",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "sitter",
+                    "profile"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "267"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"10b-QeJnHg0qAz/ILYq+DxwI0aM8HfA\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 22:11:19 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter profile updated successfully\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"perDayFee\": 0,\n        \"experience\": \"3 years\",\n        \"about\": \"\",\n        \"location\": \"Dhaka\",\n        \"lat\": 23.8103,\n        \"lng\": 90.4125,\n        \"updatedAt\": \"2025-08-07T22:11:19.098Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "sitter/profile-details",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"experience\": \"3 years\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/sitter/profile-details",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "sitter",
+                "profile-details"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "sitter profile Copy",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"experience\": \"3 years\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/users/sitter/profile-details",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "sitter",
+                    "profile-details"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "355"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"163-I6jIcJi+88tmDO7odoE2LUbI7RE\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 22:22:22 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter profile details updated successfully\",\n    \"data\": {\n        \"id\": \"6895271e542dcd5126f75237\",\n        \"userId\": \"68951236f31dc08699c5a8a6\",\n        \"bio\": \"\",\n        \"experience\": \"3 years\",\n        \"education\": \"\",\n        \"certifications\": [],\n        \"languages\": [],\n        \"availability\": \"\",\n        \"createdAt\": \"2025-08-07T22:22:22.000Z\",\n        \"updatedAt\": \"2025-08-07T22:22:22.000Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "sitter services",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Dog Walking\",\r\n  \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\r\n  \"price\": 250\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/sitter/services",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "sitter",
+                "services"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "sitter/profile-details Copy",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Dog Walking\",\r\n  \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\r\n  \"price\": 250\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/users/sitter/services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "sitter",
+                    "services"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "342"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"156-Cfo7ZHNCqJL7wZhX7GIFtdMwNVk\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 22:25:22 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"success\": true,\n    \"message\": \"Service added successfully\",\n    \"data\": {\n        \"id\": \"689527d21887bfd0f0ca3eda\",\n        \"name\": \"Dog Walking\",\n        \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n        \"price\": 250,\n        \"userId\": \"68951236f31dc08699c5a8a6\",\n        \"createdAt\": \"2025-08-07T22:25:22.327Z\",\n        \"updatedAt\": \"2025-08-07T22:25:22.327Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update sitter service",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Dog Walking\",\r\n  \"description\": \"A 30-minute wx  lk for your dog around the neighborhood.\",\r\n  \"price\": 250\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/sitter/services/689527d21887bfd0f0ca3eda",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "sitter",
+                "services",
+                "689527d21887bfd0f0ca3eda"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "sitter services Copy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/users/sitter/services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "sitter",
+                    "services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "356"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"164-GROaxEsKykI6xwv1ZuHxF3Fyem8\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 23:07:40 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter services retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"689527d21887bfd0f0ca3eda\",\n            \"name\": \"Dog Walking\",\n            \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n            \"price\": 250,\n            \"userId\": \"68951236f31dc08699c5a8a6\",\n            \"createdAt\": \"2025-08-07T22:25:22.327Z\",\n            \"updatedAt\": \"2025-08-07T22:25:22.327Z\"\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete sitter service",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/users/sitter/services/6895362dfd2b7a2dc2757825",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "sitter",
+                "services",
+                "6895362dfd2b7a2dc2757825"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "sitter services Copy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/users/sitter/services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "users",
+                    "sitter",
+                    "services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "356"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"164-GROaxEsKykI6xwv1ZuHxF3Fyem8\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 23:07:40 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter services retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"689527d21887bfd0f0ca3eda\",\n            \"name\": \"Dog Walking\",\n            \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n            \"price\": 250,\n            \"userId\": \"68951236f31dc08699c5a8a6\",\n            \"createdAt\": \"2025-08-07T22:25:22.327Z\",\n            \"updatedAt\": \"2025-08-07T22:25:22.327Z\"\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"sitterId\": \"68ddeb334190fd226b3ff416\",\r\n    \"review\": \"Great client, easy to communicate with.\",\r\n    \"rating\": 5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/reviews/review-sitter",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reviews",
+                "review-sitter"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create review Copy",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"sitterId\": \"68ddeb334190fd226b3ff416\",\r\n    \"review\": \"Great client, easy to communicate with.\",\r\n    \"rating\": 5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/reviews/68ddeb334190fd226b3ff416",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reviews",
+                "68ddeb334190fd226b3ff416"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "client  and dog review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"petData\": {\r\n    \"dogId\": \"689fa206ed1d2e27ee61d4d9\",\r\n    \"review\": \"The sitter was very attentive and caring with my dog.\",\r\n    \"rating\": 5\r\n  },\r\n  \"clientData\": {\r\n    \"clientId\": \"689e174dca2c1f1e5d395aa5\",\r\n    \"review\": \"Great client, easy to communicate with.\",\r\n    \"rating\": 4\r\n  }\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/reviews/review-client-and-dog",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "reviews",
+                "review-client-and-dog"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Image Uploads",
+      "item": [
+        {
+          "name": "Chat Images Upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [
+                    "postman-cloud:///1f076ed6-cf13-4840-93dd-8953eaa00216",
+                    "postman-cloud:///1f070bac-1228-4ba0-8e00-273953460577"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/chats/upload-images",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "chats",
+                "upload-images"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User Profile Image Upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": "postman-cloud:///1f070bac-1228-4ba0-8e00-273953460577"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/users/update-profileImage",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "update-profileImage"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Video Uploads",
+      "item": [
+        {
+          "name": "Profile Short Video upload",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "value": "",
+                  "type": "file"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/users/demo-class",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "demo-class"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "sitters",
+      "item": [
+        {
+          "name": "get",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Dog Walking\",\r\n  \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\r\n  \"price\": 250\r\n}"
+            },
+            "url": {
+              "raw": "{{url}}/sitters/68c8426b3ba95bf5184e65e1",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "68c8426b3ba95bf5184e65e1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Recommendations Copy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/68951236f31dc08699c5a8a6",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "68951236f31dc08699c5a8a6"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1764"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"6e4-K55Gj14MauXbe3Fpp5ivH5gNo6I\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 23:51:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter details retrieved successfully\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"firstName\": \"Md.\",\n        \"lastName\": \"Tanvir Hossain\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754604345221_fe9dfc2d-d9f6-4546-8a64-c6f6e6fe8e28_test.jpg\",\n        \"location\": \"Dhaka\",\n        \"lat\": 23.8103,\n        \"lng\": 90.4125,\n        \"perDayFee\": 0,\n        \"totalRating\": 0,\n        \"totalReviews\": 0,\n        \"experience\": \"3 years\",\n        \"about\": \"\",\n        \"services\": [\n            {\n                \"id\": \"689527d21887bfd0f0ca3eda\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute wx  lk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T22:25:22.327Z\",\n                \"updatedAt\": \"2025-08-07T23:27:04.162Z\"\n            },\n            {\n                \"id\": \"68953622fd2b7a2dc2757822\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:26.080Z\",\n                \"updatedAt\": \"2025-08-07T23:26:26.080Z\"\n            },\n            {\n                \"id\": \"68953626fd2b7a2dc2757823\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:30.611Z\",\n                \"updatedAt\": \"2025-08-07T23:26:30.611Z\"\n            },\n            {\n                \"id\": \"68953629fd2b7a2dc2757824\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:33.342Z\",\n                \"updatedAt\": \"2025-08-07T23:26:33.342Z\"\n            }\n        ],\n        \"sitterProfile\": {\n            \"id\": \"6895271e542dcd5126f75237\",\n            \"userId\": \"68951236f31dc08699c5a8a6\",\n            \"bio\": \"\",\n            \"experience\": \"3 years\",\n            \"education\": \"\",\n            \"certifications\": [],\n            \"languages\": [],\n            \"availability\": \"\",\n            \"createdAt\": \"2025-08-07T22:22:22.000Z\",\n            \"updatedAt\": \"2025-08-07T22:22:22.000Z\"\n        },\n        \"ratings\": [],\n        \"averageRating\": 0\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "get all service user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/sitters/sitter/all-services",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "sitter",
+                "all-services"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Recommendations Copy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/68951236f31dc08699c5a8a6",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "68951236f31dc08699c5a8a6"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1764"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"6e4-K55Gj14MauXbe3Fpp5ivH5gNo6I\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 23:51:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter details retrieved successfully\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"firstName\": \"Md.\",\n        \"lastName\": \"Tanvir Hossain\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754604345221_fe9dfc2d-d9f6-4546-8a64-c6f6e6fe8e28_test.jpg\",\n        \"location\": \"Dhaka\",\n        \"lat\": 23.8103,\n        \"lng\": 90.4125,\n        \"perDayFee\": 0,\n        \"totalRating\": 0,\n        \"totalReviews\": 0,\n        \"experience\": \"3 years\",\n        \"about\": \"\",\n        \"services\": [\n            {\n                \"id\": \"689527d21887bfd0f0ca3eda\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute wx  lk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T22:25:22.327Z\",\n                \"updatedAt\": \"2025-08-07T23:27:04.162Z\"\n            },\n            {\n                \"id\": \"68953622fd2b7a2dc2757822\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:26.080Z\",\n                \"updatedAt\": \"2025-08-07T23:26:26.080Z\"\n            },\n            {\n                \"id\": \"68953626fd2b7a2dc2757823\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:30.611Z\",\n                \"updatedAt\": \"2025-08-07T23:26:30.611Z\"\n            },\n            {\n                \"id\": \"68953629fd2b7a2dc2757824\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:33.342Z\",\n                \"updatedAt\": \"2025-08-07T23:26:33.342Z\"\n            }\n        ],\n        \"sitterProfile\": {\n            \"id\": \"6895271e542dcd5126f75237\",\n            \"userId\": \"68951236f31dc08699c5a8a6\",\n            \"bio\": \"\",\n            \"experience\": \"3 years\",\n            \"education\": \"\",\n            \"certifications\": [],\n            \"languages\": [],\n            \"availability\": \"\",\n            \"createdAt\": \"2025-08-07T22:22:22.000Z\",\n            \"updatedAt\": \"2025-08-07T22:22:22.000Z\"\n        },\n        \"ratings\": [],\n        \"averageRating\": 0\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Review from user for sitter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"rating\": 4.5,\r\n  \"review\": \"Very friendly and took great care of my dog!\",\r\n  \"sitterId\": \"64d123abc456def789012345\"\r\n}\r\n"
+            },
+            "url": {
+              "raw": "{{url}}/sitters/rate",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "rate"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Recommendations Copy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/68951236f31dc08699c5a8a6",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "68951236f31dc08699c5a8a6"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1764"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"6e4-K55Gj14MauXbe3Fpp5ivH5gNo6I\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 07 Aug 2025 23:51:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter details retrieved successfully\",\n    \"data\": {\n        \"id\": \"68951236f31dc08699c5a8a6\",\n        \"firstName\": \"Md.\",\n        \"lastName\": \"Tanvir Hossain\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754604345221_fe9dfc2d-d9f6-4546-8a64-c6f6e6fe8e28_test.jpg\",\n        \"location\": \"Dhaka\",\n        \"lat\": 23.8103,\n        \"lng\": 90.4125,\n        \"perDayFee\": 0,\n        \"totalRating\": 0,\n        \"totalReviews\": 0,\n        \"experience\": \"3 years\",\n        \"about\": \"\",\n        \"services\": [\n            {\n                \"id\": \"689527d21887bfd0f0ca3eda\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute wx  lk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T22:25:22.327Z\",\n                \"updatedAt\": \"2025-08-07T23:27:04.162Z\"\n            },\n            {\n                \"id\": \"68953622fd2b7a2dc2757822\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:26.080Z\",\n                \"updatedAt\": \"2025-08-07T23:26:26.080Z\"\n            },\n            {\n                \"id\": \"68953626fd2b7a2dc2757823\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:30.611Z\",\n                \"updatedAt\": \"2025-08-07T23:26:30.611Z\"\n            },\n            {\n                \"id\": \"68953629fd2b7a2dc2757824\",\n                \"name\": \"Dog Walking\",\n                \"description\": \"A 30-minute walk for your dog around the neighborhood.\",\n                \"price\": 250,\n                \"userId\": \"68951236f31dc08699c5a8a6\",\n                \"createdAt\": \"2025-08-07T23:26:33.342Z\",\n                \"updatedAt\": \"2025-08-07T23:26:33.342Z\"\n            }\n        ],\n        \"sitterProfile\": {\n            \"id\": \"6895271e542dcd5126f75237\",\n            \"userId\": \"68951236f31dc08699c5a8a6\",\n            \"bio\": \"\",\n            \"experience\": \"3 years\",\n            \"education\": \"\",\n            \"certifications\": [],\n            \"languages\": [],\n            \"availability\": \"\",\n            \"createdAt\": \"2025-08-07T22:22:22.000Z\",\n            \"updatedAt\": \"2025-08-07T22:22:22.000Z\"\n        },\n        \"ratings\": [],\n        \"averageRating\": 0\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dog Profile",
+      "item": [
+        {
+          "name": "Create Dog Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n  \"name\": \"Buddy\",\n  \"gender\": \"Male\",\n  \"breed\": \"Golden Retriever\",\n  \"weight\": \"30 kg\",\n  \"vaccination\": \"Up to date\",\n  \"spayed\": \"No\",\n  \"about\": \"Friendly and energetic dog.\"\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [
+                    "postman-cloud:///1f071792-d54f-4790-9990-01766a9cb818",
+                    "postman-cloud:///1f070bac-1228-4ba0-8e00-273953460577"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/dogs",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "dogs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Dog Profile Copy",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/dogs/68d994844190fd226b3ff3e1",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "dogs",
+                "68d994844190fd226b3ff3e1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Client Home",
+      "item": [
+        {
+          "name": "Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/sitters/recommendations",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "recommendations"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Recommendations",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{tokenUser}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/recommendations",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "recommendations"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "786"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"312-5IhYZEqFrOG4pmuPD0HgyZFRXyU\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 19:00:16 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter recommendations retrieved successfully\",\n    \"meta\": {\n        \"page\": 1,\n        \"limit\": 10,\n        \"total\": 2,\n        \"totalPage\": 1\n    },\n    \"data\": [\n        {\n            \"id\": \"6897861269a3b23b71579d12\",\n            \"firstName\": \"karina\",\n            \"lastName\": \"Jahan\",\n            \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754762179729_e53e9e5c-d1af-4604-9123-99f5cfb8d143_test.jpg\",\n            \"location\": \"Rajshahi\",\n            \"lat\": 24.3745,\n            \"lng\": 88.6042,\n            \"perDayFee\": 0,\n            \"totalRating\": 0,\n            \"totalReviews\": 0,\n            \"experience\": \"\",\n            \"about\": \"\",\n            \"services\": [],\n            \"sitterProfile\": null,\n            \"distance\": null\n        },\n        {\n            \"id\": \"68978adfceb530326be7e311\",\n            \"firstName\": \"\",\n            \"lastName\": \"\",\n            \"profileImage\": \"\",\n            \"location\": \"\",\n            \"lat\": 0,\n            \"lng\": 0,\n            \"perDayFee\": 0,\n            \"totalRating\": 0,\n            \"totalReviews\": 0,\n            \"experience\": \"\",\n            \"about\": \"\",\n            \"services\": [],\n            \"sitterProfile\": null,\n            \"distance\": null\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "services all services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/sitters/sitter/all-services?search=John",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "sitter",
+                "all-services"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "John"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "services all services",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{userToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/sitter/all-services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "sitter",
+                    "all-services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "493"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1ed-jN4HWDNB5PfXe08Gjb9aI3TQefI\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 18:10:18 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Services retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"6897861269a3b23b71579d12\",\n            \"firstName\": \"karina\",\n            \"lastName\": \"Jahan\",\n            \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754762179729_e53e9e5c-d1af-4604-9123-99f5cfb8d143_test.jpg\",\n            \"serviceType\": \"DOGCARE\",\n            \"serviceAvailableDates\": []\n        },\n        {\n            \"id\": \"68978adfceb530326be7e311\",\n            \"firstName\": \"\",\n            \"lastName\": \"\",\n            \"profileImage\": \"\",\n            \"serviceType\": \"NOSERVICE\",\n            \"serviceAvailableDates\": []\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "boarding-services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/sitters/sitter/boarding-services",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "sitter",
+                "boarding-services"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "services all services Copy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{userToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/sitter/boarding-services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "sitter",
+                    "boarding-services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "406"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"196-2wDXZ65nj1/EddHUnUfar6gpJh0\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 14 Aug 2025 17:40:49 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter services retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"68978adfceb530326be7e311\",\n            \"firstName\": \"karina\",\n            \"lastName\": \"Jahan\",\n            \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754767309037_284327ea-995d-441c-a13f-b3305efbf9d1_test.jpg\",\n            \"serviceType\": \"BOARDING\",\n            \"serviceAvailableDates\": [],\n            \"about\": \"\",\n            \"email\": \"sitter2@gmail.com\"\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "walk-services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/sitters/sitter/walk-services?search=",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "sitter",
+                "walk-services"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "services all services Copy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{userToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/sitter/boarding-services",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "sitter",
+                    "boarding-services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "406"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"196-2wDXZ65nj1/EddHUnUfar6gpJh0\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 14 Aug 2025 17:40:49 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter services retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"68978adfceb530326be7e311\",\n            \"firstName\": \"karina\",\n            \"lastName\": \"Jahan\",\n            \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754767309037_284327ea-995d-441c-a13f-b3305efbf9d1_test.jpg\",\n            \"serviceType\": \"BOARDING\",\n            \"serviceAvailableDates\": [],\n            \"about\": \"\",\n            \"email\": \"sitter2@gmail.com\"\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "dog-care-services",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/sitters/sitter/dog-care-services?search=Siddique",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "sitter",
+                "dog-care-services"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Siddique"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "send services  request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n  \"sitterId\": \"68c8426b3ba95bf5184e65e1\",\r\n  \"dogIds\": [\r\n    \"68d994844190fd226b3ff3e1\"\r\n  ],\r\n  \"startTime\": \"2025-09-20T09:00:00.000Z\",\r\n  \"endTime\": \"2025-09-20T17:00:00.000Z\",\r\n  \"serviceType\": \"DAYCARE\",\r\n  \"price\": 15,\r\n  \"totalPrice\": 120\r\n}\r\n\r\n\r\n\r\n// {\r\n//   \"dogId\": \"68b8bbdfe5c45f633dae5778\",\r\n//   \"sitterId\": \"68b38ddecac16010a437a59a\",\r\n//  \"startTime\": \"2025-08-28T09:00:00.000Z\",\r\n//   \"endTime\": \"2025-08-31T15:00:00.000Z\",\r\n//   \"serviceType\": \"DAYCARE\",\r\n//   \"hourlyRate\": 14.5,\r\n//   \"totalPrice\": 116,\r\n//   \"dogs\":[ \r\n//    {\r\n//         \"id\": \"68b89fe5c1ab112837cd4780\",\r\n//         \"userId\": \"68b329407462e9d671725715\",\r\n//         \"name\": \"Buddy\",\r\n//         \"gender\": \"Male\",\r\n//         \"age\": \"\",\r\n//         \"breed\": \"Golden Retriever\",\r\n//         \"weight\": \"30 kg\",\r\n//         \"vaccination\": \"Up to date\",\r\n//         \"spayed\": \"No\",\r\n//         \"about\": \"Friendly and energetic dog.\",\r\n//         \"images\": [\r\n//             \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1756575240558_4f931ed2-50c7-4daf-aa1b-4ee290407410_test.jpg\",\r\n//             \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1756575240558_a0f494bf-51c1-46a0-adbe-79eb0e5554eb_test_(4).jpg\"\r\n//         ],\r\n//         \"createdAt\": \"2025-08-30T17:34:02.729Z\",\r\n//         \"updatedAt\": \"2025-08-30T17:34:02.729Z\"\r\n//     }\r\n//     ]\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/service-requests/send-request",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "send-request"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "services all services Copy",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{tokenUser}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"sitterId\": \"68978adfceb530326be7e311\",\r\n  \"startTime\": \"2025-08-20T09:00:00.000Z\",\r\n  \"endTime\": \"2025-08-20T17:00:00.000Z\",\r\n  \"serviceType\": \"DOGCARE\",\r\n  \"hourlyRate\": 15.5,\r\n  \"totalPrice\": 124\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/sitters/send-request",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "send-request"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "441"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1b9-0T/HaBE4CDyMx+3XwwA0//dH8/w\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 18:56:38 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"success\": true,\n    \"message\": \"Client request created successfully\",\n    \"data\": {\n        \"id\": \"689799e692d3bcd39c6ef029\",\n        \"clientId\": \"68978b0aceb530326be7e312\",\n        \"sitterId\": \"68978adfceb530326be7e311\",\n        \"startTime\": \"2025-08-20T09:00:00.000Z\",\n        \"endTime\": \"2025-08-20T17:00:00.000Z\",\n        \"serviceType\": \"DOGCARE\",\n        \"hourlyRate\": 15.5,\n        \"totalPrice\": 124,\n        \"status\": \"PENDING\",\n        \"createdAt\": \"2025-08-09T18:56:38.154Z\",\n        \"updatedAt\": \"2025-08-09T18:56:38.154Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "deny-request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"dogId\": \"68b8bbdfe5c45f633dae5778\",\r\n  \"sitterId\": \"68b38ddecac16010a437a59a\",\r\n \"startTime\": \"2025-08-28T09:00:00.000Z\",\r\n  \"endTime\": \"2025-08-31T15:00:00.000Z\",\r\n  \"serviceType\": \"DOGCARE\",\r\n  \"hourlyRate\": 14.5,\r\n  \"totalPrice\": 116,\r\n  \"dogs\":[ \r\n   {\r\n        \"id\": \"68b89fe5c1ab112837cd4780\",\r\n        \"userId\": \"68b329407462e9d671725715\",\r\n        \"name\": \"Buddy\",\r\n        \"gender\": \"Male\",\r\n        \"age\": \"\",\r\n        \"breed\": \"Golden Retriever\",\r\n        \"weight\": \"30 kg\",\r\n        \"vaccination\": \"Up to date\",\r\n        \"spayed\": \"No\",\r\n        \"about\": \"Friendly and energetic dog.\",\r\n        \"images\": [\r\n            \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1756575240558_4f931ed2-50c7-4daf-aa1b-4ee290407410_test.jpg\",\r\n            \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1756575240558_a0f494bf-51c1-46a0-adbe-79eb0e5554eb_test_(4).jpg\"\r\n        ],\r\n        \"createdAt\": \"2025-08-30T17:34:02.729Z\",\r\n        \"updatedAt\": \"2025-08-30T17:34:02.729Z\"\r\n    }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/service-requests/deny-request/68b38ddecac16010a437a59a",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "deny-request",
+                "68b38ddecac16010a437a59a"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "services all services Copy",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{tokenUser}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"sitterId\": \"68978adfceb530326be7e311\",\r\n  \"startTime\": \"2025-08-20T09:00:00.000Z\",\r\n  \"endTime\": \"2025-08-20T17:00:00.000Z\",\r\n  \"serviceType\": \"DOGCARE\",\r\n  \"hourlyRate\": 15.5,\r\n  \"totalPrice\": 124\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{url}}/sitters/send-request",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "send-request"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "441"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1b9-0T/HaBE4CDyMx+3XwwA0//dH8/w\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 18:56:38 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"success\": true,\n    \"message\": \"Client request created successfully\",\n    \"data\": {\n        \"id\": \"689799e692d3bcd39c6ef029\",\n        \"clientId\": \"68978b0aceb530326be7e312\",\n        \"sitterId\": \"68978adfceb530326be7e311\",\n        \"startTime\": \"2025-08-20T09:00:00.000Z\",\n        \"endTime\": \"2025-08-20T17:00:00.000Z\",\n        \"serviceType\": \"DOGCARE\",\n        \"hourlyRate\": 15.5,\n        \"totalPrice\": 124,\n        \"status\": \"PENDING\",\n        \"createdAt\": \"2025-08-09T18:56:38.154Z\",\n        \"updatedAt\": \"2025-08-09T18:56:38.154Z\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Sitter Details",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"sitterId\": \"68978adfceb530326be7e311\",\r\n  \"startTime\": \"2025-08-20T09:00:00.000Z\",\r\n  \"endTime\": \"2025-08-20T17:00:00.000Z\",\r\n  \"serviceType\": \"DOGCARE\",\r\n  \"hourlyRate\": 15.5,\r\n  \"totalPrice\": 124\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/sitters/68b329317462e9d671725714",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "68b329317462e9d671725714"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "services all services Copy 2",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{tokenUser}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/68978adfceb530326be7e311",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "68978adfceb530326be7e311"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "502"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1f6-DjuWVfio8/n7Hhs9B8Dfmv6bN+w\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 19:21:59 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter details retrieved successfully\",\n    \"data\": {\n        \"id\": \"68978adfceb530326be7e311\",\n        \"firstName\": \"karina\",\n        \"lastName\": \"Jahan\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754767309037_284327ea-995d-441c-a13f-b3305efbf9d1_test.jpg\",\n        \"location\": \"Rajshahi\",\n        \"lat\": 24.3745,\n        \"lng\": 88.6042,\n        \"perDayFee\": 0,\n        \"totalRating\": 0,\n        \"totalReviews\": 0,\n        \"experience\": \"\",\n        \"about\": \"\",\n        \"services\": [],\n        \"sitterProfile\": null,\n        \"ratings\": [],\n        \"averageRating\": 0\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get my pets",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"sitterId\": \"68978adfceb530326be7e311\",\r\n  \"startTime\": \"2025-08-20T09:00:00.000Z\",\r\n  \"endTime\": \"2025-08-20T17:00:00.000Z\",\r\n  \"serviceType\": \"DOGCARE\",\r\n  \"hourlyRate\": 15.5,\r\n  \"totalPrice\": 124\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/dogs/my-pets",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "dogs",
+                "my-pets"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "services all services Copy 2",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{tokenUser}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/sitters/68978adfceb530326be7e311",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "sitters",
+                    "68978adfceb530326be7e311"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "502"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1f6-DjuWVfio8/n7Hhs9B8Dfmv6bN+w\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 19:21:59 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Sitter details retrieved successfully\",\n    \"data\": {\n        \"id\": \"68978adfceb530326be7e311\",\n        \"firstName\": \"karina\",\n        \"lastName\": \"Jahan\",\n        \"profileImage\": \"https://nyc3.digitaloceanspaces.com/freashstart/fresh-start/1754767309037_284327ea-995d-441c-a13f-b3305efbf9d1_test.jpg\",\n        \"location\": \"Rajshahi\",\n        \"lat\": 24.3745,\n        \"lng\": 88.6042,\n        \"perDayFee\": 0,\n        \"totalRating\": 0,\n        \"totalReviews\": 0,\n        \"experience\": \"\",\n        \"about\": \"\",\n        \"services\": [],\n        \"sitterProfile\": null,\n        \"ratings\": [],\n        \"averageRating\": 0\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "accepted-requests-for Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/service-requests/accepted-requests-for-client",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "accepted-requests-for-client"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "accepted-requests-for Payment Copy",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/service-requests/accept-service-payment",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "accept-service-payment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ongoing and upcoming",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/service-requests/upcoming-and-ongoing-requests-for-client",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "upcoming-and-ongoing-requests-for-client"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Service Requests",
+      "item": [
+        {
+          "name": "Boarding get",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n  \"name\": \"Buddy\",\n  \"gender\": \"Male\",\n  \"breed\": \"Golden Retriever\",\n  \"weight\": \"30 kg\",\n  \"vaccination\": \"Up to date\",\n  \"spayed\": \"No\",\n  \"about\": \"Friendly and energetic dog.\"\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [
+                    "postman-cloud:///1f071792-d54f-4790-9990-01766a9cb818",
+                    "postman-cloud:///1f070bac-1228-4ba0-8e00-273953460577"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/service-requests",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{tokenUser}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/service-requests",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "service-requests"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "862"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"35e-6D0A2a1fyxgDpldmZ4Ws7YanKsY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 22:04:19 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Service requests retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"6897bf22577ac1559319f879\",\n            \"clientId\": \"68978b0aceb530326be7e312\",\n            \"dogId\": \"6897a9489d611cd1057a2fef\",\n            \"sitterId\": \"68978adfceb530326be7e311\",\n            \"startTime\": \"2025-08-20T09:00:00.000Z\",\n            \"endTime\": \"2025-08-20T17:00:00.000Z\",\n            \"serviceType\": \"DOGCARE\",\n            \"hourlyRate\": 15.5,\n            \"totalPrice\": 124,\n            \"status\": \"ACCEPTED\",\n            \"createdAt\": \"2025-08-09T21:35:30.230Z\",\n            \"updatedAt\": \"2025-08-09T21:35:30.230Z\"\n        },\n        {\n            \"id\": \"6897c40cbbae529e16459d30\",\n            \"clientId\": \"68978b0aceb530326be7e312\",\n            \"dogId\": \"6897a9489d611cd1057a2fef\",\n            \"sitterId\": \"68978adfceb530326be7e311\",\n            \"startTime\": \"2025-08-20T09:00:00.000Z\",\n            \"endTime\": \"2025-08-20T17:00:00.000Z\",\n            \"serviceType\": \"DOGCARE\",\n            \"hourlyRate\": 15.5,\n            \"totalPrice\": 124,\n            \"status\": \"COMPLETED\",\n            \"createdAt\": \"2025-08-09T21:56:28.624Z\",\n            \"updatedAt\": \"2025-08-09T21:56:28.624Z\"\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Ongoing",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n  \"name\": \"Buddy\",\n  \"gender\": \"Male\",\n  \"breed\": \"Golden Retriever\",\n  \"weight\": \"30 kg\",\n  \"vaccination\": \"Up to date\",\n  \"spayed\": \"No\",\n  \"about\": \"Friendly and energetic dog.\"\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [
+                    "postman-cloud:///1f071792-d54f-4790-9990-01766a9cb818",
+                    "postman-cloud:///1f070bac-1228-4ba0-8e00-273953460577"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{url}}/service-requests/on-going-service",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "on-going-service"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "New Request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{tokenUser}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{url}}/service-requests",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "service-requests"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "862"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"35e-6D0A2a1fyxgDpldmZ4Ws7YanKsY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 09 Aug 2025 22:04:19 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Service requests retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"6897bf22577ac1559319f879\",\n            \"clientId\": \"68978b0aceb530326be7e312\",\n            \"dogId\": \"6897a9489d611cd1057a2fef\",\n            \"sitterId\": \"68978adfceb530326be7e311\",\n            \"startTime\": \"2025-08-20T09:00:00.000Z\",\n            \"endTime\": \"2025-08-20T17:00:00.000Z\",\n            \"serviceType\": \"DOGCARE\",\n            \"hourlyRate\": 15.5,\n            \"totalPrice\": 124,\n            \"status\": \"ACCEPTED\",\n            \"createdAt\": \"2025-08-09T21:35:30.230Z\",\n            \"updatedAt\": \"2025-08-09T21:35:30.230Z\"\n        },\n        {\n            \"id\": \"6897c40cbbae529e16459d30\",\n            \"clientId\": \"68978b0aceb530326be7e312\",\n            \"dogId\": \"6897a9489d611cd1057a2fef\",\n            \"sitterId\": \"68978adfceb530326be7e311\",\n            \"startTime\": \"2025-08-20T09:00:00.000Z\",\n            \"endTime\": \"2025-08-20T17:00:00.000Z\",\n            \"serviceType\": \"DOGCARE\",\n            \"hourlyRate\": 15.5,\n            \"totalPrice\": 124,\n            \"status\": \"COMPLETED\",\n            \"createdAt\": \"2025-08-09T21:56:28.624Z\",\n            \"updatedAt\": \"2025-08-09T21:56:28.624Z\"\n        }\n    ],\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Sitter Rating",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"ratingsReceivedId\": \"68b38ddecac16010a437a59a\",\r\n  \"rating\": 4,\r\n  \"review\": \"Very caring and punctual sitter. Highly recommended!\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/sitters/rate",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sitters",
+                "rate"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sitter Home",
+      "item": [
+        {
+          "name": "get service Request",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/service-requests/sitter",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "sitter"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update-status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"requestId\": \"68bdc694825a4379969ab522\",\r\n  \"status\":\"ONGOING\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/service-requests/update-status",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "update-status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Service",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"serviceStatus\": \"BOARDING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/change-sitter-service",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "change-sitter-service"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Create Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"New Message\",\r\n  \"body\": \"You have received a new message from John Doe.\",\r\n//   \"type\": \"REMINDER\",\r\n//   \"data\": \" \",\r\n  \"receiverId\": \"68b38dadcac16010a437a599\"\r\n//   \"fcmToken\": \"fVvZbCjsq0V3hS1j3FgRtx:APA91bGd7H8XkZ...\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/notifications/save",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                "save"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/notifications/get",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                "get"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get All Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{tokenUser}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/notifications/all-noitifications",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                "all-noitifications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Notifications",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/notifications/read",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                "read"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Notifications By Id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/notifications/delete/68b61e2e75ca51eb64114282",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "notifications",
+                "delete",
+                "68b61e2e75ca51eb64114282"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": []
+    },
+    {
+      "name": "Client Requests",
+      "item": [
+        {
+          "name": "get dog and client details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/service-requests/clinet-and-dog/68b33631f8021589e261c97e",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "clinet-and-dog",
+                "68b33631f8021589e261c97e"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "send review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"requestId\": \"68b8bbf4e5c45f633dae5779\",\r\n    \"client\": {\r\n        \"rating\": 4.5,\r\n        \"review\": \"Very friendly and professional sitter.\"\r\n    },\r\n    \"dog\": {\r\n        \"rating\": 5.0,\r\n        \"review\": \"Client was very cooperative and dog was happy!\"\r\n    }\r\n}\r\n\r\n// {\r\n//   \"petData\": {\r\n//     \"dogId\": \"68b49701cac16010a437a59b\",\r\n//     \"review\": \"The sitter was very attentive and caring with my dog.\",\r\n//     \"rating\": 5\r\n//   },\r\n//   \"clientData\": {\r\n//     \"clientId\": \"68b38dadcac16010a437a599\",\r\n//     \"review\": \"Great client, easy to communicate with.\",\r\n//     \"rating\": 4\r\n//   }\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/service-requests/review-client-and-dog",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "review-client-and-dog"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "accept client request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"requestId\": \"68c897a03577a88d61eab60e\",\r\n  \"status\":\"DENIED\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/service-requests/update-status",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "update-status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "client requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/service-requests/accepted-requests-for-client",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "accepted-requests-for-client"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "client request ongoing status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/service-requests/ongoing",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "service-requests",
+                "ongoing"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "payment",
+      "item": [
+        {
+          "name": "Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"requestId\": \"68b8bbf4e5c45f633dae5779\",\r\n  \"paymentMethod\": \"pm_card_visa\"\r\n}\r\n\r\n\r\n// {\r\n//   \"requestId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"userId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"methodCardId\": \"4242424242424242\",\r\n//   \"currency\": \"USD\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/payments",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "payments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Payment Copy",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/payments/create-stripe-account",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "payments",
+                "create-stripe-account"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YTBiYzBhNTY2MWMzMTQwMWM5NWYzOSIsImVtYWlsIjoiIiwicm9sZSI6IlNpdHRlciIsImlhdCI6MTc1NTM2NDQ0NywiZXhwIjoxNzg2OTAwNDQ3fQ.bEUVRhhq-UGHKQ-F3ICvnxh8uC75dH25URO_thkRX0I",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"payment_method\": \"pm_card_visa\",\r\n    \"isDefult\": true\r\n}\r\n\r\n\r\n// {\r\n//   \"requestId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"userId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"methodCardId\": \"4242424242424242\",\r\n//   \"currency\": \"USD\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/payments/create-card",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "payments",
+                "create-card"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all payments",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZTlkMWI1ZTQ2MzcyMDJhYmYzYTMyYiIsImVtYWlsIjoiIiwicm9sZSI6IlNpdHRlciIsImlhdCI6MTc3ODAzNzk3OSwiZXhwIjoxODA5NTczOTc5fQ.P6aShRMoOQB3UKcRujNujtG_EeUOtoZIgX518uefWxQ",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"payment_method\": \"pm_card_visa\",\r\n    \"isDefult\": true\r\n}\r\n\r\n\r\n// {\r\n//   \"requestId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"userId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"methodCardId\": \"4242424242424242\",\r\n//   \"currency\": \"USD\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/payments/get-all-payments",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "payments",
+                "get-all-payments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all payments Copy",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YTBiYzBhNTY2MWMzMTQwMWM5NWYzOSIsImVtYWlsIjoiIiwicm9sZSI6IlNpdHRlciIsImlhdCI6MTc1NTM2NDQ0NywiZXhwIjoxNzg2OTAwNDQ3fQ.bEUVRhhq-UGHKQ-F3ICvnxh8uC75dH25URO_thkRX0I",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"payment_method\": \"pm_card_visa\",\r\n    \"isDefult\": true\r\n}\r\n\r\n\r\n// {\r\n//   \"requestId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"userId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"methodCardId\": \"4242424242424242\",\r\n//   \"currency\": \"USD\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/payments/get-my-payments",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "payments",
+                "get-my-payments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "check-stripe-status",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{setterToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"payment_method\": \"pm_card_visa\",\r\n    \"isDefult\": true\r\n}\r\n\r\n\r\n// {\r\n//   \"requestId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"userId\": \"68a0c2840ffecdd9c3ecf0be\",\r\n//   \"methodCardId\": \"4242424242424242\",\r\n//   \"currency\": \"USD\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/payments/check-stripe-status",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "payments",
+                "check-stripe-status"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "add service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "// {\r\n//     \"name\": \"Dog Walking Service\",\r\n//     \"description\": \"30-minute walk for your dog in your neighborhood\",\r\n//     \"price\": 15.5,\r\n//     \"serviceType\": \"WALKING\"\r\n//   }\r\n\r\n// {\r\n//     \"name\": \"Boarding Service\",\r\n//     \"description\": \"Overnight stay for your dog in a safe environment\",\r\n//     \"price\": 16.5,\r\n//     \"serviceType\": \"BOARDING\"\r\n// }\r\n\r\n//  {\r\n//     \"name\": \"Dog Walking Service\",\r\n//     \"description\": \"30-minute walk for your dog in your neighborhood\",\r\n//     \"price\": 15,\r\n//     \"serviceType\": \"WALKING\"\r\n//   }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/users/sitter/services",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "sitter",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete service",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/users/services/delete/68c5ebeb23de59d0ec7f4dcb",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "users",
+                "services",
+                "delete",
+                "68c5ebeb23de59d0ec7f4dcb"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{setterToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{url}}/service-requests/sitter",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "service-requests",
+            "sitter"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{setterToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "// {\r\n//   \"name\": \"Home Cleaning\",\r\n//   \"description\": \"Professional home cleaning service\",\r\n//   \"price\": 50.0,\r\n//   \"serviceType\": \"DAYCARE\"\r\n// }\r\n\r\n\r\n// {\r\n//   \"name\": \"Home Cleaning\",\r\n//   \"description\": \"Professional home cleaning service\",\r\n//   \"price\": 50.0,\r\n//   \"serviceType\": \"BOARDING\"\r\n// }\r\n\r\n{\r\n  \"name\": \"Home Cleaning\",\r\n  \"description\": \"Professional home cleaning service\",\r\n  \"price\": 50.0,\r\n  \"serviceType\": \"WALKING\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/users/sitter/services",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "users",
+            "sitter",
+            "services"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": "http://localhost:5006/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "tokenUser",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Njk5Nzk5OGNkNzZiMDRjMmUxMjFmNyIsImVtYWlsIjoibWdkdG9uMTAwQGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzUxNzUwNTUzLCJleHAiOjE3NTQzNDI1NTN9.Jn1PbLq1xUvWXA2HtNy0epqDIaxZlwClpwpKXCcwHa4",
+      "type": "string"
+    },
+    {
+      "key": "setterToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWUxNzRkY2EyYzFmMWU1ZDM5NWFhNSIsImVtYWlsIjoiKzg4MDE4MTEyMjMzNDQiLCJyb2xlIjoiVXNlciIsImlhdCI6MTc1NTE5Mjg4MywiZXhwIjoxNzg2NzI4ODgzfQ.VkDYnwGe3lt3U-2bezJ8lnEVCpJaCrZuZ4Y7uLGNiNM",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OTc4YWRmY2ViNTMwMzI2YmU3ZTMxMSIsImVtYWlsIjoiKzg4MDE4MTEyMjMzNDQiLCJyb2xlIjoiU2l0dGVyIiwiaWF0IjoxNzU1MjE5NTk5LCJleHAiOjE3ODY3NTU1OTl9.fs3wEVQ1Iohbkv3ynwRUYyBdL_FXoOpxThDTBLQT_Bk",
+      "type": "string"
+    }
+  ]
+}
