@@ -38,12 +38,6 @@ router.get(
   SitterController.getSitterServicesForDogCareController
 );
 
-// router.get(
-//   "/onboarding",
-//   auth(),
-//   SitterController.getSitterBoarding
-// )
-
 // Get sitter details by ID
 router.get(
   "/:sitterId",
@@ -57,30 +51,6 @@ router.post(
   auth(),
   SitterController.rateSitter
 );
-
-
-// // Update sitter rating
-// router.patch(
-//   "/:sitterId/rate",
-//   auth(),
-//   SitterController.updateSitterRating
-// );
-
-// // Delete sitter rating
-// router.delete(
-//   "/:sitterId/rate",
-//   auth(),
-//   SitterController.deleteSitterRating
-// );
-
-// // Get user's ratings
-// router.get(
-//   "/ratings/my",
-//   auth(),
-//   SitterController.getUserRatings
-// );
-
-
 
 
 export const SitterRoutes = router; 

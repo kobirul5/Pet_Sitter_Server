@@ -1,13 +1,11 @@
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiErrors";
-import { NotificationType, Prisma, ServiceType, UserRole } from "@prisma/client";
+import { NotificationType, ServiceType } from "@prisma/client";
 import httpStatus from "http-status";
 import { jwtHelpers } from "../../../helpars/jwtHelpers";
-import { omit } from "lodash";
+
 import {
   ISitterFilters,
-  ISitterRecommendation,
-  ISitterDetail,
   ICreateRating,
 } from "./sitter.interface";
 import config from "../../../config";
@@ -141,65 +139,6 @@ const getAllServices = async (clientId: string, searchText?: string) => {
   return services;
 };
 
-
-// const getSitterBoarding = async (clientId: string, searchText?: string) => {
-//   // 1. Get denied services for this client
-//   const client = await prisma.user.findUnique({
-//     where: { id: clientId },
-//     select: { deniedServices: true },
-//   });
-
-//   console.log(client, "client");
-
-//   const deniedServiceIds = client?.deniedServices || [];
-
-//   // 2. Fetch BOARDING services excluding denied ones, with optional search
-//   const services = await prisma.service.findMany({
-//     where: {
-//       serviceType: ServiceType.BOARDING,
-//       id: { notIn: deniedServiceIds },
-//       ...(searchText && {
-//         OR: [
-//           { name: { contains: searchText, mode: "insensitive" } },
-//           { description: { contains: searchText, mode: "insensitive" } },
-//           {
-//             user: {
-//               OR: [
-//                 { firstName: { contains: searchText, mode: "insensitive" } },
-//                 { lastName: { contains: searchText, mode: "insensitive" } },
-//                 { about: { contains: searchText, mode: "insensitive" } },
-//                 { email: { contains: searchText, mode: "insensitive" } },
-//               ],
-//             },
-//           },
-//         ],
-//       }),
-//     },
-//     include: {
-//       user: {
-//         select: {
-//           id: true,
-//           firstName: true,
-//           lastName: true,
-//           profileImage: true,
-//           serviceAvailableDates: true,
-//           sitterProfile: true,
-//           about: true,
-//           email: true,
-//           totalRating: true,
-//           ratingsReceived: true,
-//         },
-//       },
-//     },
-//   });
-
-
-  
-
-//   console.log(services, "services");
-
-//   return services;
-// };
 
 const getSitterBoarding = async (clientId: string, searchText?: string) => {
   // 1. Get denied services

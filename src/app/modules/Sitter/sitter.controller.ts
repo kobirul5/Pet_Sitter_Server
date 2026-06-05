@@ -4,8 +4,6 @@ import { SitterService } from "./sitter.service";
 import { ISitterFilters, ICreateRating } from "./sitter.interface";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import ApiError from "../../../errors/ApiErrors";
-import { ServiceType } from "@prisma/client";
 
 // Get sitter recommendations
 const getSitterRecommendations = catchAsync(

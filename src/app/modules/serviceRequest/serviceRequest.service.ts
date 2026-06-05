@@ -523,8 +523,8 @@ const createReviewClientAndDog = async ({ requestId, client, dog }: { requestId:
   //   data: {
   //     review: dog.review,
   //     rating: dog.rating,
-  //     ratingsGivenId: serviceReuestData.clientId,
-  //     ratingsReceivedId: serviceReuestData.dogId,
+  //     ratingsGivenId: serviceRequestData.clientId,
+  //     ratingsReceivedId: serviceRequestData.dogId,
   //   },
   // })
 
