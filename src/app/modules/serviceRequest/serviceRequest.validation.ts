@@ -14,7 +14,7 @@ const updateSchema = z.object({
 
 });
 
-export const serviceReuestValidation = {
+export const serviceRequestValidation = {
 createSchema,
 updateSchema,
 };

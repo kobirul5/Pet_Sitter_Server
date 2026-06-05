@@ -1,4 +1,4 @@
-export interface IClinetRating {
+export interface IClientRating {
   rating: number;
   review: string;
 }

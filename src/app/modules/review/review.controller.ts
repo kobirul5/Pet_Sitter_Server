@@ -4,7 +4,7 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { reviewService } from './review.service';
 
-const createReviewClinetAndDog = catchAsync(async (req, res) => {
+const createReviewClientAndDog = catchAsync(async (req, res) => {
   const {
     petData,
     clientData,
@@ -46,7 +46,7 @@ const getUserOrSitterReviews = catchAsync(async (req, res) => {
 });
 
 export const reviewController = {
-  createReviewClinetAndDog,
+  createReviewClientAndDog,
   createReviewSitter,
   getUserOrSitterReviews,
 };

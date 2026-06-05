@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 import sendResponse from "../../../shared/sendResponse";
 import ApiError from "../../../errors/ApiErrors";
 import { ServiceType } from "@prisma/client";
-import { serviceReuestService } from "./serviceReuest.service";
+import { serviceRequestService } from "./serviceRequest.service";
 
 // Create client request
 const createClientRequestController = catchAsync(async (req: Request, res: Response) => {
@@ -20,7 +20,7 @@ const createClientRequestController = catchAsync(async (req: Request, res: Respo
     throw new ApiError(httpStatus.BAD_REQUEST, `Service type must be one of: ${allowedServices.join(", ")}`);
   }
 
-  const newRequest = await serviceReuestService.createClientRequestService({
+  const newRequest = await serviceRequestService.createClientRequestService({
     clientId,
     sitterId,
     startTime,
@@ -43,7 +43,7 @@ const createClientRequestController = catchAsync(async (req: Request, res: Respo
 // Get all service requests
 const getServiceRequestsController = catchAsync(
   async (req: Request, res: Response) => {
-    const requests = await serviceReuestService.getServiceRequests();
+    const requests = await serviceRequestService.getServiceRequests();
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -58,7 +58,7 @@ const getServiceRequestsForSitterController = catchAsync(
     console.log("hey");
 
     const sitterId = req.user.id;
-    const requests = await serviceReuestService.getServiceForSitterRequests(
+    const requests = await serviceRequestService.getServiceForSitterRequests(
       sitterId
     );
     sendResponse(res, {
@@ -70,12 +70,12 @@ const getServiceRequestsForSitterController = catchAsync(
   }
 );
 
-//updateServicestatusController
-const updateServicestatusController = catchAsync(
+//updateServiceStatusController
+const updateServiceStatusController = catchAsync(
   async (req: Request, res: Response) => {
     const { requestId, status } = req.body;
     const sitterId = req.user.id;
-    const result = await serviceReuestService.updateServicestatus(
+    const result = await serviceRequestService.updateServiceStatus(
       requestId,
       status,
       sitterId
@@ -89,29 +89,29 @@ const updateServicestatusController = catchAsync(
   }
 );
 
-// get clinet and dog details
-const getClinetAndDogProfileByIdController = catchAsync(
+// get client and dog details
+const getClientAndDogProfileByIdController = catchAsync(
   async (req: Request, res: Response) => {
     const requestId = req.params.requestid;
-    const result = await serviceReuestService.getClinetAndDogProfileById(
+    const result = await serviceRequestService.getClientAndDogProfileById(
       requestId
     );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "get clinet and dog details successfully",
+      message: "get client and dog details successfully",
       data: result,
     });
   }
 );
 
-const acceptClinerRequestController = catchAsync(
+const acceptClientRequestController = catchAsync(
   async (req: Request, res: Response) => {
     const requestId = req.params.id;
 
     const sitterId = req.user.id;
 
-    const result = await serviceReuestService.acceptClinerRequest(
+    const result = await serviceRequestService.acceptClientRequest(
       requestId,
       sitterId
     );
@@ -124,12 +124,12 @@ const acceptClinerRequestController = catchAsync(
   }
 );
 
-// createReviewCinetAndDogController
-const createReviewCinetAndDogController = catchAsync(
+// createReviewClientAndDogController
+const createReviewClientAndDogController = catchAsync(
   async (req: Request, res: Response) => {
     const { requestId, client, dog } = req.body;
 
-    const result = await serviceReuestService.createReviewCinetAndDog({
+    const result = await serviceRequestService.createReviewClientAndDog({
       requestId,
       client,
       dog,
@@ -146,7 +146,7 @@ const createReviewCinetAndDogController = catchAsync(
 const getAllAcceptedRequests = catchAsync(
   async (req: Request, res: Response) => {
     const sitterId = req.user.id;
-    const result = await serviceReuestService.getAllAcceptedRequests(sitterId);
+    const result = await serviceRequestService.getAllAcceptedRequests(sitterId);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -156,12 +156,12 @@ const getAllAcceptedRequests = catchAsync(
   }
 );
 
-// getAllUpcomingAndOngoingCleintRequests
-const getAllUpcomingAndOngoingCleintRequests = catchAsync(
+// getAllUpcomingAndOngoingClientRequests
+const getAllUpcomingAndOngoingClientRequests = catchAsync(
   async (req: Request, res: Response) => {
     const sitterId = req.user.id;
     const result =
-      await serviceReuestService.getAllUpcomingAndOngoingCleintServices(
+      await serviceRequestService.getAllUpcomingAndOngoingClientServices(
         sitterId
       );
     sendResponse(res, {
@@ -177,7 +177,7 @@ const getAllUpcomingAndOngoingCleintRequests = catchAsync(
 const getAcceptServiceForPaymentController = catchAsync(
   async (req: Request, res: Response) => {
     const clientId = req.user.id;
-    const result = await serviceReuestService.getAcceptServiceForPayment(
+    const result = await serviceRequestService.getAcceptServiceForPayment(
       clientId
     );
     sendResponse(res, {
@@ -189,11 +189,11 @@ const getAcceptServiceForPaymentController = catchAsync(
   }
 );
 
-const denyClinerRequestController = catchAsync(
+const denyClientRequestController = catchAsync(
   async (req: Request, res: Response) => {
     const requestId = req.params.id;
     const clientId = req.user.id;
-    const result = await serviceReuestService.denyClinerRequest(
+    const result = await serviceRequestService.denyClientRequest(
       requestId,
       clientId
     );
@@ -206,16 +206,16 @@ const denyClinerRequestController = catchAsync(
   }
 );
 
-export const serviceReuestController = {
+export const serviceRequestController = {
   createClientRequestController,
   getServiceRequestsController,
   getServiceRequestsForSitterController,
-  updateServicestatusController,
-  getClinetAndDogProfileByIdController,
-  acceptClinerRequestController,
-  createReviewCinetAndDogController,
+  updateServiceStatusController,
+  getClientAndDogProfileByIdController,
+  acceptClientRequestController,
+  createReviewClientAndDogController,
   getAllAcceptedRequests,
-  getAllUpcomingAndOngoingCleintRequests,
+  getAllUpcomingAndOngoingClientRequests,
   getAcceptServiceForPaymentController,
-  denyClinerRequestController,
+  denyClientRequestController,
 };

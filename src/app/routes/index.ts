@@ -3,7 +3,7 @@ import { AuthRoutes } from "../modules/Auth/auth.routes";
 import { userRoutes } from "../modules/User/user.route";
 import { SitterRoutes } from "../modules/Sitter/sitter.routes";
 import { dogRoutes } from "../modules/dog/dog.routes";
-import { serviceReuestRoutes } from "../modules/serviceReuest/serviceReuest.routes";
+import { serviceRequestRoutes } from "../modules/serviceRequest/serviceRequest.routes";
 import { ChatRoutes } from "../modules/chatImage/chat.route";
 import path from "path";
 import { reviewRoutes } from "../modules/review/review.routes";
@@ -32,7 +32,7 @@ const moduleRoutes = [
   },
   {
     path: "/service-requests",
-    route: serviceReuestRoutes,
+    route: serviceRequestRoutes,
   },
   {
     path: "/chats",
